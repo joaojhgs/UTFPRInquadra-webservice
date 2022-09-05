@@ -78,8 +78,8 @@ const regularDirname = hasDirname && fs.existsSync(path.join(__dirname, 'schema.
 
 // if the client has been bundled, we need to look for the folders
 const foundDirname = !regularDirname && findSync(process.cwd(), [
-    "prisma/generated/prisma-client-js",
-    "generated/prisma-client-js",
+    "prisma/@generated",
+    "@generated",
 ], ['d'], ['d'], 1)[0]
 
 const dirname = regularDirname || foundDirname || __dirname
@@ -203,7 +203,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/appmoove/Documents/UTFPRInquadra-webservice/prisma/generated/prisma-client-js",
+      "value": "/home/appmoove/Documents/UTFPRInquadra-webservice/prisma/@generated",
       "fromEnvVar": null
     },
     "config": {
@@ -214,10 +214,10 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env",
-    "schemaEnvPath": "../../../.env"
+    "rootEnvPath": "../../.env",
+    "schemaEnvPath": "../../.env"
   },
-  "relativePath": "../..",
+  "relativePath": "..",
   "clientVersion": "4.3.1",
   "engineVersion": "c875e43600dfe042452e0b868f7a48b817b9640b",
   "datasourceNames": [
@@ -244,6 +244,6 @@ exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
 path.join(__dirname, "libquery_engine-debian-openssl-1.1.x.so.node");
-path.join(process.cwd(), "prisma/generated/prisma-client-js/libquery_engine-debian-openssl-1.1.x.so.node")
+path.join(process.cwd(), "prisma/@generated/libquery_engine-debian-openssl-1.1.x.so.node")
 path.join(__dirname, "schema.prisma");
-path.join(process.cwd(), "prisma/generated/prisma-client-js/schema.prisma")
+path.join(process.cwd(), "prisma/@generated/schema.prisma")
