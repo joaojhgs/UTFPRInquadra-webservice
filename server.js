@@ -1,5 +1,5 @@
 const express = require('express');
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require('prisma/@generated');
 const bodyParser = require("body-parser");
 
 const prisma = new PrismaClient()
