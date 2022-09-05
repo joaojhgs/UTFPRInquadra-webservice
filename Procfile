@@ -1,3 +1,3 @@
-web: npm install && npx prisma migrate deploy && npx prisma generate && npm run dev
+web: npm run start
 
 release: npm install && npx prisma migrate deploy && npx prisma generate
