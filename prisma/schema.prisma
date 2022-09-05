@@ -1,0 +1,111 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output = "./generated/prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String                         @id @default(uuid()) @db.Uuid
+  Name                  String
+  RA                    Int
+  Email                 String                         @db.VarChar(255)
+  Campi                 String
+  Reservations          ReservationHasUsers[]
+  RequestedReservations ReservationHasRequestedUsers[]
+  ManagerOfReservations Reservation[]
+}
+
+model Sport {
+  id          String           @id @default(uuid()) @db.Uuid
+  Name        String
+  maxAmount   String?
+  Courts      CourtHasSports[]
+  Reservation Reservation[]
+}
+
+model Court {
+  id                  String                @id @default(uuid()) @db.Uuid
+  Name                String
+  Sports              CourtHasSports[]
+  Reservation         Reservation[]
+  HorarioIndisponivel HorarioIndisponivel[]
+}
+
+model Reservation {
+  id                     String                         @id @default(uuid()) @db.Uuid
+  date                   DateTime?                      @db.Date
+  created_at             DateTime                       @default(now()) @db.Date
+  manager_id             String                         @db.Uuid
+  manager                User                           @relation(fields: [manager_id], references: [id])
+  participants           ReservationHasUsers[]
+  requested_participants ReservationHasRequestedUsers[]
+  max_participants       Int
+  sport                  Sport                          @relation(fields: [sportId], references: [id])
+  sportId                String                         @db.Uuid
+  court                  Court                          @relation(fields: [courtId], references: [id])
+  courtId                String                         @db.Uuid
+  description            String                         @db.VarChar(255)
+}
+
+enum DayOfTheWeek {
+  sunday
+  monday
+  tuesday
+  wednesday
+  thursday
+  friday
+  saturday
+}
+
+model HorarioIndisponivel {
+  id              String       @id @default(uuid()) @db.Uuid
+  dayOfTheWeek    DayOfTheWeek
+  startTime       DateTime     @db.Date
+  endTime         DateTime     @db.Date
+  singleOccurency DateTime     @db.Date
+  court           Court        @relation(fields: [courtId], references: [id])
+  created_at      DateTime     @default(now()) @db.Date
+  courtId         String       @db.Uuid
+}
+
+model CourtHasSports {
+  court      Court     @relation(fields: [court_id], references: [id])
+  court_id   String    @unique @db.Uuid
+  active     Boolean   @default(true) @db.Boolean
+  created_at DateTime  @default(now()) @db.Date
+  updated_at DateTime? @db.Date
+  Sport      Sport?    @relation(fields: [sportsId], references: [id])
+  sportsId   String?   @db.Uuid
+
+  @@id([court_id])
+  @@map("court_has_sports")
+}
+
+model ReservationHasUsers {
+  reservation    Reservation @relation(fields: [reservation_id], references: [id])
+  reservation_id String      @db.Uuid
+  user           User        @relation(fields: [user_id], references: [id])
+  user_id        String      @db.Uuid
+  created_at     DateTime    @default(now()) @db.Date
+
+  @@id([reservation_id, user_id])
+  @@map("reservation_has_users")
+}
+
+model ReservationHasRequestedUsers {
+  reservation    Reservation @relation(fields: [reservation_id], references: [id])
+  reservation_id String      @db.Uuid
+  user           User        @relation(fields: [user_id], references: [id])
+  user_id        String      @db.Uuid
+  created_at     DateTime    @default(now()) @db.Date
+
+  @@id([reservation_id, user_id])
+  @@map("reservation_has_requested_users")
+}
