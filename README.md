@@ -1,16 +1,29 @@
 # UTFPRInquadra-webservice
 
--Inicializar o postgresql usando docker
+# Passo a passo inicial
 
-docker run -itd -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin -p 5432:5432 -v /data:/var/lib/postgresql/data --name postgresql postgres
+**Dependencias**
 
+Instale as dependencias de dev:
+`apt install git docker docker-compose`
 
--Inicializar o projeto após clonagem
-1- Adicionar um arquivo .env
+Instale o Tilt:
+`curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash`
 
-DATABASE_URL="postgresql"
+Adicione o yarn package manager ao seu computador:
+`npm i -g corepack`
 
+**Clone esse projeto**
 
-npm install
-npx prisma generate
-npx prisma migrate dev
+`git clone git@github.com:joaojhgs/UTFPRInquadra-webservice.git`
+
+**Enviroments**
+Basta renomear o arquivo `.env.example` para `.env`
+
+# Inicialização
+Abra a pasta clonada com o terminal e execute o tilt para subir uma instancia PostgreSQL e do webservice:
+`tilt up`
+(Não se deve cancelar a execução do tilt)
+
+Por fim, execute os seguintes comandos em outro terminal para realizar as alterações necessarias no banco automaticamente:
+`yarn prisma migrate deploy && yarn prisma generate`
