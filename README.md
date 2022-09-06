@@ -33,3 +33,9 @@ Abra a pasta clonada com o terminal e execute o tilt para subir uma instancia Po
 Por fim, execute os seguintes comandos em outro terminal para realizar as alterações necessarias no banco automaticamente:
 
 `yarn prisma migrate deploy && yarn prisma generate`
+
+# Desenvolvimento
+
+Sempre que forem desenvolver algo ou testar, basta rodar o `tilt up` na pasta do projeto.
+
+Para ver/editar os dados do banco local basta executar o comando `yarn prisma studio`.
