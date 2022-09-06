@@ -6,7 +6,7 @@
 
 Instale as dependencias de dev:
 
-`apt install git docker docker-compose`
+`apt install curl git docker docker-compose`
 
 Instale o Tilt:
 
