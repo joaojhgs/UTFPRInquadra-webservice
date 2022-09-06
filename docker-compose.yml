@@ -2,7 +2,7 @@ version: '3'
 
 services:
 
-  db:
+  postgres:
     image: postgres:13.4
     container_name: utfinquadra-api-postgres
     restart: always
@@ -10,5 +10,17 @@ services:
     volumes:
       - ./.docker/dbdata:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=admin
+      - POSTGRES_PASSWORD=masterkey
       - POSTGRES_DB=utfinquadra
+    ports:
+      - 5432:5432
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: utfinquadra-api-pgadmin
+    tty: true
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@ingresso.com
+      - PGADMIN_DEFAULT_PASSWORD=123456
+    ports:
+      - 9000:80
