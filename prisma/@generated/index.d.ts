@@ -18,10 +18,12 @@ type UnwrapTuple<Tuple extends readonly unknown[]> = {
  */
 export type User = {
   id: string
-  Name: string
-  RA: number
-  Email: string
-  Campi: string
+  name: string
+  ra: number
+  password: string
+  email: string
+  campi: string
+  role: string
 }
 
 /**
@@ -30,7 +32,7 @@ export type User = {
  */
 export type Sport = {
   id: string
-  Name: string
+  name: string
   maxAmount: string | null
 }
 
@@ -40,7 +42,7 @@ export type Sport = {
  */
 export type Court = {
   id: string
-  Name: string
+  name: string
 }
 
 /**
@@ -59,10 +61,10 @@ export type Reservation = {
 }
 
 /**
- * Model HorarioIndisponivel
+ * Model unavailableTime
  * 
  */
-export type HorarioIndisponivel = {
+export type unavailableTime = {
   id: string
   dayOfTheWeek: DayOfTheWeek
   startTime: Date
@@ -306,14 +308,14 @@ export class PrismaClient<
   get reservation(): Prisma.ReservationDelegate<GlobalReject>;
 
   /**
-   * `prisma.horarioIndisponivel`: Exposes CRUD operations for the **HorarioIndisponivel** model.
+   * `prisma.unavailableTime`: Exposes CRUD operations for the **unavailableTime** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more HorarioIndisponivels
-    * const horarioIndisponivels = await prisma.horarioIndisponivel.findMany()
+    * // Fetch zero or more UnavailableTimes
+    * const unavailableTimes = await prisma.unavailableTime.findMany()
     * ```
     */
-  get horarioIndisponivel(): Prisma.HorarioIndisponivelDelegate<GlobalReject>;
+  get unavailableTime(): Prisma.unavailableTimeDelegate<GlobalReject>;
 
   /**
    * `prisma.courtHasSports`: Exposes CRUD operations for the **CourtHasSports** model.
@@ -821,7 +823,7 @@ export namespace Prisma {
     Sport: 'Sport',
     Court: 'Court',
     Reservation: 'Reservation',
-    HorarioIndisponivel: 'HorarioIndisponivel',
+    unavailableTime: 'unavailableTime',
     CourtHasSports: 'CourtHasSports',
     ReservationHasUsers: 'ReservationHasUsers',
     ReservationHasRequestedUsers: 'ReservationHasRequestedUsers'
@@ -989,15 +991,15 @@ export namespace Prisma {
 
 
   export type UserCountOutputType = {
-    Reservations: number
-    RequestedReservations: number
-    ManagerOfReservations: number
+    reservations: number
+    requestedReservations: number
+    managerOfReservations: number
   }
 
   export type UserCountOutputTypeSelect = {
-    Reservations?: boolean
-    RequestedReservations?: boolean
-    ManagerOfReservations?: boolean
+    reservations?: boolean
+    requestedReservations?: boolean
+    managerOfReservations?: boolean
   }
 
   export type UserCountOutputTypeGetPayload<
@@ -1042,13 +1044,13 @@ export namespace Prisma {
 
 
   export type SportCountOutputType = {
-    Courts: number
-    Reservation: number
+    courts: number
+    reservation: number
   }
 
   export type SportCountOutputTypeSelect = {
-    Courts?: boolean
-    Reservation?: boolean
+    courts?: boolean
+    reservation?: boolean
   }
 
   export type SportCountOutputTypeGetPayload<
@@ -1093,15 +1095,15 @@ export namespace Prisma {
 
 
   export type CourtCountOutputType = {
-    Sports: number
-    Reservation: number
-    HorarioIndisponivel: number
+    sports: number
+    reservation: number
+    unavailableTime: number
   }
 
   export type CourtCountOutputTypeSelect = {
-    Sports?: boolean
-    Reservation?: boolean
-    HorarioIndisponivel?: boolean
+    sports?: boolean
+    reservation?: boolean
+    unavailableTime?: boolean
   }
 
   export type CourtCountOutputTypeGetPayload<
@@ -1209,69 +1211,81 @@ export namespace Prisma {
   }
 
   export type UserAvgAggregateOutputType = {
-    RA: number | null
+    ra: number | null
   }
 
   export type UserSumAggregateOutputType = {
-    RA: number | null
+    ra: number | null
   }
 
   export type UserMinAggregateOutputType = {
     id: string | null
-    Name: string | null
-    RA: number | null
-    Email: string | null
-    Campi: string | null
+    name: string | null
+    ra: number | null
+    password: string | null
+    email: string | null
+    campi: string | null
+    role: string | null
   }
 
   export type UserMaxAggregateOutputType = {
     id: string | null
-    Name: string | null
-    RA: number | null
-    Email: string | null
-    Campi: string | null
+    name: string | null
+    ra: number | null
+    password: string | null
+    email: string | null
+    campi: string | null
+    role: string | null
   }
 
   export type UserCountAggregateOutputType = {
     id: number
-    Name: number
-    RA: number
-    Email: number
-    Campi: number
+    name: number
+    ra: number
+    password: number
+    email: number
+    campi: number
+    role: number
     _all: number
   }
 
 
   export type UserAvgAggregateInputType = {
-    RA?: true
+    ra?: true
   }
 
   export type UserSumAggregateInputType = {
-    RA?: true
+    ra?: true
   }
 
   export type UserMinAggregateInputType = {
     id?: true
-    Name?: true
-    RA?: true
-    Email?: true
-    Campi?: true
+    name?: true
+    ra?: true
+    password?: true
+    email?: true
+    campi?: true
+    role?: true
   }
 
   export type UserMaxAggregateInputType = {
     id?: true
-    Name?: true
-    RA?: true
-    Email?: true
-    Campi?: true
+    name?: true
+    ra?: true
+    password?: true
+    email?: true
+    campi?: true
+    role?: true
   }
 
   export type UserCountAggregateInputType = {
     id?: true
-    Name?: true
-    RA?: true
-    Email?: true
-    Campi?: true
+    name?: true
+    ra?: true
+    password?: true
+    email?: true
+    campi?: true
+    role?: true
     _all?: true
   }
 
@@ -1369,10 +1383,12 @@ export namespace Prisma {
 
   export type UserGroupByOutputType = {
     id: string
-    Name: string
-    RA: number
-    Email: string
-    Campi: string
+    name: string
+    ra: number
+    password: string
+    email: string
+    campi: string
+    role: string
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -1396,20 +1412,22 @@ export namespace Prisma {
 
   export type UserSelect = {
     id?: boolean
-    Name?: boolean
-    RA?: boolean
-    Email?: boolean
-    Campi?: boolean
-    Reservations?: boolean | ReservationHasUsersFindManyArgs
-    RequestedReservations?: boolean | ReservationHasRequestedUsersFindManyArgs
-    ManagerOfReservations?: boolean | ReservationFindManyArgs
+    name?: boolean
+    ra?: boolean
+    password?: boolean
+    email?: boolean
+    campi?: boolean
+    role?: boolean
+    reservations?: boolean | ReservationHasUsersFindManyArgs
+    requestedReservations?: boolean | ReservationHasRequestedUsersFindManyArgs
+    managerOfReservations?: boolean | ReservationFindManyArgs
     _count?: boolean | UserCountOutputTypeArgs
   }
 
   export type UserInclude = {
-    Reservations?: boolean | ReservationHasUsersFindManyArgs
-    RequestedReservations?: boolean | ReservationHasRequestedUsersFindManyArgs
-    ManagerOfReservations?: boolean | ReservationFindManyArgs
+    reservations?: boolean | ReservationHasUsersFindManyArgs
+    requestedReservations?: boolean | ReservationHasRequestedUsersFindManyArgs
+    managerOfReservations?: boolean | ReservationFindManyArgs
     _count?: boolean | UserCountOutputTypeArgs
   }
 
@@ -1424,17 +1442,17 @@ export namespace Prisma {
     ?'include' extends U
     ? User  & {
     [P in TrueKeys<S['include']>]:
-        P extends 'Reservations' ? Array < ReservationHasUsersGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
-        P extends 'RequestedReservations' ? Array < ReservationHasRequestedUsersGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
-        P extends 'ManagerOfReservations' ? Array < ReservationGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
+        P extends 'reservations' ? Array < ReservationHasUsersGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
+        P extends 'requestedReservations' ? Array < ReservationHasRequestedUsersGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
+        P extends 'managerOfReservations' ? Array < ReservationGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
         P extends '_count' ? UserCountOutputTypeGetPayload<Exclude<S['include'], undefined | null>[P]> :  never
   } 
     : 'select' extends U
     ? {
     [P in TrueKeys<S['select']>]:
-        P extends 'Reservations' ? Array < ReservationHasUsersGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
-        P extends 'RequestedReservations' ? Array < ReservationHasRequestedUsersGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
-        P extends 'ManagerOfReservations' ? Array < ReservationGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
+        P extends 'reservations' ? Array < ReservationHasUsersGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
+        P extends 'requestedReservations' ? Array < ReservationHasRequestedUsersGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
+        P extends 'managerOfReservations' ? Array < ReservationGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
         P extends '_count' ? UserCountOutputTypeGetPayload<Exclude<S['select'], undefined | null>[P]> :  P extends keyof User ? User[P] : never
   } 
     : User
@@ -1810,11 +1828,11 @@ export namespace Prisma {
     constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
     readonly [Symbol.toStringTag]: 'PrismaClientPromise';
 
-    Reservations<T extends ReservationHasUsersFindManyArgs = {}>(args?: Subset<T, ReservationHasUsersFindManyArgs>): CheckSelect<T, PrismaPromise<Array<ReservationHasUsers>>, PrismaPromise<Array<ReservationHasUsersGetPayload<T>>>>;
+    reservations<T extends ReservationHasUsersFindManyArgs = {}>(args?: Subset<T, ReservationHasUsersFindManyArgs>): CheckSelect<T, PrismaPromise<Array<ReservationHasUsers>>, PrismaPromise<Array<ReservationHasUsersGetPayload<T>>>>;
 
-    RequestedReservations<T extends ReservationHasRequestedUsersFindManyArgs = {}>(args?: Subset<T, ReservationHasRequestedUsersFindManyArgs>): CheckSelect<T, PrismaPromise<Array<ReservationHasRequestedUsers>>, PrismaPromise<Array<ReservationHasRequestedUsersGetPayload<T>>>>;
+    requestedReservations<T extends ReservationHasRequestedUsersFindManyArgs = {}>(args?: Subset<T, ReservationHasRequestedUsersFindManyArgs>): CheckSelect<T, PrismaPromise<Array<ReservationHasRequestedUsers>>, PrismaPromise<Array<ReservationHasRequestedUsersGetPayload<T>>>>;
 
-    ManagerOfReservations<T extends ReservationFindManyArgs = {}>(args?: Subset<T, ReservationFindManyArgs>): CheckSelect<T, PrismaPromise<Array<Reservation>>, PrismaPromise<Array<ReservationGetPayload<T>>>>;
+    managerOfReservations<T extends ReservationFindManyArgs = {}>(args?: Subset<T, ReservationFindManyArgs>): CheckSelect<T, PrismaPromise<Array<Reservation>>, PrismaPromise<Array<ReservationGetPayload<T>>>>;
 
     private get _document();
     /**
@@ -2183,19 +2201,19 @@ export namespace Prisma {
 
   export type SportMinAggregateOutputType = {
     id: string | null
-    Name: string | null
+    name: string | null
     maxAmount: string | null
   }
 
   export type SportMaxAggregateOutputType = {
     id: string | null
-    Name: string | null
+    name: string | null
     maxAmount: string | null
   }
 
   export type SportCountAggregateOutputType = {
     id: number
-    Name: number
+    name: number
     maxAmount: number
     _all: number
   }
@@ -2203,19 +2221,19 @@ export namespace Prisma {
 
   export type SportMinAggregateInputType = {
     id?: true
-    Name?: true
+    name?: true
     maxAmount?: true
   }
 
   export type SportMaxAggregateInputType = {
     id?: true
-    Name?: true
+    name?: true
     maxAmount?: true
   }
 
   export type SportCountAggregateInputType = {
     id?: true
-    Name?: true
+    name?: true
     maxAmount?: true
     _all?: true
   }
@@ -2300,7 +2318,7 @@ export namespace Prisma {
 
   export type SportGroupByOutputType = {
     id: string
-    Name: string
+    name: string
     maxAmount: string | null
     _count: SportCountAggregateOutputType | null
     _min: SportMinAggregateOutputType | null
@@ -2323,16 +2341,16 @@ export namespace Prisma {
 
   export type SportSelect = {
     id?: boolean
-    Name?: boolean
+    name?: boolean
     maxAmount?: boolean
-    Courts?: boolean | CourtHasSportsFindManyArgs
-    Reservation?: boolean | ReservationFindManyArgs
+    courts?: boolean | CourtHasSportsFindManyArgs
+    reservation?: boolean | ReservationFindManyArgs
     _count?: boolean | SportCountOutputTypeArgs
   }
 
   export type SportInclude = {
-    Courts?: boolean | CourtHasSportsFindManyArgs
-    Reservation?: boolean | ReservationFindManyArgs
+    courts?: boolean | CourtHasSportsFindManyArgs
+    reservation?: boolean | ReservationFindManyArgs
     _count?: boolean | SportCountOutputTypeArgs
   }
 
@@ -2347,15 +2365,15 @@ export namespace Prisma {
     ?'include' extends U
     ? Sport  & {
     [P in TrueKeys<S['include']>]:
-        P extends 'Courts' ? Array < CourtHasSportsGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
-        P extends 'Reservation' ? Array < ReservationGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
+        P extends 'courts' ? Array < CourtHasSportsGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
+        P extends 'reservation' ? Array < ReservationGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
         P extends '_count' ? SportCountOutputTypeGetPayload<Exclude<S['include'], undefined | null>[P]> :  never
   } 
     : 'select' extends U
     ? {
     [P in TrueKeys<S['select']>]:
-        P extends 'Courts' ? Array < CourtHasSportsGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
-        P extends 'Reservation' ? Array < ReservationGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
+        P extends 'courts' ? Array < CourtHasSportsGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
+        P extends 'reservation' ? Array < ReservationGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
         P extends '_count' ? SportCountOutputTypeGetPayload<Exclude<S['select'], undefined | null>[P]> :  P extends keyof Sport ? Sport[P] : never
   } 
     : Sport
@@ -2731,9 +2749,9 @@ export namespace Prisma {
     constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
     readonly [Symbol.toStringTag]: 'PrismaClientPromise';
 
-    Courts<T extends CourtHasSportsFindManyArgs = {}>(args?: Subset<T, CourtHasSportsFindManyArgs>): CheckSelect<T, PrismaPromise<Array<CourtHasSports>>, PrismaPromise<Array<CourtHasSportsGetPayload<T>>>>;
+    courts<T extends CourtHasSportsFindManyArgs = {}>(args?: Subset<T, CourtHasSportsFindManyArgs>): CheckSelect<T, PrismaPromise<Array<CourtHasSports>>, PrismaPromise<Array<CourtHasSportsGetPayload<T>>>>;
 
-    Reservation<T extends ReservationFindManyArgs = {}>(args?: Subset<T, ReservationFindManyArgs>): CheckSelect<T, PrismaPromise<Array<Reservation>>, PrismaPromise<Array<ReservationGetPayload<T>>>>;
+    reservation<T extends ReservationFindManyArgs = {}>(args?: Subset<T, ReservationFindManyArgs>): CheckSelect<T, PrismaPromise<Array<Reservation>>, PrismaPromise<Array<ReservationGetPayload<T>>>>;
 
     private get _document();
     /**
@@ -3102,34 +3120,34 @@ export namespace Prisma {
 
   export type CourtMinAggregateOutputType = {
     id: string | null
-    Name: string | null
+    name: string | null
   }
 
   export type CourtMaxAggregateOutputType = {
     id: string | null
-    Name: string | null
+    name: string | null
   }
 
   export type CourtCountAggregateOutputType = {
     id: number
-    Name: number
+    name: number
     _all: number
   }
 
 
   export type CourtMinAggregateInputType = {
     id?: true
-    Name?: true
+    name?: true
   }
 
   export type CourtMaxAggregateInputType = {
     id?: true
-    Name?: true
+    name?: true
   }
 
   export type CourtCountAggregateInputType = {
     id?: true
-    Name?: true
+    name?: true
     _all?: true
   }
 
@@ -3213,7 +3231,7 @@ export namespace Prisma {
 
   export type CourtGroupByOutputType = {
     id: string
-    Name: string
+    name: string
     _count: CourtCountAggregateOutputType | null
     _min: CourtMinAggregateOutputType | null
     _max: CourtMaxAggregateOutputType | null
@@ -3235,17 +3253,17 @@ export namespace Prisma {
 
   export type CourtSelect = {
     id?: boolean
-    Name?: boolean
-    Sports?: boolean | CourtHasSportsFindManyArgs
-    Reservation?: boolean | ReservationFindManyArgs
-    HorarioIndisponivel?: boolean | HorarioIndisponivelFindManyArgs
+    name?: boolean
+    sports?: boolean | CourtHasSportsFindManyArgs
+    reservation?: boolean | ReservationFindManyArgs
+    unavailableTime?: boolean | unavailableTimeFindManyArgs
     _count?: boolean | CourtCountOutputTypeArgs
   }
 
   export type CourtInclude = {
-    Sports?: boolean | CourtHasSportsFindManyArgs
-    Reservation?: boolean | ReservationFindManyArgs
-    HorarioIndisponivel?: boolean | HorarioIndisponivelFindManyArgs
+    sports?: boolean | CourtHasSportsFindManyArgs
+    reservation?: boolean | ReservationFindManyArgs
+    unavailableTime?: boolean | unavailableTimeFindManyArgs
     _count?: boolean | CourtCountOutputTypeArgs
   }
 
@@ -3260,17 +3278,17 @@ export namespace Prisma {
     ?'include' extends U
     ? Court  & {
     [P in TrueKeys<S['include']>]:
-        P extends 'Sports' ? Array < CourtHasSportsGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
-        P extends 'Reservation' ? Array < ReservationGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
-        P extends 'HorarioIndisponivel' ? Array < HorarioIndisponivelGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
+        P extends 'sports' ? Array < CourtHasSportsGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
+        P extends 'reservation' ? Array < ReservationGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
+        P extends 'unavailableTime' ? Array < unavailableTimeGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
         P extends '_count' ? CourtCountOutputTypeGetPayload<Exclude<S['include'], undefined | null>[P]> :  never
   } 
     : 'select' extends U
     ? {
     [P in TrueKeys<S['select']>]:
-        P extends 'Sports' ? Array < CourtHasSportsGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
-        P extends 'Reservation' ? Array < ReservationGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
-        P extends 'HorarioIndisponivel' ? Array < HorarioIndisponivelGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
+        P extends 'sports' ? Array < CourtHasSportsGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
+        P extends 'reservation' ? Array < ReservationGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
+        P extends 'unavailableTime' ? Array < unavailableTimeGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
         P extends '_count' ? CourtCountOutputTypeGetPayload<Exclude<S['select'], undefined | null>[P]> :  P extends keyof Court ? Court[P] : never
   } 
     : Court
@@ -3646,11 +3664,11 @@ export namespace Prisma {
     constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
     readonly [Symbol.toStringTag]: 'PrismaClientPromise';
 
-    Sports<T extends CourtHasSportsFindManyArgs = {}>(args?: Subset<T, CourtHasSportsFindManyArgs>): CheckSelect<T, PrismaPromise<Array<CourtHasSports>>, PrismaPromise<Array<CourtHasSportsGetPayload<T>>>>;
+    sports<T extends CourtHasSportsFindManyArgs = {}>(args?: Subset<T, CourtHasSportsFindManyArgs>): CheckSelect<T, PrismaPromise<Array<CourtHasSports>>, PrismaPromise<Array<CourtHasSportsGetPayload<T>>>>;
 
-    Reservation<T extends ReservationFindManyArgs = {}>(args?: Subset<T, ReservationFindManyArgs>): CheckSelect<T, PrismaPromise<Array<Reservation>>, PrismaPromise<Array<ReservationGetPayload<T>>>>;
+    reservation<T extends ReservationFindManyArgs = {}>(args?: Subset<T, ReservationFindManyArgs>): CheckSelect<T, PrismaPromise<Array<Reservation>>, PrismaPromise<Array<ReservationGetPayload<T>>>>;
 
-    HorarioIndisponivel<T extends HorarioIndisponivelFindManyArgs = {}>(args?: Subset<T, HorarioIndisponivelFindManyArgs>): CheckSelect<T, PrismaPromise<Array<HorarioIndisponivel>>, PrismaPromise<Array<HorarioIndisponivelGetPayload<T>>>>;
+    unavailableTime<T extends unavailableTimeFindManyArgs = {}>(args?: Subset<T, unavailableTimeFindManyArgs>): CheckSelect<T, PrismaPromise<Array<unavailableTime>>, PrismaPromise<Array<unavailableTimeGetPayload<T>>>>;
 
     private get _document();
     /**
@@ -5018,17 +5036,17 @@ export namespace Prisma {
 
 
   /**
-   * Model HorarioIndisponivel
+   * Model unavailableTime
    */
 
 
-  export type AggregateHorarioIndisponivel = {
-    _count: HorarioIndisponivelCountAggregateOutputType | null
-    _min: HorarioIndisponivelMinAggregateOutputType | null
-    _max: HorarioIndisponivelMaxAggregateOutputType | null
+  export type AggregateUnavailableTime = {
+    _count: UnavailableTimeCountAggregateOutputType | null
+    _min: UnavailableTimeMinAggregateOutputType | null
+    _max: UnavailableTimeMaxAggregateOutputType | null
   }
 
-  export type HorarioIndisponivelMinAggregateOutputType = {
+  export type UnavailableTimeMinAggregateOutputType = {
     id: string | null
     dayOfTheWeek: DayOfTheWeek | null
     startTime: Date | null
@@ -5038,7 +5056,7 @@ export namespace Prisma {
     courtId: string | null
   }
 
-  export type HorarioIndisponivelMaxAggregateOutputType = {
+  export type UnavailableTimeMaxAggregateOutputType = {
     id: string | null
     dayOfTheWeek: DayOfTheWeek | null
     startTime: Date | null
@@ -5048,7 +5066,7 @@ export namespace Prisma {
     courtId: string | null
   }
 
-  export type HorarioIndisponivelCountAggregateOutputType = {
+  export type UnavailableTimeCountAggregateOutputType = {
     id: number
     dayOfTheWeek: number
     startTime: number
@@ -5060,7 +5078,7 @@ export namespace Prisma {
   }
 
 
-  export type HorarioIndisponivelMinAggregateInputType = {
+  export type UnavailableTimeMinAggregateInputType = {
     id?: true
     dayOfTheWeek?: true
     startTime?: true
@@ -5070,7 +5088,7 @@ export namespace Prisma {
     courtId?: true
   }
 
-  export type HorarioIndisponivelMaxAggregateInputType = {
+  export type UnavailableTimeMaxAggregateInputType = {
     id?: true
     dayOfTheWeek?: true
     startTime?: true
@@ -5080,7 +5098,7 @@ export namespace Prisma {
     courtId?: true
   }
 
-  export type HorarioIndisponivelCountAggregateInputType = {
+  export type UnavailableTimeCountAggregateInputType = {
     id?: true
     dayOfTheWeek?: true
     startTime?: true
@@ -5091,85 +5109,85 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type HorarioIndisponivelAggregateArgs = {
+  export type UnavailableTimeAggregateArgs = {
     /**
-     * Filter which HorarioIndisponivel to aggregate.
+     * Filter which unavailableTime to aggregate.
      * 
     **/
-    where?: HorarioIndisponivelWhereInput
+    where?: unavailableTimeWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of HorarioIndisponivels to fetch.
+     * Determine the order of unavailableTimes to fetch.
      * 
     **/
-    orderBy?: Enumerable<HorarioIndisponivelOrderByWithRelationInput>
+    orderBy?: Enumerable<unavailableTimeOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      * 
     **/
-    cursor?: HorarioIndisponivelWhereUniqueInput
+    cursor?: unavailableTimeWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` HorarioIndisponivels from the position of the cursor.
+     * Take `±n` unavailableTimes from the position of the cursor.
      * 
     **/
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` HorarioIndisponivels.
+     * Skip the first `n` unavailableTimes.
      * 
     **/
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned HorarioIndisponivels
+     * Count returned unavailableTimes
     **/
-    _count?: true | HorarioIndisponivelCountAggregateInputType
+    _count?: true | UnavailableTimeCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: HorarioIndisponivelMinAggregateInputType
+    _min?: UnavailableTimeMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: HorarioIndisponivelMaxAggregateInputType
+    _max?: UnavailableTimeMaxAggregateInputType
   }
 
-  export type GetHorarioIndisponivelAggregateType<T extends HorarioIndisponivelAggregateArgs> = {
-        [P in keyof T & keyof AggregateHorarioIndisponivel]: P extends '_count' | 'count'
+  export type GetUnavailableTimeAggregateType<T extends UnavailableTimeAggregateArgs> = {
+        [P in keyof T & keyof AggregateUnavailableTime]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateHorarioIndisponivel[P]>
-      : GetScalarType<T[P], AggregateHorarioIndisponivel[P]>
+        : GetScalarType<T[P], AggregateUnavailableTime[P]>
+      : GetScalarType<T[P], AggregateUnavailableTime[P]>
   }
 
 
 
 
-  export type HorarioIndisponivelGroupByArgs = {
-    where?: HorarioIndisponivelWhereInput
-    orderBy?: Enumerable<HorarioIndisponivelOrderByWithAggregationInput>
-    by: Array<HorarioIndisponivelScalarFieldEnum>
-    having?: HorarioIndisponivelScalarWhereWithAggregatesInput
+  export type UnavailableTimeGroupByArgs = {
+    where?: unavailableTimeWhereInput
+    orderBy?: Enumerable<unavailableTimeOrderByWithAggregationInput>
+    by: Array<UnavailableTimeScalarFieldEnum>
+    having?: unavailableTimeScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: HorarioIndisponivelCountAggregateInputType | true
-    _min?: HorarioIndisponivelMinAggregateInputType
-    _max?: HorarioIndisponivelMaxAggregateInputType
+    _count?: UnavailableTimeCountAggregateInputType | true
+    _min?: UnavailableTimeMinAggregateInputType
+    _max?: UnavailableTimeMaxAggregateInputType
   }
 
 
-  export type HorarioIndisponivelGroupByOutputType = {
+  export type UnavailableTimeGroupByOutputType = {
     id: string
     dayOfTheWeek: DayOfTheWeek
     startTime: Date
@@ -5177,26 +5195,26 @@ export namespace Prisma {
     singleOccurency: Date
     created_at: Date
     courtId: string
-    _count: HorarioIndisponivelCountAggregateOutputType | null
-    _min: HorarioIndisponivelMinAggregateOutputType | null
-    _max: HorarioIndisponivelMaxAggregateOutputType | null
+    _count: UnavailableTimeCountAggregateOutputType | null
+    _min: UnavailableTimeMinAggregateOutputType | null
+    _max: UnavailableTimeMaxAggregateOutputType | null
   }
 
-  type GetHorarioIndisponivelGroupByPayload<T extends HorarioIndisponivelGroupByArgs> = PrismaPromise<
+  type GetUnavailableTimeGroupByPayload<T extends UnavailableTimeGroupByArgs> = PrismaPromise<
     Array<
-      PickArray<HorarioIndisponivelGroupByOutputType, T['by']> &
+      PickArray<UnavailableTimeGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof HorarioIndisponivelGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof UnavailableTimeGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], HorarioIndisponivelGroupByOutputType[P]>
-            : GetScalarType<T[P], HorarioIndisponivelGroupByOutputType[P]>
+              : GetScalarType<T[P], UnavailableTimeGroupByOutputType[P]>
+            : GetScalarType<T[P], UnavailableTimeGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type HorarioIndisponivelSelect = {
+  export type unavailableTimeSelect = {
     id?: boolean
     dayOfTheWeek?: boolean
     startTime?: boolean
@@ -5207,145 +5225,145 @@ export namespace Prisma {
     courtId?: boolean
   }
 
-  export type HorarioIndisponivelInclude = {
+  export type unavailableTimeInclude = {
     court?: boolean | CourtArgs
   }
 
-  export type HorarioIndisponivelGetPayload<
-    S extends boolean | null | undefined | HorarioIndisponivelArgs,
+  export type unavailableTimeGetPayload<
+    S extends boolean | null | undefined | unavailableTimeArgs,
     U = keyof S
       > = S extends true
-        ? HorarioIndisponivel
+        ? unavailableTime
     : S extends undefined
     ? never
-    : S extends HorarioIndisponivelArgs | HorarioIndisponivelFindManyArgs
+    : S extends unavailableTimeArgs | unavailableTimeFindManyArgs
     ?'include' extends U
-    ? HorarioIndisponivel  & {
+    ? unavailableTime  & {
     [P in TrueKeys<S['include']>]:
         P extends 'court' ? CourtGetPayload<Exclude<S['include'], undefined | null>[P]> :  never
   } 
     : 'select' extends U
     ? {
     [P in TrueKeys<S['select']>]:
-        P extends 'court' ? CourtGetPayload<Exclude<S['select'], undefined | null>[P]> :  P extends keyof HorarioIndisponivel ? HorarioIndisponivel[P] : never
+        P extends 'court' ? CourtGetPayload<Exclude<S['select'], undefined | null>[P]> :  P extends keyof unavailableTime ? unavailableTime[P] : never
   } 
-    : HorarioIndisponivel
-  : HorarioIndisponivel
+    : unavailableTime
+  : unavailableTime
 
 
-  type HorarioIndisponivelCountArgs = Merge<
-    Omit<HorarioIndisponivelFindManyArgs, 'select' | 'include'> & {
-      select?: HorarioIndisponivelCountAggregateInputType | true
+  type unavailableTimeCountArgs = Merge<
+    Omit<unavailableTimeFindManyArgs, 'select' | 'include'> & {
+      select?: UnavailableTimeCountAggregateInputType | true
     }
   >
 
-  export interface HorarioIndisponivelDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+  export interface unavailableTimeDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
     /**
-     * Find zero or one HorarioIndisponivel that matches the filter.
-     * @param {HorarioIndisponivelFindUniqueArgs} args - Arguments to find a HorarioIndisponivel
+     * Find zero or one UnavailableTime that matches the filter.
+     * @param {unavailableTimeFindUniqueArgs} args - Arguments to find a UnavailableTime
      * @example
-     * // Get one HorarioIndisponivel
-     * const horarioIndisponivel = await prisma.horarioIndisponivel.findUnique({
+     * // Get one UnavailableTime
+     * const unavailableTime = await prisma.unavailableTime.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUnique<T extends HorarioIndisponivelFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args: SelectSubset<T, HorarioIndisponivelFindUniqueArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'HorarioIndisponivel'> extends True ? CheckSelect<T, Prisma__HorarioIndisponivelClient<HorarioIndisponivel>, Prisma__HorarioIndisponivelClient<HorarioIndisponivelGetPayload<T>>> : CheckSelect<T, Prisma__HorarioIndisponivelClient<HorarioIndisponivel | null >, Prisma__HorarioIndisponivelClient<HorarioIndisponivelGetPayload<T> | null >>
+    findUnique<T extends unavailableTimeFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, unavailableTimeFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'unavailableTime'> extends True ? CheckSelect<T, Prisma__unavailableTimeClient<unavailableTime>, Prisma__unavailableTimeClient<unavailableTimeGetPayload<T>>> : CheckSelect<T, Prisma__unavailableTimeClient<unavailableTime | null >, Prisma__unavailableTimeClient<unavailableTimeGetPayload<T> | null >>
 
     /**
-     * Find the first HorarioIndisponivel that matches the filter.
+     * Find the first UnavailableTime that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {HorarioIndisponivelFindFirstArgs} args - Arguments to find a HorarioIndisponivel
+     * @param {unavailableTimeFindFirstArgs} args - Arguments to find a UnavailableTime
      * @example
-     * // Get one HorarioIndisponivel
-     * const horarioIndisponivel = await prisma.horarioIndisponivel.findFirst({
+     * // Get one UnavailableTime
+     * const unavailableTime = await prisma.unavailableTime.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirst<T extends HorarioIndisponivelFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args?: SelectSubset<T, HorarioIndisponivelFindFirstArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'HorarioIndisponivel'> extends True ? CheckSelect<T, Prisma__HorarioIndisponivelClient<HorarioIndisponivel>, Prisma__HorarioIndisponivelClient<HorarioIndisponivelGetPayload<T>>> : CheckSelect<T, Prisma__HorarioIndisponivelClient<HorarioIndisponivel | null >, Prisma__HorarioIndisponivelClient<HorarioIndisponivelGetPayload<T> | null >>
+    findFirst<T extends unavailableTimeFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, unavailableTimeFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'unavailableTime'> extends True ? CheckSelect<T, Prisma__unavailableTimeClient<unavailableTime>, Prisma__unavailableTimeClient<unavailableTimeGetPayload<T>>> : CheckSelect<T, Prisma__unavailableTimeClient<unavailableTime | null >, Prisma__unavailableTimeClient<unavailableTimeGetPayload<T> | null >>
 
     /**
-     * Find zero or more HorarioIndisponivels that matches the filter.
+     * Find zero or more UnavailableTimes that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {HorarioIndisponivelFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @param {unavailableTimeFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all HorarioIndisponivels
-     * const horarioIndisponivels = await prisma.horarioIndisponivel.findMany()
+     * // Get all UnavailableTimes
+     * const unavailableTimes = await prisma.unavailableTime.findMany()
      * 
-     * // Get first 10 HorarioIndisponivels
-     * const horarioIndisponivels = await prisma.horarioIndisponivel.findMany({ take: 10 })
+     * // Get first 10 UnavailableTimes
+     * const unavailableTimes = await prisma.unavailableTime.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const horarioIndisponivelWithIdOnly = await prisma.horarioIndisponivel.findMany({ select: { id: true } })
+     * const unavailableTimeWithIdOnly = await prisma.unavailableTime.findMany({ select: { id: true } })
      * 
     **/
-    findMany<T extends HorarioIndisponivelFindManyArgs>(
-      args?: SelectSubset<T, HorarioIndisponivelFindManyArgs>
-    ): CheckSelect<T, PrismaPromise<Array<HorarioIndisponivel>>, PrismaPromise<Array<HorarioIndisponivelGetPayload<T>>>>
+    findMany<T extends unavailableTimeFindManyArgs>(
+      args?: SelectSubset<T, unavailableTimeFindManyArgs>
+    ): CheckSelect<T, PrismaPromise<Array<unavailableTime>>, PrismaPromise<Array<unavailableTimeGetPayload<T>>>>
 
     /**
-     * Create a HorarioIndisponivel.
-     * @param {HorarioIndisponivelCreateArgs} args - Arguments to create a HorarioIndisponivel.
+     * Create a UnavailableTime.
+     * @param {unavailableTimeCreateArgs} args - Arguments to create a UnavailableTime.
      * @example
-     * // Create one HorarioIndisponivel
-     * const HorarioIndisponivel = await prisma.horarioIndisponivel.create({
+     * // Create one UnavailableTime
+     * const UnavailableTime = await prisma.unavailableTime.create({
      *   data: {
-     *     // ... data to create a HorarioIndisponivel
+     *     // ... data to create a UnavailableTime
      *   }
      * })
      * 
     **/
-    create<T extends HorarioIndisponivelCreateArgs>(
-      args: SelectSubset<T, HorarioIndisponivelCreateArgs>
-    ): CheckSelect<T, Prisma__HorarioIndisponivelClient<HorarioIndisponivel>, Prisma__HorarioIndisponivelClient<HorarioIndisponivelGetPayload<T>>>
+    create<T extends unavailableTimeCreateArgs>(
+      args: SelectSubset<T, unavailableTimeCreateArgs>
+    ): CheckSelect<T, Prisma__unavailableTimeClient<unavailableTime>, Prisma__unavailableTimeClient<unavailableTimeGetPayload<T>>>
 
     /**
-     * Create many HorarioIndisponivels.
-     *     @param {HorarioIndisponivelCreateManyArgs} args - Arguments to create many HorarioIndisponivels.
+     * Create many UnavailableTimes.
+     *     @param {unavailableTimeCreateManyArgs} args - Arguments to create many UnavailableTimes.
      *     @example
-     *     // Create many HorarioIndisponivels
-     *     const horarioIndisponivel = await prisma.horarioIndisponivel.createMany({
+     *     // Create many UnavailableTimes
+     *     const unavailableTime = await prisma.unavailableTime.createMany({
      *       data: {
      *         // ... provide data here
      *       }
      *     })
      *     
     **/
-    createMany<T extends HorarioIndisponivelCreateManyArgs>(
-      args?: SelectSubset<T, HorarioIndisponivelCreateManyArgs>
+    createMany<T extends unavailableTimeCreateManyArgs>(
+      args?: SelectSubset<T, unavailableTimeCreateManyArgs>
     ): PrismaPromise<BatchPayload>
 
     /**
-     * Delete a HorarioIndisponivel.
-     * @param {HorarioIndisponivelDeleteArgs} args - Arguments to delete one HorarioIndisponivel.
+     * Delete a UnavailableTime.
+     * @param {unavailableTimeDeleteArgs} args - Arguments to delete one UnavailableTime.
      * @example
-     * // Delete one HorarioIndisponivel
-     * const HorarioIndisponivel = await prisma.horarioIndisponivel.delete({
+     * // Delete one UnavailableTime
+     * const UnavailableTime = await prisma.unavailableTime.delete({
      *   where: {
-     *     // ... filter to delete one HorarioIndisponivel
+     *     // ... filter to delete one UnavailableTime
      *   }
      * })
      * 
     **/
-    delete<T extends HorarioIndisponivelDeleteArgs>(
-      args: SelectSubset<T, HorarioIndisponivelDeleteArgs>
-    ): CheckSelect<T, Prisma__HorarioIndisponivelClient<HorarioIndisponivel>, Prisma__HorarioIndisponivelClient<HorarioIndisponivelGetPayload<T>>>
+    delete<T extends unavailableTimeDeleteArgs>(
+      args: SelectSubset<T, unavailableTimeDeleteArgs>
+    ): CheckSelect<T, Prisma__unavailableTimeClient<unavailableTime>, Prisma__unavailableTimeClient<unavailableTimeGetPayload<T>>>
 
     /**
-     * Update one HorarioIndisponivel.
-     * @param {HorarioIndisponivelUpdateArgs} args - Arguments to update one HorarioIndisponivel.
+     * Update one UnavailableTime.
+     * @param {unavailableTimeUpdateArgs} args - Arguments to update one UnavailableTime.
      * @example
-     * // Update one HorarioIndisponivel
-     * const horarioIndisponivel = await prisma.horarioIndisponivel.update({
+     * // Update one UnavailableTime
+     * const unavailableTime = await prisma.unavailableTime.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -5355,34 +5373,34 @@ export namespace Prisma {
      * })
      * 
     **/
-    update<T extends HorarioIndisponivelUpdateArgs>(
-      args: SelectSubset<T, HorarioIndisponivelUpdateArgs>
-    ): CheckSelect<T, Prisma__HorarioIndisponivelClient<HorarioIndisponivel>, Prisma__HorarioIndisponivelClient<HorarioIndisponivelGetPayload<T>>>
+    update<T extends unavailableTimeUpdateArgs>(
+      args: SelectSubset<T, unavailableTimeUpdateArgs>
+    ): CheckSelect<T, Prisma__unavailableTimeClient<unavailableTime>, Prisma__unavailableTimeClient<unavailableTimeGetPayload<T>>>
 
     /**
-     * Delete zero or more HorarioIndisponivels.
-     * @param {HorarioIndisponivelDeleteManyArgs} args - Arguments to filter HorarioIndisponivels to delete.
+     * Delete zero or more UnavailableTimes.
+     * @param {unavailableTimeDeleteManyArgs} args - Arguments to filter UnavailableTimes to delete.
      * @example
-     * // Delete a few HorarioIndisponivels
-     * const { count } = await prisma.horarioIndisponivel.deleteMany({
+     * // Delete a few UnavailableTimes
+     * const { count } = await prisma.unavailableTime.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
     **/
-    deleteMany<T extends HorarioIndisponivelDeleteManyArgs>(
-      args?: SelectSubset<T, HorarioIndisponivelDeleteManyArgs>
+    deleteMany<T extends unavailableTimeDeleteManyArgs>(
+      args?: SelectSubset<T, unavailableTimeDeleteManyArgs>
     ): PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more HorarioIndisponivels.
+     * Update zero or more UnavailableTimes.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {HorarioIndisponivelUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {unavailableTimeUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many HorarioIndisponivels
-     * const horarioIndisponivel = await prisma.horarioIndisponivel.updateMany({
+     * // Update many UnavailableTimes
+     * const unavailableTime = await prisma.unavailableTime.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -5392,93 +5410,93 @@ export namespace Prisma {
      * })
      * 
     **/
-    updateMany<T extends HorarioIndisponivelUpdateManyArgs>(
-      args: SelectSubset<T, HorarioIndisponivelUpdateManyArgs>
+    updateMany<T extends unavailableTimeUpdateManyArgs>(
+      args: SelectSubset<T, unavailableTimeUpdateManyArgs>
     ): PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one HorarioIndisponivel.
-     * @param {HorarioIndisponivelUpsertArgs} args - Arguments to update or create a HorarioIndisponivel.
+     * Create or update one UnavailableTime.
+     * @param {unavailableTimeUpsertArgs} args - Arguments to update or create a UnavailableTime.
      * @example
-     * // Update or create a HorarioIndisponivel
-     * const horarioIndisponivel = await prisma.horarioIndisponivel.upsert({
+     * // Update or create a UnavailableTime
+     * const unavailableTime = await prisma.unavailableTime.upsert({
      *   create: {
-     *     // ... data to create a HorarioIndisponivel
+     *     // ... data to create a UnavailableTime
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the HorarioIndisponivel we want to update
+     *     // ... the filter for the UnavailableTime we want to update
      *   }
      * })
     **/
-    upsert<T extends HorarioIndisponivelUpsertArgs>(
-      args: SelectSubset<T, HorarioIndisponivelUpsertArgs>
-    ): CheckSelect<T, Prisma__HorarioIndisponivelClient<HorarioIndisponivel>, Prisma__HorarioIndisponivelClient<HorarioIndisponivelGetPayload<T>>>
+    upsert<T extends unavailableTimeUpsertArgs>(
+      args: SelectSubset<T, unavailableTimeUpsertArgs>
+    ): CheckSelect<T, Prisma__unavailableTimeClient<unavailableTime>, Prisma__unavailableTimeClient<unavailableTimeGetPayload<T>>>
 
     /**
-     * Find one HorarioIndisponivel that matches the filter or throw
+     * Find one UnavailableTime that matches the filter or throw
      * `NotFoundError` if no matches were found.
-     * @param {HorarioIndisponivelFindUniqueOrThrowArgs} args - Arguments to find a HorarioIndisponivel
+     * @param {unavailableTimeFindUniqueOrThrowArgs} args - Arguments to find a UnavailableTime
      * @example
-     * // Get one HorarioIndisponivel
-     * const horarioIndisponivel = await prisma.horarioIndisponivel.findUniqueOrThrow({
+     * // Get one UnavailableTime
+     * const unavailableTime = await prisma.unavailableTime.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUniqueOrThrow<T extends HorarioIndisponivelFindUniqueOrThrowArgs>(
-      args?: SelectSubset<T, HorarioIndisponivelFindUniqueOrThrowArgs>
-    ): CheckSelect<T, Prisma__HorarioIndisponivelClient<HorarioIndisponivel>, Prisma__HorarioIndisponivelClient<HorarioIndisponivelGetPayload<T>>>
+    findUniqueOrThrow<T extends unavailableTimeFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, unavailableTimeFindUniqueOrThrowArgs>
+    ): CheckSelect<T, Prisma__unavailableTimeClient<unavailableTime>, Prisma__unavailableTimeClient<unavailableTimeGetPayload<T>>>
 
     /**
-     * Find the first HorarioIndisponivel that matches the filter or
+     * Find the first UnavailableTime that matches the filter or
      * throw `NotFoundError` if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {HorarioIndisponivelFindFirstOrThrowArgs} args - Arguments to find a HorarioIndisponivel
+     * @param {unavailableTimeFindFirstOrThrowArgs} args - Arguments to find a UnavailableTime
      * @example
-     * // Get one HorarioIndisponivel
-     * const horarioIndisponivel = await prisma.horarioIndisponivel.findFirstOrThrow({
+     * // Get one UnavailableTime
+     * const unavailableTime = await prisma.unavailableTime.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirstOrThrow<T extends HorarioIndisponivelFindFirstOrThrowArgs>(
-      args?: SelectSubset<T, HorarioIndisponivelFindFirstOrThrowArgs>
-    ): CheckSelect<T, Prisma__HorarioIndisponivelClient<HorarioIndisponivel>, Prisma__HorarioIndisponivelClient<HorarioIndisponivelGetPayload<T>>>
+    findFirstOrThrow<T extends unavailableTimeFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, unavailableTimeFindFirstOrThrowArgs>
+    ): CheckSelect<T, Prisma__unavailableTimeClient<unavailableTime>, Prisma__unavailableTimeClient<unavailableTimeGetPayload<T>>>
 
     /**
-     * Count the number of HorarioIndisponivels.
+     * Count the number of UnavailableTimes.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {HorarioIndisponivelCountArgs} args - Arguments to filter HorarioIndisponivels to count.
+     * @param {unavailableTimeCountArgs} args - Arguments to filter UnavailableTimes to count.
      * @example
-     * // Count the number of HorarioIndisponivels
-     * const count = await prisma.horarioIndisponivel.count({
+     * // Count the number of UnavailableTimes
+     * const count = await prisma.unavailableTime.count({
      *   where: {
-     *     // ... the filter for the HorarioIndisponivels we want to count
+     *     // ... the filter for the UnavailableTimes we want to count
      *   }
      * })
     **/
-    count<T extends HorarioIndisponivelCountArgs>(
-      args?: Subset<T, HorarioIndisponivelCountArgs>,
+    count<T extends unavailableTimeCountArgs>(
+      args?: Subset<T, unavailableTimeCountArgs>,
     ): PrismaPromise<
       T extends _Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], HorarioIndisponivelCountAggregateOutputType>
+          : GetScalarType<T['select'], UnavailableTimeCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a HorarioIndisponivel.
+     * Allows you to perform aggregations operations on a UnavailableTime.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {HorarioIndisponivelAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {UnavailableTimeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -5498,13 +5516,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends HorarioIndisponivelAggregateArgs>(args: Subset<T, HorarioIndisponivelAggregateArgs>): PrismaPromise<GetHorarioIndisponivelAggregateType<T>>
+    aggregate<T extends UnavailableTimeAggregateArgs>(args: Subset<T, UnavailableTimeAggregateArgs>): PrismaPromise<GetUnavailableTimeAggregateType<T>>
 
     /**
-     * Group by HorarioIndisponivel.
+     * Group by UnavailableTime.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {HorarioIndisponivelGroupByArgs} args - Group by arguments.
+     * @param {UnavailableTimeGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -5519,14 +5537,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends HorarioIndisponivelGroupByArgs,
+      T extends UnavailableTimeGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: HorarioIndisponivelGroupByArgs['orderBy'] }
-        : { orderBy?: HorarioIndisponivelGroupByArgs['orderBy'] },
+        ? { orderBy: UnavailableTimeGroupByArgs['orderBy'] }
+        : { orderBy?: UnavailableTimeGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends TupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -5575,17 +5593,17 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, HorarioIndisponivelGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHorarioIndisponivelGroupByPayload<T> : PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, UnavailableTimeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUnavailableTimeGroupByPayload<T> : PrismaPromise<InputErrors>
 
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for HorarioIndisponivel.
+   * The delegate class that acts as a "Promise-like" for unavailableTime.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export class Prisma__HorarioIndisponivelClient<T> implements PrismaPromise<T> {
+  export class Prisma__unavailableTimeClient<T> implements PrismaPromise<T> {
     [prisma]: true;
     private readonly _dmmf;
     private readonly _fetcher;
@@ -5632,30 +5650,30 @@ export namespace Prisma {
   // Custom InputTypes
 
   /**
-   * HorarioIndisponivel base type for findUnique actions
+   * unavailableTime base type for findUnique actions
    */
-  export type HorarioIndisponivelFindUniqueArgsBase = {
+  export type unavailableTimeFindUniqueArgsBase = {
     /**
-     * Select specific fields to fetch from the HorarioIndisponivel
+     * Select specific fields to fetch from the unavailableTime
      * 
     **/
-    select?: HorarioIndisponivelSelect | null
+    select?: unavailableTimeSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: HorarioIndisponivelInclude | null
+    include?: unavailableTimeInclude | null
     /**
-     * Filter, which HorarioIndisponivel to fetch.
+     * Filter, which unavailableTime to fetch.
      * 
     **/
-    where: HorarioIndisponivelWhereUniqueInput
+    where: unavailableTimeWhereUniqueInput
   }
 
   /**
-   * HorarioIndisponivel: findUnique
+   * unavailableTime: findUnique
    */
-  export interface HorarioIndisponivelFindUniqueArgs extends HorarioIndisponivelFindUniqueArgsBase {
+  export interface unavailableTimeFindUniqueArgs extends unavailableTimeFindUniqueArgsBase {
    /**
     * Throw an Error if query returns no results
     * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
@@ -5665,65 +5683,65 @@ export namespace Prisma {
       
 
   /**
-   * HorarioIndisponivel base type for findFirst actions
+   * unavailableTime base type for findFirst actions
    */
-  export type HorarioIndisponivelFindFirstArgsBase = {
+  export type unavailableTimeFindFirstArgsBase = {
     /**
-     * Select specific fields to fetch from the HorarioIndisponivel
+     * Select specific fields to fetch from the unavailableTime
      * 
     **/
-    select?: HorarioIndisponivelSelect | null
+    select?: unavailableTimeSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: HorarioIndisponivelInclude | null
+    include?: unavailableTimeInclude | null
     /**
-     * Filter, which HorarioIndisponivel to fetch.
+     * Filter, which unavailableTime to fetch.
      * 
     **/
-    where?: HorarioIndisponivelWhereInput
+    where?: unavailableTimeWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of HorarioIndisponivels to fetch.
+     * Determine the order of unavailableTimes to fetch.
      * 
     **/
-    orderBy?: Enumerable<HorarioIndisponivelOrderByWithRelationInput>
+    orderBy?: Enumerable<unavailableTimeOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for HorarioIndisponivels.
+     * Sets the position for searching for unavailableTimes.
      * 
     **/
-    cursor?: HorarioIndisponivelWhereUniqueInput
+    cursor?: unavailableTimeWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` HorarioIndisponivels from the position of the cursor.
+     * Take `±n` unavailableTimes from the position of the cursor.
      * 
     **/
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` HorarioIndisponivels.
+     * Skip the first `n` unavailableTimes.
      * 
     **/
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of HorarioIndisponivels.
+     * Filter by unique combinations of unavailableTimes.
      * 
     **/
-    distinct?: Enumerable<HorarioIndisponivelScalarFieldEnum>
+    distinct?: Enumerable<UnavailableTimeScalarFieldEnum>
   }
 
   /**
-   * HorarioIndisponivel: findFirst
+   * unavailableTime: findFirst
    */
-  export interface HorarioIndisponivelFindFirstArgs extends HorarioIndisponivelFindFirstArgsBase {
+  export interface unavailableTimeFindFirstArgs extends unavailableTimeFindFirstArgsBase {
    /**
     * Throw an Error if query returns no results
     * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
@@ -5733,227 +5751,227 @@ export namespace Prisma {
       
 
   /**
-   * HorarioIndisponivel findMany
+   * unavailableTime findMany
    */
-  export type HorarioIndisponivelFindManyArgs = {
+  export type unavailableTimeFindManyArgs = {
     /**
-     * Select specific fields to fetch from the HorarioIndisponivel
+     * Select specific fields to fetch from the unavailableTime
      * 
     **/
-    select?: HorarioIndisponivelSelect | null
+    select?: unavailableTimeSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: HorarioIndisponivelInclude | null
+    include?: unavailableTimeInclude | null
     /**
-     * Filter, which HorarioIndisponivels to fetch.
+     * Filter, which unavailableTimes to fetch.
      * 
     **/
-    where?: HorarioIndisponivelWhereInput
+    where?: unavailableTimeWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of HorarioIndisponivels to fetch.
+     * Determine the order of unavailableTimes to fetch.
      * 
     **/
-    orderBy?: Enumerable<HorarioIndisponivelOrderByWithRelationInput>
+    orderBy?: Enumerable<unavailableTimeOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing HorarioIndisponivels.
+     * Sets the position for listing unavailableTimes.
      * 
     **/
-    cursor?: HorarioIndisponivelWhereUniqueInput
+    cursor?: unavailableTimeWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` HorarioIndisponivels from the position of the cursor.
+     * Take `±n` unavailableTimes from the position of the cursor.
      * 
     **/
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` HorarioIndisponivels.
+     * Skip the first `n` unavailableTimes.
      * 
     **/
     skip?: number
-    distinct?: Enumerable<HorarioIndisponivelScalarFieldEnum>
+    distinct?: Enumerable<UnavailableTimeScalarFieldEnum>
   }
 
 
   /**
-   * HorarioIndisponivel create
+   * unavailableTime create
    */
-  export type HorarioIndisponivelCreateArgs = {
+  export type unavailableTimeCreateArgs = {
     /**
-     * Select specific fields to fetch from the HorarioIndisponivel
+     * Select specific fields to fetch from the unavailableTime
      * 
     **/
-    select?: HorarioIndisponivelSelect | null
+    select?: unavailableTimeSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: HorarioIndisponivelInclude | null
+    include?: unavailableTimeInclude | null
     /**
-     * The data needed to create a HorarioIndisponivel.
+     * The data needed to create a unavailableTime.
      * 
     **/
-    data: XOR<HorarioIndisponivelCreateInput, HorarioIndisponivelUncheckedCreateInput>
+    data: XOR<unavailableTimeCreateInput, unavailableTimeUncheckedCreateInput>
   }
 
 
   /**
-   * HorarioIndisponivel createMany
+   * unavailableTime createMany
    */
-  export type HorarioIndisponivelCreateManyArgs = {
+  export type unavailableTimeCreateManyArgs = {
     /**
-     * The data used to create many HorarioIndisponivels.
+     * The data used to create many unavailableTimes.
      * 
     **/
-    data: Enumerable<HorarioIndisponivelCreateManyInput>
+    data: Enumerable<unavailableTimeCreateManyInput>
     skipDuplicates?: boolean
   }
 
 
   /**
-   * HorarioIndisponivel update
+   * unavailableTime update
    */
-  export type HorarioIndisponivelUpdateArgs = {
+  export type unavailableTimeUpdateArgs = {
     /**
-     * Select specific fields to fetch from the HorarioIndisponivel
+     * Select specific fields to fetch from the unavailableTime
      * 
     **/
-    select?: HorarioIndisponivelSelect | null
+    select?: unavailableTimeSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: HorarioIndisponivelInclude | null
+    include?: unavailableTimeInclude | null
     /**
-     * The data needed to update a HorarioIndisponivel.
+     * The data needed to update a unavailableTime.
      * 
     **/
-    data: XOR<HorarioIndisponivelUpdateInput, HorarioIndisponivelUncheckedUpdateInput>
+    data: XOR<unavailableTimeUpdateInput, unavailableTimeUncheckedUpdateInput>
     /**
-     * Choose, which HorarioIndisponivel to update.
+     * Choose, which unavailableTime to update.
      * 
     **/
-    where: HorarioIndisponivelWhereUniqueInput
+    where: unavailableTimeWhereUniqueInput
   }
 
 
   /**
-   * HorarioIndisponivel updateMany
+   * unavailableTime updateMany
    */
-  export type HorarioIndisponivelUpdateManyArgs = {
+  export type unavailableTimeUpdateManyArgs = {
     /**
-     * The data used to update HorarioIndisponivels.
+     * The data used to update unavailableTimes.
      * 
     **/
-    data: XOR<HorarioIndisponivelUpdateManyMutationInput, HorarioIndisponivelUncheckedUpdateManyInput>
+    data: XOR<unavailableTimeUpdateManyMutationInput, unavailableTimeUncheckedUpdateManyInput>
     /**
-     * Filter which HorarioIndisponivels to update
+     * Filter which unavailableTimes to update
      * 
     **/
-    where?: HorarioIndisponivelWhereInput
+    where?: unavailableTimeWhereInput
   }
 
 
   /**
-   * HorarioIndisponivel upsert
+   * unavailableTime upsert
    */
-  export type HorarioIndisponivelUpsertArgs = {
+  export type unavailableTimeUpsertArgs = {
     /**
-     * Select specific fields to fetch from the HorarioIndisponivel
+     * Select specific fields to fetch from the unavailableTime
      * 
     **/
-    select?: HorarioIndisponivelSelect | null
+    select?: unavailableTimeSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: HorarioIndisponivelInclude | null
+    include?: unavailableTimeInclude | null
     /**
-     * The filter to search for the HorarioIndisponivel to update in case it exists.
+     * The filter to search for the unavailableTime to update in case it exists.
      * 
     **/
-    where: HorarioIndisponivelWhereUniqueInput
+    where: unavailableTimeWhereUniqueInput
     /**
-     * In case the HorarioIndisponivel found by the `where` argument doesn't exist, create a new HorarioIndisponivel with this data.
+     * In case the unavailableTime found by the `where` argument doesn't exist, create a new unavailableTime with this data.
      * 
     **/
-    create: XOR<HorarioIndisponivelCreateInput, HorarioIndisponivelUncheckedCreateInput>
+    create: XOR<unavailableTimeCreateInput, unavailableTimeUncheckedCreateInput>
     /**
-     * In case the HorarioIndisponivel was found with the provided `where` argument, update it with this data.
+     * In case the unavailableTime was found with the provided `where` argument, update it with this data.
      * 
     **/
-    update: XOR<HorarioIndisponivelUpdateInput, HorarioIndisponivelUncheckedUpdateInput>
+    update: XOR<unavailableTimeUpdateInput, unavailableTimeUncheckedUpdateInput>
   }
 
 
   /**
-   * HorarioIndisponivel delete
+   * unavailableTime delete
    */
-  export type HorarioIndisponivelDeleteArgs = {
+  export type unavailableTimeDeleteArgs = {
     /**
-     * Select specific fields to fetch from the HorarioIndisponivel
+     * Select specific fields to fetch from the unavailableTime
      * 
     **/
-    select?: HorarioIndisponivelSelect | null
+    select?: unavailableTimeSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: HorarioIndisponivelInclude | null
+    include?: unavailableTimeInclude | null
     /**
-     * Filter which HorarioIndisponivel to delete.
+     * Filter which unavailableTime to delete.
      * 
     **/
-    where: HorarioIndisponivelWhereUniqueInput
+    where: unavailableTimeWhereUniqueInput
   }
 
 
   /**
-   * HorarioIndisponivel deleteMany
+   * unavailableTime deleteMany
    */
-  export type HorarioIndisponivelDeleteManyArgs = {
+  export type unavailableTimeDeleteManyArgs = {
     /**
-     * Filter which HorarioIndisponivels to delete
+     * Filter which unavailableTimes to delete
      * 
     **/
-    where?: HorarioIndisponivelWhereInput
+    where?: unavailableTimeWhereInput
   }
 
 
   /**
-   * HorarioIndisponivel: findUniqueOrThrow
+   * unavailableTime: findUniqueOrThrow
    */
-  export type HorarioIndisponivelFindUniqueOrThrowArgs = HorarioIndisponivelFindUniqueArgsBase
+  export type unavailableTimeFindUniqueOrThrowArgs = unavailableTimeFindUniqueArgsBase
       
 
   /**
-   * HorarioIndisponivel: findFirstOrThrow
+   * unavailableTime: findFirstOrThrow
    */
-  export type HorarioIndisponivelFindFirstOrThrowArgs = HorarioIndisponivelFindFirstArgsBase
+  export type unavailableTimeFindFirstOrThrowArgs = unavailableTimeFindFirstArgsBase
       
 
   /**
-   * HorarioIndisponivel without action
+   * unavailableTime without action
    */
-  export type HorarioIndisponivelArgs = {
+  export type unavailableTimeArgs = {
     /**
-     * Select specific fields to fetch from the HorarioIndisponivel
+     * Select specific fields to fetch from the unavailableTime
      * 
     **/
-    select?: HorarioIndisponivelSelect | null
+    select?: unavailableTimeSelect | null
     /**
      * Choose, which related nodes to fetch as well.
      * 
     **/
-    include?: HorarioIndisponivelInclude | null
+    include?: unavailableTimeInclude | null
   }
 
 
@@ -6129,13 +6147,13 @@ export namespace Prisma {
     active?: boolean
     created_at?: boolean
     updated_at?: boolean
-    Sport?: boolean | SportArgs
+    sport?: boolean | SportArgs
     sportsId?: boolean
   }
 
   export type CourtHasSportsInclude = {
     court?: boolean | CourtArgs
-    Sport?: boolean | SportArgs
+    sport?: boolean | SportArgs
   }
 
   export type CourtHasSportsGetPayload<
@@ -6150,13 +6168,13 @@ export namespace Prisma {
     ? CourtHasSports  & {
     [P in TrueKeys<S['include']>]:
         P extends 'court' ? CourtGetPayload<Exclude<S['include'], undefined | null>[P]> :
-        P extends 'Sport' ? SportGetPayload<Exclude<S['include'], undefined | null>[P]> | null :  never
+        P extends 'sport' ? SportGetPayload<Exclude<S['include'], undefined | null>[P]> | null :  never
   } 
     : 'select' extends U
     ? {
     [P in TrueKeys<S['select']>]:
         P extends 'court' ? CourtGetPayload<Exclude<S['select'], undefined | null>[P]> :
-        P extends 'Sport' ? SportGetPayload<Exclude<S['select'], undefined | null>[P]> | null :  P extends keyof CourtHasSports ? CourtHasSports[P] : never
+        P extends 'sport' ? SportGetPayload<Exclude<S['select'], undefined | null>[P]> | null :  P extends keyof CourtHasSports ? CourtHasSports[P] : never
   } 
     : CourtHasSports
   : CourtHasSports
@@ -6533,7 +6551,7 @@ export namespace Prisma {
 
     court<T extends CourtArgs = {}>(args?: Subset<T, CourtArgs>): CheckSelect<T, Prisma__CourtClient<Court | null >, Prisma__CourtClient<CourtGetPayload<T> | null >>;
 
-    Sport<T extends SportArgs = {}>(args?: Subset<T, SportArgs>): CheckSelect<T, Prisma__SportClient<Sport | null >, Prisma__SportClient<SportGetPayload<T> | null >>;
+    sport<T extends SportArgs = {}>(args?: Subset<T, SportArgs>): CheckSelect<T, Prisma__SportClient<Sport | null >, Prisma__SportClient<SportGetPayload<T> | null >>;
 
     private get _document();
     /**
@@ -8739,23 +8757,10 @@ export namespace Prisma {
 
   export const CourtScalarFieldEnum: {
     id: 'id',
-    Name: 'Name'
+    name: 'name'
   };
 
   export type CourtScalarFieldEnum = (typeof CourtScalarFieldEnum)[keyof typeof CourtScalarFieldEnum]
-
-
-  export const HorarioIndisponivelScalarFieldEnum: {
-    id: 'id',
-    dayOfTheWeek: 'dayOfTheWeek',
-    startTime: 'startTime',
-    endTime: 'endTime',
-    singleOccurency: 'singleOccurency',
-    created_at: 'created_at',
-    courtId: 'courtId'
-  };
-
-  export type HorarioIndisponivelScalarFieldEnum = (typeof HorarioIndisponivelScalarFieldEnum)[keyof typeof HorarioIndisponivelScalarFieldEnum]
 
 
   export const QueryMode: {
@@ -8808,7 +8813,7 @@ export namespace Prisma {
 
   export const SportScalarFieldEnum: {
     id: 'id',
-    Name: 'Name',
+    name: 'name',
     maxAmount: 'maxAmount'
   };
 
@@ -8825,12 +8830,27 @@ export namespace Prisma {
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+  export const UnavailableTimeScalarFieldEnum: {
+    id: 'id',
+    dayOfTheWeek: 'dayOfTheWeek',
+    startTime: 'startTime',
+    endTime: 'endTime',
+    singleOccurency: 'singleOccurency',
+    created_at: 'created_at',
+    courtId: 'courtId'
+  };
+
+  export type UnavailableTimeScalarFieldEnum = (typeof UnavailableTimeScalarFieldEnum)[keyof typeof UnavailableTimeScalarFieldEnum]
+
+
   export const UserScalarFieldEnum: {
     id: 'id',
-    Name: 'Name',
-    RA: 'RA',
-    Email: 'Email',
-    Campi: 'Campi'
+    name: 'name',
+    ra: 'ra',
+    password: 'password',
+    email: 'email',
+    campi: 'campi',
+    role: 'role'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -8846,24 +8866,28 @@ export namespace Prisma {
     OR?: Enumerable<UserWhereInput>
     NOT?: Enumerable<UserWhereInput>
     id?: StringFilter | string
-    Name?: StringFilter | string
-    RA?: IntFilter | number
-    Email?: StringFilter | string
-    Campi?: StringFilter | string
-    Reservations?: ReservationHasUsersListRelationFilter
-    RequestedReservations?: ReservationHasRequestedUsersListRelationFilter
-    ManagerOfReservations?: ReservationListRelationFilter
+    name?: StringFilter | string
+    ra?: IntFilter | number
+    password?: StringFilter | string
+    email?: StringFilter | string
+    campi?: StringFilter | string
+    role?: StringFilter | string
+    reservations?: ReservationHasUsersListRelationFilter
+    requestedReservations?: ReservationHasRequestedUsersListRelationFilter
+    managerOfReservations?: ReservationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
-    Name?: SortOrder
-    RA?: SortOrder
-    Email?: SortOrder
-    Campi?: SortOrder
-    Reservations?: ReservationHasUsersOrderByRelationAggregateInput
-    RequestedReservations?: ReservationHasRequestedUsersOrderByRelationAggregateInput
-    ManagerOfReservations?: ReservationOrderByRelationAggregateInput
+    name?: SortOrder
+    ra?: SortOrder
+    password?: SortOrder
+    email?: SortOrder
+    campi?: SortOrder
+    role?: SortOrder
+    reservations?: ReservationHasUsersOrderByRelationAggregateInput
+    requestedReservations?: ReservationHasRequestedUsersOrderByRelationAggregateInput
+    managerOfReservations?: ReservationOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = {
@@ -8872,10 +8896,12 @@ export namespace Prisma {
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
-    Name?: SortOrder
-    RA?: SortOrder
-    Email?: SortOrder
-    Campi?: SortOrder
+    name?: SortOrder
+    ra?: SortOrder
+    password?: SortOrder
+    email?: SortOrder
+    campi?: SortOrder
+    role?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -8888,10 +8914,12 @@ export namespace Prisma {
     OR?: Enumerable<UserScalarWhereWithAggregatesInput>
     NOT?: Enumerable<UserScalarWhereWithAggregatesInput>
     id?: StringWithAggregatesFilter | string
-    Name?: StringWithAggregatesFilter | string
-    RA?: IntWithAggregatesFilter | number
-    Email?: StringWithAggregatesFilter | string
-    Campi?: StringWithAggregatesFilter | string
+    name?: StringWithAggregatesFilter | string
+    ra?: IntWithAggregatesFilter | number
+    password?: StringWithAggregatesFilter | string
+    email?: StringWithAggregatesFilter | string
+    campi?: StringWithAggregatesFilter | string
+    role?: StringWithAggregatesFilter | string
   }
 
   export type SportWhereInput = {
@@ -8899,18 +8927,18 @@ export namespace Prisma {
     OR?: Enumerable<SportWhereInput>
     NOT?: Enumerable<SportWhereInput>
     id?: StringFilter | string
-    Name?: StringFilter | string
+    name?: StringFilter | string
     maxAmount?: StringNullableFilter | string | null
-    Courts?: CourtHasSportsListRelationFilter
-    Reservation?: ReservationListRelationFilter
+    courts?: CourtHasSportsListRelationFilter
+    reservation?: ReservationListRelationFilter
   }
 
   export type SportOrderByWithRelationInput = {
     id?: SortOrder
-    Name?: SortOrder
+    name?: SortOrder
     maxAmount?: SortOrder
-    Courts?: CourtHasSportsOrderByRelationAggregateInput
-    Reservation?: ReservationOrderByRelationAggregateInput
+    courts?: CourtHasSportsOrderByRelationAggregateInput
+    reservation?: ReservationOrderByRelationAggregateInput
   }
 
   export type SportWhereUniqueInput = {
@@ -8919,7 +8947,7 @@ export namespace Prisma {
 
   export type SportOrderByWithAggregationInput = {
     id?: SortOrder
-    Name?: SortOrder
+    name?: SortOrder
     maxAmount?: SortOrder
     _count?: SportCountOrderByAggregateInput
     _max?: SportMaxOrderByAggregateInput
@@ -8931,7 +8959,7 @@ export namespace Prisma {
     OR?: Enumerable<SportScalarWhereWithAggregatesInput>
     NOT?: Enumerable<SportScalarWhereWithAggregatesInput>
     id?: StringWithAggregatesFilter | string
-    Name?: StringWithAggregatesFilter | string
+    name?: StringWithAggregatesFilter | string
     maxAmount?: StringNullableWithAggregatesFilter | string | null
   }
 
@@ -8940,18 +8968,18 @@ export namespace Prisma {
     OR?: Enumerable<CourtWhereInput>
     NOT?: Enumerable<CourtWhereInput>
     id?: StringFilter | string
-    Name?: StringFilter | string
-    Sports?: CourtHasSportsListRelationFilter
-    Reservation?: ReservationListRelationFilter
-    HorarioIndisponivel?: HorarioIndisponivelListRelationFilter
+    name?: StringFilter | string
+    sports?: CourtHasSportsListRelationFilter
+    reservation?: ReservationListRelationFilter
+    unavailableTime?: UnavailableTimeListRelationFilter
   }
 
   export type CourtOrderByWithRelationInput = {
     id?: SortOrder
-    Name?: SortOrder
-    Sports?: CourtHasSportsOrderByRelationAggregateInput
-    Reservation?: ReservationOrderByRelationAggregateInput
-    HorarioIndisponivel?: HorarioIndisponivelOrderByRelationAggregateInput
+    name?: SortOrder
+    sports?: CourtHasSportsOrderByRelationAggregateInput
+    reservation?: ReservationOrderByRelationAggregateInput
+    unavailableTime?: unavailableTimeOrderByRelationAggregateInput
   }
 
   export type CourtWhereUniqueInput = {
@@ -8960,7 +8988,7 @@ export namespace Prisma {
 
   export type CourtOrderByWithAggregationInput = {
     id?: SortOrder
-    Name?: SortOrder
+    name?: SortOrder
     _count?: CourtCountOrderByAggregateInput
     _max?: CourtMaxOrderByAggregateInput
     _min?: CourtMinOrderByAggregateInput
@@ -8971,7 +8999,7 @@ export namespace Prisma {
     OR?: Enumerable<CourtScalarWhereWithAggregatesInput>
     NOT?: Enumerable<CourtScalarWhereWithAggregatesInput>
     id?: StringWithAggregatesFilter | string
-    Name?: StringWithAggregatesFilter | string
+    name?: StringWithAggregatesFilter | string
   }
 
   export type ReservationWhereInput = {
@@ -9043,10 +9071,10 @@ export namespace Prisma {
     description?: StringWithAggregatesFilter | string
   }
 
-  export type HorarioIndisponivelWhereInput = {
-    AND?: Enumerable<HorarioIndisponivelWhereInput>
-    OR?: Enumerable<HorarioIndisponivelWhereInput>
-    NOT?: Enumerable<HorarioIndisponivelWhereInput>
+  export type unavailableTimeWhereInput = {
+    AND?: Enumerable<unavailableTimeWhereInput>
+    OR?: Enumerable<unavailableTimeWhereInput>
+    NOT?: Enumerable<unavailableTimeWhereInput>
     id?: StringFilter | string
     dayOfTheWeek?: EnumDayOfTheWeekFilter | DayOfTheWeek
     startTime?: DateTimeFilter | Date | string
@@ -9057,7 +9085,7 @@ export namespace Prisma {
     courtId?: StringFilter | string
   }
 
-  export type HorarioIndisponivelOrderByWithRelationInput = {
+  export type unavailableTimeOrderByWithRelationInput = {
     id?: SortOrder
     dayOfTheWeek?: SortOrder
     startTime?: SortOrder
@@ -9068,11 +9096,11 @@ export namespace Prisma {
     courtId?: SortOrder
   }
 
-  export type HorarioIndisponivelWhereUniqueInput = {
+  export type unavailableTimeWhereUniqueInput = {
     id?: string
   }
 
-  export type HorarioIndisponivelOrderByWithAggregationInput = {
+  export type unavailableTimeOrderByWithAggregationInput = {
     id?: SortOrder
     dayOfTheWeek?: SortOrder
     startTime?: SortOrder
@@ -9080,15 +9108,15 @@ export namespace Prisma {
     singleOccurency?: SortOrder
     created_at?: SortOrder
     courtId?: SortOrder
-    _count?: HorarioIndisponivelCountOrderByAggregateInput
-    _max?: HorarioIndisponivelMaxOrderByAggregateInput
-    _min?: HorarioIndisponivelMinOrderByAggregateInput
+    _count?: unavailableTimeCountOrderByAggregateInput
+    _max?: unavailableTimeMaxOrderByAggregateInput
+    _min?: unavailableTimeMinOrderByAggregateInput
   }
 
-  export type HorarioIndisponivelScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<HorarioIndisponivelScalarWhereWithAggregatesInput>
-    OR?: Enumerable<HorarioIndisponivelScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<HorarioIndisponivelScalarWhereWithAggregatesInput>
+  export type unavailableTimeScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<unavailableTimeScalarWhereWithAggregatesInput>
+    OR?: Enumerable<unavailableTimeScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<unavailableTimeScalarWhereWithAggregatesInput>
     id?: StringWithAggregatesFilter | string
     dayOfTheWeek?: EnumDayOfTheWeekWithAggregatesFilter | DayOfTheWeek
     startTime?: DateTimeWithAggregatesFilter | Date | string
@@ -9107,7 +9135,7 @@ export namespace Prisma {
     active?: BoolFilter | boolean
     created_at?: DateTimeFilter | Date | string
     updated_at?: DateTimeNullableFilter | Date | string | null
-    Sport?: XOR<SportRelationFilter, SportWhereInput> | null
+    sport?: XOR<SportRelationFilter, SportWhereInput> | null
     sportsId?: StringNullableFilter | string | null
   }
 
@@ -9117,7 +9145,7 @@ export namespace Prisma {
     active?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
-    Sport?: SportOrderByWithRelationInput
+    sport?: SportOrderByWithRelationInput
     sportsId?: SortOrder
   }
 
@@ -9231,167 +9259,181 @@ export namespace Prisma {
 
   export type UserCreateInput = {
     id?: string
-    Name: string
-    RA: number
-    Email: string
-    Campi: string
-    Reservations?: ReservationHasUsersCreateNestedManyWithoutUserInput
-    RequestedReservations?: ReservationHasRequestedUsersCreateNestedManyWithoutUserInput
-    ManagerOfReservations?: ReservationCreateNestedManyWithoutManagerInput
+    name: string
+    ra: number
+    password: string
+    email: string
+    campi: string
+    role?: string
+    reservations?: ReservationHasUsersCreateNestedManyWithoutUserInput
+    requestedReservations?: ReservationHasRequestedUsersCreateNestedManyWithoutUserInput
+    managerOfReservations?: ReservationCreateNestedManyWithoutManagerInput
   }
 
   export type UserUncheckedCreateInput = {
     id?: string
-    Name: string
-    RA: number
-    Email: string
-    Campi: string
-    Reservations?: ReservationHasUsersUncheckedCreateNestedManyWithoutUserInput
-    RequestedReservations?: ReservationHasRequestedUsersUncheckedCreateNestedManyWithoutUserInput
-    ManagerOfReservations?: ReservationUncheckedCreateNestedManyWithoutManagerInput
+    name: string
+    ra: number
+    password: string
+    email: string
+    campi: string
+    role?: string
+    reservations?: ReservationHasUsersUncheckedCreateNestedManyWithoutUserInput
+    requestedReservations?: ReservationHasRequestedUsersUncheckedCreateNestedManyWithoutUserInput
+    managerOfReservations?: ReservationUncheckedCreateNestedManyWithoutManagerInput
   }
 
   export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
-    RA?: IntFieldUpdateOperationsInput | number
-    Email?: StringFieldUpdateOperationsInput | string
-    Campi?: StringFieldUpdateOperationsInput | string
-    Reservations?: ReservationHasUsersUpdateManyWithoutUserNestedInput
-    RequestedReservations?: ReservationHasRequestedUsersUpdateManyWithoutUserNestedInput
-    ManagerOfReservations?: ReservationUpdateManyWithoutManagerNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    ra?: IntFieldUpdateOperationsInput | number
+    password?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    campi?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    reservations?: ReservationHasUsersUpdateManyWithoutUserNestedInput
+    requestedReservations?: ReservationHasRequestedUsersUpdateManyWithoutUserNestedInput
+    managerOfReservations?: ReservationUpdateManyWithoutManagerNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
-    RA?: IntFieldUpdateOperationsInput | number
-    Email?: StringFieldUpdateOperationsInput | string
-    Campi?: StringFieldUpdateOperationsInput | string
-    Reservations?: ReservationHasUsersUncheckedUpdateManyWithoutUserNestedInput
-    RequestedReservations?: ReservationHasRequestedUsersUncheckedUpdateManyWithoutUserNestedInput
-    ManagerOfReservations?: ReservationUncheckedUpdateManyWithoutManagerNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    ra?: IntFieldUpdateOperationsInput | number
+    password?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    campi?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    reservations?: ReservationHasUsersUncheckedUpdateManyWithoutUserNestedInput
+    requestedReservations?: ReservationHasRequestedUsersUncheckedUpdateManyWithoutUserNestedInput
+    managerOfReservations?: ReservationUncheckedUpdateManyWithoutManagerNestedInput
   }
 
   export type UserCreateManyInput = {
     id?: string
-    Name: string
-    RA: number
-    Email: string
-    Campi: string
+    name: string
+    ra: number
+    password: string
+    email: string
+    campi: string
+    role?: string
   }
 
   export type UserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
-    RA?: IntFieldUpdateOperationsInput | number
-    Email?: StringFieldUpdateOperationsInput | string
-    Campi?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    ra?: IntFieldUpdateOperationsInput | number
+    password?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    campi?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
-    RA?: IntFieldUpdateOperationsInput | number
-    Email?: StringFieldUpdateOperationsInput | string
-    Campi?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    ra?: IntFieldUpdateOperationsInput | number
+    password?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    campi?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
   }
 
   export type SportCreateInput = {
     id?: string
-    Name: string
+    name: string
     maxAmount?: string | null
-    Courts?: CourtHasSportsCreateNestedManyWithoutSportInput
-    Reservation?: ReservationCreateNestedManyWithoutSportInput
+    courts?: CourtHasSportsCreateNestedManyWithoutSportInput
+    reservation?: ReservationCreateNestedManyWithoutSportInput
   }
 
   export type SportUncheckedCreateInput = {
     id?: string
-    Name: string
+    name: string
     maxAmount?: string | null
-    Courts?: CourtHasSportsUncheckedCreateNestedManyWithoutSportInput
-    Reservation?: ReservationUncheckedCreateNestedManyWithoutSportInput
+    courts?: CourtHasSportsUncheckedCreateNestedManyWithoutSportInput
+    reservation?: ReservationUncheckedCreateNestedManyWithoutSportInput
   }
 
   export type SportUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     maxAmount?: NullableStringFieldUpdateOperationsInput | string | null
-    Courts?: CourtHasSportsUpdateManyWithoutSportNestedInput
-    Reservation?: ReservationUpdateManyWithoutSportNestedInput
+    courts?: CourtHasSportsUpdateManyWithoutSportNestedInput
+    reservation?: ReservationUpdateManyWithoutSportNestedInput
   }
 
   export type SportUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     maxAmount?: NullableStringFieldUpdateOperationsInput | string | null
-    Courts?: CourtHasSportsUncheckedUpdateManyWithoutSportNestedInput
-    Reservation?: ReservationUncheckedUpdateManyWithoutSportNestedInput
+    courts?: CourtHasSportsUncheckedUpdateManyWithoutSportNestedInput
+    reservation?: ReservationUncheckedUpdateManyWithoutSportNestedInput
   }
 
   export type SportCreateManyInput = {
     id?: string
-    Name: string
+    name: string
     maxAmount?: string | null
   }
 
   export type SportUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     maxAmount?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SportUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     maxAmount?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CourtCreateInput = {
     id?: string
-    Name: string
-    Sports?: CourtHasSportsCreateNestedManyWithoutCourtInput
-    Reservation?: ReservationCreateNestedManyWithoutCourtInput
-    HorarioIndisponivel?: HorarioIndisponivelCreateNestedManyWithoutCourtInput
+    name: string
+    sports?: CourtHasSportsCreateNestedManyWithoutCourtInput
+    reservation?: ReservationCreateNestedManyWithoutCourtInput
+    unavailableTime?: unavailableTimeCreateNestedManyWithoutCourtInput
   }
 
   export type CourtUncheckedCreateInput = {
     id?: string
-    Name: string
-    Sports?: CourtHasSportsUncheckedCreateNestedManyWithoutCourtInput
-    Reservation?: ReservationUncheckedCreateNestedManyWithoutCourtInput
-    HorarioIndisponivel?: HorarioIndisponivelUncheckedCreateNestedManyWithoutCourtInput
+    name: string
+    sports?: CourtHasSportsUncheckedCreateNestedManyWithoutCourtInput
+    reservation?: ReservationUncheckedCreateNestedManyWithoutCourtInput
+    unavailableTime?: unavailableTimeUncheckedCreateNestedManyWithoutCourtInput
   }
 
   export type CourtUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
-    Sports?: CourtHasSportsUpdateManyWithoutCourtNestedInput
-    Reservation?: ReservationUpdateManyWithoutCourtNestedInput
-    HorarioIndisponivel?: HorarioIndisponivelUpdateManyWithoutCourtNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    sports?: CourtHasSportsUpdateManyWithoutCourtNestedInput
+    reservation?: ReservationUpdateManyWithoutCourtNestedInput
+    unavailableTime?: unavailableTimeUpdateManyWithoutCourtNestedInput
   }
 
   export type CourtUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
-    Sports?: CourtHasSportsUncheckedUpdateManyWithoutCourtNestedInput
-    Reservation?: ReservationUncheckedUpdateManyWithoutCourtNestedInput
-    HorarioIndisponivel?: HorarioIndisponivelUncheckedUpdateManyWithoutCourtNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    sports?: CourtHasSportsUncheckedUpdateManyWithoutCourtNestedInput
+    reservation?: ReservationUncheckedUpdateManyWithoutCourtNestedInput
+    unavailableTime?: unavailableTimeUncheckedUpdateManyWithoutCourtNestedInput
   }
 
   export type CourtCreateManyInput = {
     id?: string
-    Name: string
+    name: string
   }
 
   export type CourtUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
   }
 
   export type CourtUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
   }
 
   export type ReservationCreateInput = {
@@ -9476,17 +9518,17 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
   }
 
-  export type HorarioIndisponivelCreateInput = {
+  export type unavailableTimeCreateInput = {
     id?: string
     dayOfTheWeek: DayOfTheWeek
     startTime: Date | string
     endTime: Date | string
     singleOccurency: Date | string
-    court: CourtCreateNestedOneWithoutHorarioIndisponivelInput
+    court: CourtCreateNestedOneWithoutUnavailableTimeInput
     created_at?: Date | string
   }
 
-  export type HorarioIndisponivelUncheckedCreateInput = {
+  export type unavailableTimeUncheckedCreateInput = {
     id?: string
     dayOfTheWeek: DayOfTheWeek
     startTime: Date | string
@@ -9496,17 +9538,17 @@ export namespace Prisma {
     courtId: string
   }
 
-  export type HorarioIndisponivelUpdateInput = {
+  export type unavailableTimeUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
     singleOccurency?: DateTimeFieldUpdateOperationsInput | Date | string
-    court?: CourtUpdateOneRequiredWithoutHorarioIndisponivelNestedInput
+    court?: CourtUpdateOneRequiredWithoutUnavailableTimeNestedInput
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type HorarioIndisponivelUncheckedUpdateInput = {
+  export type unavailableTimeUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9516,7 +9558,7 @@ export namespace Prisma {
     courtId?: StringFieldUpdateOperationsInput | string
   }
 
-  export type HorarioIndisponivelCreateManyInput = {
+  export type unavailableTimeCreateManyInput = {
     id?: string
     dayOfTheWeek: DayOfTheWeek
     startTime: Date | string
@@ -9526,7 +9568,7 @@ export namespace Prisma {
     courtId: string
   }
 
-  export type HorarioIndisponivelUpdateManyMutationInput = {
+  export type unavailableTimeUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9535,7 +9577,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type HorarioIndisponivelUncheckedUpdateManyInput = {
+  export type unavailableTimeUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9550,7 +9592,7 @@ export namespace Prisma {
     active?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
-    Sport?: SportCreateNestedOneWithoutCourtsInput
+    sport?: SportCreateNestedOneWithoutCourtsInput
   }
 
   export type CourtHasSportsUncheckedCreateInput = {
@@ -9566,7 +9608,7 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    Sport?: SportUpdateOneWithoutCourtsNestedInput
+    sport?: SportUpdateOneWithoutCourtsNestedInput
   }
 
   export type CourtHasSportsUncheckedUpdateInput = {
@@ -9737,34 +9779,40 @@ export namespace Prisma {
 
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
-    Name?: SortOrder
-    RA?: SortOrder
-    Email?: SortOrder
-    Campi?: SortOrder
+    name?: SortOrder
+    ra?: SortOrder
+    password?: SortOrder
+    email?: SortOrder
+    campi?: SortOrder
+    role?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
-    RA?: SortOrder
+    ra?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
-    Name?: SortOrder
-    RA?: SortOrder
-    Email?: SortOrder
-    Campi?: SortOrder
+    name?: SortOrder
+    ra?: SortOrder
+    password?: SortOrder
+    email?: SortOrder
+    campi?: SortOrder
+    role?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
     id?: SortOrder
-    Name?: SortOrder
-    RA?: SortOrder
-    Email?: SortOrder
-    Campi?: SortOrder
+    name?: SortOrder
+    ra?: SortOrder
+    password?: SortOrder
+    email?: SortOrder
+    campi?: SortOrder
+    role?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
-    RA?: SortOrder
+    ra?: SortOrder
   }
 
   export type StringWithAggregatesFilter = {
@@ -9828,19 +9876,19 @@ export namespace Prisma {
 
   export type SportCountOrderByAggregateInput = {
     id?: SortOrder
-    Name?: SortOrder
+    name?: SortOrder
     maxAmount?: SortOrder
   }
 
   export type SportMaxOrderByAggregateInput = {
     id?: SortOrder
-    Name?: SortOrder
+    name?: SortOrder
     maxAmount?: SortOrder
   }
 
   export type SportMinOrderByAggregateInput = {
     id?: SortOrder
-    Name?: SortOrder
+    name?: SortOrder
     maxAmount?: SortOrder
   }
 
@@ -9862,29 +9910,29 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter
   }
 
-  export type HorarioIndisponivelListRelationFilter = {
-    every?: HorarioIndisponivelWhereInput
-    some?: HorarioIndisponivelWhereInput
-    none?: HorarioIndisponivelWhereInput
+  export type UnavailableTimeListRelationFilter = {
+    every?: unavailableTimeWhereInput
+    some?: unavailableTimeWhereInput
+    none?: unavailableTimeWhereInput
   }
 
-  export type HorarioIndisponivelOrderByRelationAggregateInput = {
+  export type unavailableTimeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type CourtCountOrderByAggregateInput = {
     id?: SortOrder
-    Name?: SortOrder
+    name?: SortOrder
   }
 
   export type CourtMaxOrderByAggregateInput = {
     id?: SortOrder
-    Name?: SortOrder
+    name?: SortOrder
   }
 
   export type CourtMinOrderByAggregateInput = {
     id?: SortOrder
-    Name?: SortOrder
+    name?: SortOrder
   }
 
   export type DateTimeNullableFilter = {
@@ -10000,7 +10048,7 @@ export namespace Prisma {
     not?: NestedEnumDayOfTheWeekFilter | DayOfTheWeek
   }
 
-  export type HorarioIndisponivelCountOrderByAggregateInput = {
+  export type unavailableTimeCountOrderByAggregateInput = {
     id?: SortOrder
     dayOfTheWeek?: SortOrder
     startTime?: SortOrder
@@ -10010,7 +10058,7 @@ export namespace Prisma {
     courtId?: SortOrder
   }
 
-  export type HorarioIndisponivelMaxOrderByAggregateInput = {
+  export type unavailableTimeMaxOrderByAggregateInput = {
     id?: SortOrder
     dayOfTheWeek?: SortOrder
     startTime?: SortOrder
@@ -10020,7 +10068,7 @@ export namespace Prisma {
     courtId?: SortOrder
   }
 
-  export type HorarioIndisponivelMinOrderByAggregateInput = {
+  export type unavailableTimeMinOrderByAggregateInput = {
     id?: SortOrder
     dayOfTheWeek?: SortOrder
     startTime?: SortOrder
@@ -10368,11 +10416,11 @@ export namespace Prisma {
     connect?: Enumerable<ReservationWhereUniqueInput>
   }
 
-  export type HorarioIndisponivelCreateNestedManyWithoutCourtInput = {
-    create?: XOR<Enumerable<HorarioIndisponivelCreateWithoutCourtInput>, Enumerable<HorarioIndisponivelUncheckedCreateWithoutCourtInput>>
-    connectOrCreate?: Enumerable<HorarioIndisponivelCreateOrConnectWithoutCourtInput>
-    createMany?: HorarioIndisponivelCreateManyCourtInputEnvelope
-    connect?: Enumerable<HorarioIndisponivelWhereUniqueInput>
+  export type unavailableTimeCreateNestedManyWithoutCourtInput = {
+    create?: XOR<Enumerable<unavailableTimeCreateWithoutCourtInput>, Enumerable<unavailableTimeUncheckedCreateWithoutCourtInput>>
+    connectOrCreate?: Enumerable<unavailableTimeCreateOrConnectWithoutCourtInput>
+    createMany?: unavailableTimeCreateManyCourtInputEnvelope
+    connect?: Enumerable<unavailableTimeWhereUniqueInput>
   }
 
   export type CourtHasSportsUncheckedCreateNestedManyWithoutCourtInput = {
@@ -10389,11 +10437,11 @@ export namespace Prisma {
     connect?: Enumerable<ReservationWhereUniqueInput>
   }
 
-  export type HorarioIndisponivelUncheckedCreateNestedManyWithoutCourtInput = {
-    create?: XOR<Enumerable<HorarioIndisponivelCreateWithoutCourtInput>, Enumerable<HorarioIndisponivelUncheckedCreateWithoutCourtInput>>
-    connectOrCreate?: Enumerable<HorarioIndisponivelCreateOrConnectWithoutCourtInput>
-    createMany?: HorarioIndisponivelCreateManyCourtInputEnvelope
-    connect?: Enumerable<HorarioIndisponivelWhereUniqueInput>
+  export type unavailableTimeUncheckedCreateNestedManyWithoutCourtInput = {
+    create?: XOR<Enumerable<unavailableTimeCreateWithoutCourtInput>, Enumerable<unavailableTimeUncheckedCreateWithoutCourtInput>>
+    connectOrCreate?: Enumerable<unavailableTimeCreateOrConnectWithoutCourtInput>
+    createMany?: unavailableTimeCreateManyCourtInputEnvelope
+    connect?: Enumerable<unavailableTimeWhereUniqueInput>
   }
 
   export type CourtHasSportsUpdateManyWithoutCourtNestedInput = {
@@ -10424,18 +10472,18 @@ export namespace Prisma {
     deleteMany?: Enumerable<ReservationScalarWhereInput>
   }
 
-  export type HorarioIndisponivelUpdateManyWithoutCourtNestedInput = {
-    create?: XOR<Enumerable<HorarioIndisponivelCreateWithoutCourtInput>, Enumerable<HorarioIndisponivelUncheckedCreateWithoutCourtInput>>
-    connectOrCreate?: Enumerable<HorarioIndisponivelCreateOrConnectWithoutCourtInput>
-    upsert?: Enumerable<HorarioIndisponivelUpsertWithWhereUniqueWithoutCourtInput>
-    createMany?: HorarioIndisponivelCreateManyCourtInputEnvelope
-    set?: Enumerable<HorarioIndisponivelWhereUniqueInput>
-    disconnect?: Enumerable<HorarioIndisponivelWhereUniqueInput>
-    delete?: Enumerable<HorarioIndisponivelWhereUniqueInput>
-    connect?: Enumerable<HorarioIndisponivelWhereUniqueInput>
-    update?: Enumerable<HorarioIndisponivelUpdateWithWhereUniqueWithoutCourtInput>
-    updateMany?: Enumerable<HorarioIndisponivelUpdateManyWithWhereWithoutCourtInput>
-    deleteMany?: Enumerable<HorarioIndisponivelScalarWhereInput>
+  export type unavailableTimeUpdateManyWithoutCourtNestedInput = {
+    create?: XOR<Enumerable<unavailableTimeCreateWithoutCourtInput>, Enumerable<unavailableTimeUncheckedCreateWithoutCourtInput>>
+    connectOrCreate?: Enumerable<unavailableTimeCreateOrConnectWithoutCourtInput>
+    upsert?: Enumerable<unavailableTimeUpsertWithWhereUniqueWithoutCourtInput>
+    createMany?: unavailableTimeCreateManyCourtInputEnvelope
+    set?: Enumerable<unavailableTimeWhereUniqueInput>
+    disconnect?: Enumerable<unavailableTimeWhereUniqueInput>
+    delete?: Enumerable<unavailableTimeWhereUniqueInput>
+    connect?: Enumerable<unavailableTimeWhereUniqueInput>
+    update?: Enumerable<unavailableTimeUpdateWithWhereUniqueWithoutCourtInput>
+    updateMany?: Enumerable<unavailableTimeUpdateManyWithWhereWithoutCourtInput>
+    deleteMany?: Enumerable<unavailableTimeScalarWhereInput>
   }
 
   export type CourtHasSportsUncheckedUpdateManyWithoutCourtNestedInput = {
@@ -10466,18 +10514,18 @@ export namespace Prisma {
     deleteMany?: Enumerable<ReservationScalarWhereInput>
   }
 
-  export type HorarioIndisponivelUncheckedUpdateManyWithoutCourtNestedInput = {
-    create?: XOR<Enumerable<HorarioIndisponivelCreateWithoutCourtInput>, Enumerable<HorarioIndisponivelUncheckedCreateWithoutCourtInput>>
-    connectOrCreate?: Enumerable<HorarioIndisponivelCreateOrConnectWithoutCourtInput>
-    upsert?: Enumerable<HorarioIndisponivelUpsertWithWhereUniqueWithoutCourtInput>
-    createMany?: HorarioIndisponivelCreateManyCourtInputEnvelope
-    set?: Enumerable<HorarioIndisponivelWhereUniqueInput>
-    disconnect?: Enumerable<HorarioIndisponivelWhereUniqueInput>
-    delete?: Enumerable<HorarioIndisponivelWhereUniqueInput>
-    connect?: Enumerable<HorarioIndisponivelWhereUniqueInput>
-    update?: Enumerable<HorarioIndisponivelUpdateWithWhereUniqueWithoutCourtInput>
-    updateMany?: Enumerable<HorarioIndisponivelUpdateManyWithWhereWithoutCourtInput>
-    deleteMany?: Enumerable<HorarioIndisponivelScalarWhereInput>
+  export type unavailableTimeUncheckedUpdateManyWithoutCourtNestedInput = {
+    create?: XOR<Enumerable<unavailableTimeCreateWithoutCourtInput>, Enumerable<unavailableTimeUncheckedCreateWithoutCourtInput>>
+    connectOrCreate?: Enumerable<unavailableTimeCreateOrConnectWithoutCourtInput>
+    upsert?: Enumerable<unavailableTimeUpsertWithWhereUniqueWithoutCourtInput>
+    createMany?: unavailableTimeCreateManyCourtInputEnvelope
+    set?: Enumerable<unavailableTimeWhereUniqueInput>
+    disconnect?: Enumerable<unavailableTimeWhereUniqueInput>
+    delete?: Enumerable<unavailableTimeWhereUniqueInput>
+    connect?: Enumerable<unavailableTimeWhereUniqueInput>
+    update?: Enumerable<unavailableTimeUpdateWithWhereUniqueWithoutCourtInput>
+    updateMany?: Enumerable<unavailableTimeUpdateManyWithWhereWithoutCourtInput>
+    deleteMany?: Enumerable<unavailableTimeScalarWhereInput>
   }
 
   export type UserCreateNestedOneWithoutManagerOfReservationsInput = {
@@ -10614,9 +10662,9 @@ export namespace Prisma {
     deleteMany?: Enumerable<ReservationHasRequestedUsersScalarWhereInput>
   }
 
-  export type CourtCreateNestedOneWithoutHorarioIndisponivelInput = {
-    create?: XOR<CourtCreateWithoutHorarioIndisponivelInput, CourtUncheckedCreateWithoutHorarioIndisponivelInput>
-    connectOrCreate?: CourtCreateOrConnectWithoutHorarioIndisponivelInput
+  export type CourtCreateNestedOneWithoutUnavailableTimeInput = {
+    create?: XOR<CourtCreateWithoutUnavailableTimeInput, CourtUncheckedCreateWithoutUnavailableTimeInput>
+    connectOrCreate?: CourtCreateOrConnectWithoutUnavailableTimeInput
     connect?: CourtWhereUniqueInput
   }
 
@@ -10624,12 +10672,12 @@ export namespace Prisma {
     set?: DayOfTheWeek
   }
 
-  export type CourtUpdateOneRequiredWithoutHorarioIndisponivelNestedInput = {
-    create?: XOR<CourtCreateWithoutHorarioIndisponivelInput, CourtUncheckedCreateWithoutHorarioIndisponivelInput>
-    connectOrCreate?: CourtCreateOrConnectWithoutHorarioIndisponivelInput
-    upsert?: CourtUpsertWithoutHorarioIndisponivelInput
+  export type CourtUpdateOneRequiredWithoutUnavailableTimeNestedInput = {
+    create?: XOR<CourtCreateWithoutUnavailableTimeInput, CourtUncheckedCreateWithoutUnavailableTimeInput>
+    connectOrCreate?: CourtCreateOrConnectWithoutUnavailableTimeInput
+    upsert?: CourtUpsertWithoutUnavailableTimeInput
     connect?: CourtWhereUniqueInput
-    update?: XOR<CourtUpdateWithoutHorarioIndisponivelInput, CourtUncheckedUpdateWithoutHorarioIndisponivelInput>
+    update?: XOR<CourtUpdateWithoutUnavailableTimeInput, CourtUncheckedUpdateWithoutUnavailableTimeInput>
   }
 
   export type CourtCreateNestedOneWithoutSportsInput = {
@@ -11172,7 +11220,7 @@ export namespace Prisma {
     active?: boolean
     created_at?: Date | string
     updated_at?: Date | string | null
-    Sport?: SportCreateNestedOneWithoutCourtsInput
+    sport?: SportCreateNestedOneWithoutCourtsInput
   }
 
   export type CourtHasSportsUncheckedCreateWithoutCourtInput = {
@@ -11226,7 +11274,7 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type HorarioIndisponivelCreateWithoutCourtInput = {
+  export type unavailableTimeCreateWithoutCourtInput = {
     id?: string
     dayOfTheWeek: DayOfTheWeek
     startTime: Date | string
@@ -11235,7 +11283,7 @@ export namespace Prisma {
     created_at?: Date | string
   }
 
-  export type HorarioIndisponivelUncheckedCreateWithoutCourtInput = {
+  export type unavailableTimeUncheckedCreateWithoutCourtInput = {
     id?: string
     dayOfTheWeek: DayOfTheWeek
     startTime: Date | string
@@ -11244,13 +11292,13 @@ export namespace Prisma {
     created_at?: Date | string
   }
 
-  export type HorarioIndisponivelCreateOrConnectWithoutCourtInput = {
-    where: HorarioIndisponivelWhereUniqueInput
-    create: XOR<HorarioIndisponivelCreateWithoutCourtInput, HorarioIndisponivelUncheckedCreateWithoutCourtInput>
+  export type unavailableTimeCreateOrConnectWithoutCourtInput = {
+    where: unavailableTimeWhereUniqueInput
+    create: XOR<unavailableTimeCreateWithoutCourtInput, unavailableTimeUncheckedCreateWithoutCourtInput>
   }
 
-  export type HorarioIndisponivelCreateManyCourtInputEnvelope = {
-    data: Enumerable<HorarioIndisponivelCreateManyCourtInput>
+  export type unavailableTimeCreateManyCourtInputEnvelope = {
+    data: Enumerable<unavailableTimeCreateManyCourtInput>
     skipDuplicates?: boolean
   }
 
@@ -11286,26 +11334,26 @@ export namespace Prisma {
     data: XOR<ReservationUpdateManyMutationInput, ReservationUncheckedUpdateManyWithoutReservationInput>
   }
 
-  export type HorarioIndisponivelUpsertWithWhereUniqueWithoutCourtInput = {
-    where: HorarioIndisponivelWhereUniqueInput
-    update: XOR<HorarioIndisponivelUpdateWithoutCourtInput, HorarioIndisponivelUncheckedUpdateWithoutCourtInput>
-    create: XOR<HorarioIndisponivelCreateWithoutCourtInput, HorarioIndisponivelUncheckedCreateWithoutCourtInput>
+  export type unavailableTimeUpsertWithWhereUniqueWithoutCourtInput = {
+    where: unavailableTimeWhereUniqueInput
+    update: XOR<unavailableTimeUpdateWithoutCourtInput, unavailableTimeUncheckedUpdateWithoutCourtInput>
+    create: XOR<unavailableTimeCreateWithoutCourtInput, unavailableTimeUncheckedCreateWithoutCourtInput>
   }
 
-  export type HorarioIndisponivelUpdateWithWhereUniqueWithoutCourtInput = {
-    where: HorarioIndisponivelWhereUniqueInput
-    data: XOR<HorarioIndisponivelUpdateWithoutCourtInput, HorarioIndisponivelUncheckedUpdateWithoutCourtInput>
+  export type unavailableTimeUpdateWithWhereUniqueWithoutCourtInput = {
+    where: unavailableTimeWhereUniqueInput
+    data: XOR<unavailableTimeUpdateWithoutCourtInput, unavailableTimeUncheckedUpdateWithoutCourtInput>
   }
 
-  export type HorarioIndisponivelUpdateManyWithWhereWithoutCourtInput = {
-    where: HorarioIndisponivelScalarWhereInput
-    data: XOR<HorarioIndisponivelUpdateManyMutationInput, HorarioIndisponivelUncheckedUpdateManyWithoutHorarioIndisponivelInput>
+  export type unavailableTimeUpdateManyWithWhereWithoutCourtInput = {
+    where: unavailableTimeScalarWhereInput
+    data: XOR<unavailableTimeUpdateManyMutationInput, unavailableTimeUncheckedUpdateManyWithoutUnavailableTimeInput>
   }
 
-  export type HorarioIndisponivelScalarWhereInput = {
-    AND?: Enumerable<HorarioIndisponivelScalarWhereInput>
-    OR?: Enumerable<HorarioIndisponivelScalarWhereInput>
-    NOT?: Enumerable<HorarioIndisponivelScalarWhereInput>
+  export type unavailableTimeScalarWhereInput = {
+    AND?: Enumerable<unavailableTimeScalarWhereInput>
+    OR?: Enumerable<unavailableTimeScalarWhereInput>
+    NOT?: Enumerable<unavailableTimeScalarWhereInput>
     id?: StringFilter | string
     dayOfTheWeek?: EnumDayOfTheWeekFilter | DayOfTheWeek
     startTime?: DateTimeFilter | Date | string
@@ -11317,22 +11365,26 @@ export namespace Prisma {
 
   export type UserCreateWithoutManagerOfReservationsInput = {
     id?: string
-    Name: string
-    RA: number
-    Email: string
-    Campi: string
-    Reservations?: ReservationHasUsersCreateNestedManyWithoutUserInput
-    RequestedReservations?: ReservationHasRequestedUsersCreateNestedManyWithoutUserInput
+    name: string
+    ra: number
+    password: string
+    email: string
+    campi: string
+    role?: string
+    reservations?: ReservationHasUsersCreateNestedManyWithoutUserInput
+    requestedReservations?: ReservationHasRequestedUsersCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagerOfReservationsInput = {
     id?: string
-    Name: string
-    RA: number
-    Email: string
-    Campi: string
-    Reservations?: ReservationHasUsersUncheckedCreateNestedManyWithoutUserInput
-    RequestedReservations?: ReservationHasRequestedUsersUncheckedCreateNestedManyWithoutUserInput
+    name: string
+    ra: number
+    password: string
+    email: string
+    campi: string
+    role?: string
+    reservations?: ReservationHasUsersUncheckedCreateNestedManyWithoutUserInput
+    requestedReservations?: ReservationHasRequestedUsersUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagerOfReservationsInput = {
@@ -11382,16 +11434,16 @@ export namespace Prisma {
 
   export type SportCreateWithoutReservationInput = {
     id?: string
-    Name: string
+    name: string
     maxAmount?: string | null
-    Courts?: CourtHasSportsCreateNestedManyWithoutSportInput
+    courts?: CourtHasSportsCreateNestedManyWithoutSportInput
   }
 
   export type SportUncheckedCreateWithoutReservationInput = {
     id?: string
-    Name: string
+    name: string
     maxAmount?: string | null
-    Courts?: CourtHasSportsUncheckedCreateNestedManyWithoutSportInput
+    courts?: CourtHasSportsUncheckedCreateNestedManyWithoutSportInput
   }
 
   export type SportCreateOrConnectWithoutReservationInput = {
@@ -11401,16 +11453,16 @@ export namespace Prisma {
 
   export type CourtCreateWithoutReservationInput = {
     id?: string
-    Name: string
-    Sports?: CourtHasSportsCreateNestedManyWithoutCourtInput
-    HorarioIndisponivel?: HorarioIndisponivelCreateNestedManyWithoutCourtInput
+    name: string
+    sports?: CourtHasSportsCreateNestedManyWithoutCourtInput
+    unavailableTime?: unavailableTimeCreateNestedManyWithoutCourtInput
   }
 
   export type CourtUncheckedCreateWithoutReservationInput = {
     id?: string
-    Name: string
-    Sports?: CourtHasSportsUncheckedCreateNestedManyWithoutCourtInput
-    HorarioIndisponivel?: HorarioIndisponivelUncheckedCreateNestedManyWithoutCourtInput
+    name: string
+    sports?: CourtHasSportsUncheckedCreateNestedManyWithoutCourtInput
+    unavailableTime?: unavailableTimeUncheckedCreateNestedManyWithoutCourtInput
   }
 
   export type CourtCreateOrConnectWithoutReservationInput = {
@@ -11425,22 +11477,26 @@ export namespace Prisma {
 
   export type UserUpdateWithoutManagerOfReservationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
-    RA?: IntFieldUpdateOperationsInput | number
-    Email?: StringFieldUpdateOperationsInput | string
-    Campi?: StringFieldUpdateOperationsInput | string
-    Reservations?: ReservationHasUsersUpdateManyWithoutUserNestedInput
-    RequestedReservations?: ReservationHasRequestedUsersUpdateManyWithoutUserNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    ra?: IntFieldUpdateOperationsInput | number
+    password?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    campi?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    reservations?: ReservationHasUsersUpdateManyWithoutUserNestedInput
+    requestedReservations?: ReservationHasRequestedUsersUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagerOfReservationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
-    RA?: IntFieldUpdateOperationsInput | number
-    Email?: StringFieldUpdateOperationsInput | string
-    Campi?: StringFieldUpdateOperationsInput | string
-    Reservations?: ReservationHasUsersUncheckedUpdateManyWithoutUserNestedInput
-    RequestedReservations?: ReservationHasRequestedUsersUncheckedUpdateManyWithoutUserNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    ra?: IntFieldUpdateOperationsInput | number
+    password?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    campi?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    reservations?: ReservationHasUsersUncheckedUpdateManyWithoutUserNestedInput
+    requestedReservations?: ReservationHasRequestedUsersUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ReservationHasUsersUpsertWithWhereUniqueWithoutReservationInput = {
@@ -11482,16 +11538,16 @@ export namespace Prisma {
 
   export type SportUpdateWithoutReservationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     maxAmount?: NullableStringFieldUpdateOperationsInput | string | null
-    Courts?: CourtHasSportsUpdateManyWithoutSportNestedInput
+    courts?: CourtHasSportsUpdateManyWithoutSportNestedInput
   }
 
   export type SportUncheckedUpdateWithoutReservationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     maxAmount?: NullableStringFieldUpdateOperationsInput | string | null
-    Courts?: CourtHasSportsUncheckedUpdateManyWithoutSportNestedInput
+    courts?: CourtHasSportsUncheckedUpdateManyWithoutSportNestedInput
   }
 
   export type CourtUpsertWithoutReservationInput = {
@@ -11501,68 +11557,68 @@ export namespace Prisma {
 
   export type CourtUpdateWithoutReservationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
-    Sports?: CourtHasSportsUpdateManyWithoutCourtNestedInput
-    HorarioIndisponivel?: HorarioIndisponivelUpdateManyWithoutCourtNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    sports?: CourtHasSportsUpdateManyWithoutCourtNestedInput
+    unavailableTime?: unavailableTimeUpdateManyWithoutCourtNestedInput
   }
 
   export type CourtUncheckedUpdateWithoutReservationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
-    Sports?: CourtHasSportsUncheckedUpdateManyWithoutCourtNestedInput
-    HorarioIndisponivel?: HorarioIndisponivelUncheckedUpdateManyWithoutCourtNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    sports?: CourtHasSportsUncheckedUpdateManyWithoutCourtNestedInput
+    unavailableTime?: unavailableTimeUncheckedUpdateManyWithoutCourtNestedInput
   }
 
-  export type CourtCreateWithoutHorarioIndisponivelInput = {
+  export type CourtCreateWithoutUnavailableTimeInput = {
     id?: string
-    Name: string
-    Sports?: CourtHasSportsCreateNestedManyWithoutCourtInput
-    Reservation?: ReservationCreateNestedManyWithoutCourtInput
+    name: string
+    sports?: CourtHasSportsCreateNestedManyWithoutCourtInput
+    reservation?: ReservationCreateNestedManyWithoutCourtInput
   }
 
-  export type CourtUncheckedCreateWithoutHorarioIndisponivelInput = {
+  export type CourtUncheckedCreateWithoutUnavailableTimeInput = {
     id?: string
-    Name: string
-    Sports?: CourtHasSportsUncheckedCreateNestedManyWithoutCourtInput
-    Reservation?: ReservationUncheckedCreateNestedManyWithoutCourtInput
+    name: string
+    sports?: CourtHasSportsUncheckedCreateNestedManyWithoutCourtInput
+    reservation?: ReservationUncheckedCreateNestedManyWithoutCourtInput
   }
 
-  export type CourtCreateOrConnectWithoutHorarioIndisponivelInput = {
+  export type CourtCreateOrConnectWithoutUnavailableTimeInput = {
     where: CourtWhereUniqueInput
-    create: XOR<CourtCreateWithoutHorarioIndisponivelInput, CourtUncheckedCreateWithoutHorarioIndisponivelInput>
+    create: XOR<CourtCreateWithoutUnavailableTimeInput, CourtUncheckedCreateWithoutUnavailableTimeInput>
   }
 
-  export type CourtUpsertWithoutHorarioIndisponivelInput = {
-    update: XOR<CourtUpdateWithoutHorarioIndisponivelInput, CourtUncheckedUpdateWithoutHorarioIndisponivelInput>
-    create: XOR<CourtCreateWithoutHorarioIndisponivelInput, CourtUncheckedCreateWithoutHorarioIndisponivelInput>
+  export type CourtUpsertWithoutUnavailableTimeInput = {
+    update: XOR<CourtUpdateWithoutUnavailableTimeInput, CourtUncheckedUpdateWithoutUnavailableTimeInput>
+    create: XOR<CourtCreateWithoutUnavailableTimeInput, CourtUncheckedCreateWithoutUnavailableTimeInput>
   }
 
-  export type CourtUpdateWithoutHorarioIndisponivelInput = {
+  export type CourtUpdateWithoutUnavailableTimeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
-    Sports?: CourtHasSportsUpdateManyWithoutCourtNestedInput
-    Reservation?: ReservationUpdateManyWithoutCourtNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    sports?: CourtHasSportsUpdateManyWithoutCourtNestedInput
+    reservation?: ReservationUpdateManyWithoutCourtNestedInput
   }
 
-  export type CourtUncheckedUpdateWithoutHorarioIndisponivelInput = {
+  export type CourtUncheckedUpdateWithoutUnavailableTimeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
-    Sports?: CourtHasSportsUncheckedUpdateManyWithoutCourtNestedInput
-    Reservation?: ReservationUncheckedUpdateManyWithoutCourtNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    sports?: CourtHasSportsUncheckedUpdateManyWithoutCourtNestedInput
+    reservation?: ReservationUncheckedUpdateManyWithoutCourtNestedInput
   }
 
   export type CourtCreateWithoutSportsInput = {
     id?: string
-    Name: string
-    Reservation?: ReservationCreateNestedManyWithoutCourtInput
-    HorarioIndisponivel?: HorarioIndisponivelCreateNestedManyWithoutCourtInput
+    name: string
+    reservation?: ReservationCreateNestedManyWithoutCourtInput
+    unavailableTime?: unavailableTimeCreateNestedManyWithoutCourtInput
   }
 
   export type CourtUncheckedCreateWithoutSportsInput = {
     id?: string
-    Name: string
-    Reservation?: ReservationUncheckedCreateNestedManyWithoutCourtInput
-    HorarioIndisponivel?: HorarioIndisponivelUncheckedCreateNestedManyWithoutCourtInput
+    name: string
+    reservation?: ReservationUncheckedCreateNestedManyWithoutCourtInput
+    unavailableTime?: unavailableTimeUncheckedCreateNestedManyWithoutCourtInput
   }
 
   export type CourtCreateOrConnectWithoutSportsInput = {
@@ -11572,16 +11628,16 @@ export namespace Prisma {
 
   export type SportCreateWithoutCourtsInput = {
     id?: string
-    Name: string
+    name: string
     maxAmount?: string | null
-    Reservation?: ReservationCreateNestedManyWithoutSportInput
+    reservation?: ReservationCreateNestedManyWithoutSportInput
   }
 
   export type SportUncheckedCreateWithoutCourtsInput = {
     id?: string
-    Name: string
+    name: string
     maxAmount?: string | null
-    Reservation?: ReservationUncheckedCreateNestedManyWithoutSportInput
+    reservation?: ReservationUncheckedCreateNestedManyWithoutSportInput
   }
 
   export type SportCreateOrConnectWithoutCourtsInput = {
@@ -11596,16 +11652,16 @@ export namespace Prisma {
 
   export type CourtUpdateWithoutSportsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
-    Reservation?: ReservationUpdateManyWithoutCourtNestedInput
-    HorarioIndisponivel?: HorarioIndisponivelUpdateManyWithoutCourtNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    reservation?: ReservationUpdateManyWithoutCourtNestedInput
+    unavailableTime?: unavailableTimeUpdateManyWithoutCourtNestedInput
   }
 
   export type CourtUncheckedUpdateWithoutSportsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
-    Reservation?: ReservationUncheckedUpdateManyWithoutCourtNestedInput
-    HorarioIndisponivel?: HorarioIndisponivelUncheckedUpdateManyWithoutCourtNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    reservation?: ReservationUncheckedUpdateManyWithoutCourtNestedInput
+    unavailableTime?: unavailableTimeUncheckedUpdateManyWithoutCourtNestedInput
   }
 
   export type SportUpsertWithoutCourtsInput = {
@@ -11615,16 +11671,16 @@ export namespace Prisma {
 
   export type SportUpdateWithoutCourtsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     maxAmount?: NullableStringFieldUpdateOperationsInput | string | null
-    Reservation?: ReservationUpdateManyWithoutSportNestedInput
+    reservation?: ReservationUpdateManyWithoutSportNestedInput
   }
 
   export type SportUncheckedUpdateWithoutCourtsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     maxAmount?: NullableStringFieldUpdateOperationsInput | string | null
-    Reservation?: ReservationUncheckedUpdateManyWithoutSportNestedInput
+    reservation?: ReservationUncheckedUpdateManyWithoutSportNestedInput
   }
 
   export type ReservationCreateWithoutParticipantsInput = {
@@ -11658,22 +11714,26 @@ export namespace Prisma {
 
   export type UserCreateWithoutReservationsInput = {
     id?: string
-    Name: string
-    RA: number
-    Email: string
-    Campi: string
-    RequestedReservations?: ReservationHasRequestedUsersCreateNestedManyWithoutUserInput
-    ManagerOfReservations?: ReservationCreateNestedManyWithoutManagerInput
+    name: string
+    ra: number
+    password: string
+    email: string
+    campi: string
+    role?: string
+    requestedReservations?: ReservationHasRequestedUsersCreateNestedManyWithoutUserInput
+    managerOfReservations?: ReservationCreateNestedManyWithoutManagerInput
   }
 
   export type UserUncheckedCreateWithoutReservationsInput = {
     id?: string
-    Name: string
-    RA: number
-    Email: string
-    Campi: string
-    RequestedReservations?: ReservationHasRequestedUsersUncheckedCreateNestedManyWithoutUserInput
-    ManagerOfReservations?: ReservationUncheckedCreateNestedManyWithoutManagerInput
+    name: string
+    ra: number
+    password: string
+    email: string
+    campi: string
+    role?: string
+    requestedReservations?: ReservationHasRequestedUsersUncheckedCreateNestedManyWithoutUserInput
+    managerOfReservations?: ReservationUncheckedCreateNestedManyWithoutManagerInput
   }
 
   export type UserCreateOrConnectWithoutReservationsInput = {
@@ -11717,22 +11777,26 @@ export namespace Prisma {
 
   export type UserUpdateWithoutReservationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
-    RA?: IntFieldUpdateOperationsInput | number
-    Email?: StringFieldUpdateOperationsInput | string
-    Campi?: StringFieldUpdateOperationsInput | string
-    RequestedReservations?: ReservationHasRequestedUsersUpdateManyWithoutUserNestedInput
-    ManagerOfReservations?: ReservationUpdateManyWithoutManagerNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    ra?: IntFieldUpdateOperationsInput | number
+    password?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    campi?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    requestedReservations?: ReservationHasRequestedUsersUpdateManyWithoutUserNestedInput
+    managerOfReservations?: ReservationUpdateManyWithoutManagerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReservationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
-    RA?: IntFieldUpdateOperationsInput | number
-    Email?: StringFieldUpdateOperationsInput | string
-    Campi?: StringFieldUpdateOperationsInput | string
-    RequestedReservations?: ReservationHasRequestedUsersUncheckedUpdateManyWithoutUserNestedInput
-    ManagerOfReservations?: ReservationUncheckedUpdateManyWithoutManagerNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    ra?: IntFieldUpdateOperationsInput | number
+    password?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    campi?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    requestedReservations?: ReservationHasRequestedUsersUncheckedUpdateManyWithoutUserNestedInput
+    managerOfReservations?: ReservationUncheckedUpdateManyWithoutManagerNestedInput
   }
 
   export type ReservationCreateWithoutRequested_participantsInput = {
@@ -11766,22 +11830,26 @@ export namespace Prisma {
 
   export type UserCreateWithoutRequestedReservationsInput = {
     id?: string
-    Name: string
-    RA: number
-    Email: string
-    Campi: string
-    Reservations?: ReservationHasUsersCreateNestedManyWithoutUserInput
-    ManagerOfReservations?: ReservationCreateNestedManyWithoutManagerInput
+    name: string
+    ra: number
+    password: string
+    email: string
+    campi: string
+    role?: string
+    reservations?: ReservationHasUsersCreateNestedManyWithoutUserInput
+    managerOfReservations?: ReservationCreateNestedManyWithoutManagerInput
   }
 
   export type UserUncheckedCreateWithoutRequestedReservationsInput = {
     id?: string
-    Name: string
-    RA: number
-    Email: string
-    Campi: string
-    Reservations?: ReservationHasUsersUncheckedCreateNestedManyWithoutUserInput
-    ManagerOfReservations?: ReservationUncheckedCreateNestedManyWithoutManagerInput
+    name: string
+    ra: number
+    password: string
+    email: string
+    campi: string
+    role?: string
+    reservations?: ReservationHasUsersUncheckedCreateNestedManyWithoutUserInput
+    managerOfReservations?: ReservationUncheckedCreateNestedManyWithoutManagerInput
   }
 
   export type UserCreateOrConnectWithoutRequestedReservationsInput = {
@@ -11825,22 +11893,26 @@ export namespace Prisma {
 
   export type UserUpdateWithoutRequestedReservationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
-    RA?: IntFieldUpdateOperationsInput | number
-    Email?: StringFieldUpdateOperationsInput | string
-    Campi?: StringFieldUpdateOperationsInput | string
-    Reservations?: ReservationHasUsersUpdateManyWithoutUserNestedInput
-    ManagerOfReservations?: ReservationUpdateManyWithoutManagerNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    ra?: IntFieldUpdateOperationsInput | number
+    password?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    campi?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    reservations?: ReservationHasUsersUpdateManyWithoutUserNestedInput
+    managerOfReservations?: ReservationUpdateManyWithoutManagerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRequestedReservationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    Name?: StringFieldUpdateOperationsInput | string
-    RA?: IntFieldUpdateOperationsInput | number
-    Email?: StringFieldUpdateOperationsInput | string
-    Campi?: StringFieldUpdateOperationsInput | string
-    Reservations?: ReservationHasUsersUncheckedUpdateManyWithoutUserNestedInput
-    ManagerOfReservations?: ReservationUncheckedUpdateManyWithoutManagerNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    ra?: IntFieldUpdateOperationsInput | number
+    password?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    campi?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    reservations?: ReservationHasUsersUncheckedUpdateManyWithoutUserNestedInput
+    managerOfReservations?: ReservationUncheckedUpdateManyWithoutManagerNestedInput
   }
 
   export type ReservationHasUsersCreateManyUserInput = {
@@ -12016,7 +12088,7 @@ export namespace Prisma {
     description: string
   }
 
-  export type HorarioIndisponivelCreateManyCourtInput = {
+  export type unavailableTimeCreateManyCourtInput = {
     id?: string
     dayOfTheWeek: DayOfTheWeek
     startTime: Date | string
@@ -12029,7 +12101,7 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    Sport?: SportUpdateOneWithoutCourtsNestedInput
+    sport?: SportUpdateOneWithoutCourtsNestedInput
   }
 
   export type CourtHasSportsUncheckedUpdateWithoutCourtInput = {
@@ -12070,7 +12142,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
   }
 
-  export type HorarioIndisponivelUpdateWithoutCourtInput = {
+  export type unavailableTimeUpdateWithoutCourtInput = {
     id?: StringFieldUpdateOperationsInput | string
     dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12079,7 +12151,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type HorarioIndisponivelUncheckedUpdateWithoutCourtInput = {
+  export type unavailableTimeUncheckedUpdateWithoutCourtInput = {
     id?: StringFieldUpdateOperationsInput | string
     dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12088,7 +12160,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type HorarioIndisponivelUncheckedUpdateManyWithoutHorarioIndisponivelInput = {
+  export type unavailableTimeUncheckedUpdateManyWithoutUnavailableTimeInput = {
     id?: StringFieldUpdateOperationsInput | string
     dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string

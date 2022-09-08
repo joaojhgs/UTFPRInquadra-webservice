@@ -3,7 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output = "@generated"
+  output   = "@generated"
 }
 
 datasource db {
@@ -13,29 +13,31 @@ datasource db {
 
 model User {
   id                    String                         @id @default(uuid()) @db.Uuid
-  Name                  String
-  RA                    Int
-  Email                 String                         @db.VarChar(255)
-  Campi                 String
-  Reservations          ReservationHasUsers[]
-  RequestedReservations ReservationHasRequestedUsers[]
-  ManagerOfReservations Reservation[]
+  name                  String
+  ra                    Int
+  password              String                         @db.VarChar(255)
+  email                 String                         @db.VarChar(255)
+  campi                 String
+  role                  String                         @default("User") @db.VarChar(255)
+  reservations          ReservationHasUsers[]
+  requestedReservations ReservationHasRequestedUsers[]
+  managerOfReservations Reservation[]
 }
 
 model Sport {
   id          String           @id @default(uuid()) @db.Uuid
-  Name        String
+  name        String
   maxAmount   String?
-  Courts      CourtHasSports[]
-  Reservation Reservation[]
+  courts      CourtHasSports[]
+  reservation Reservation[]
 }
 
 model Court {
-  id                  String                @id @default(uuid()) @db.Uuid
-  Name                String
-  Sports              CourtHasSports[]
-  Reservation         Reservation[]
-  HorarioIndisponivel HorarioIndisponivel[]
+  id              String            @id @default(uuid()) @db.Uuid
+  name            String
+  sports          CourtHasSports[]
+  reservation     Reservation[]
+  unavailableTime unavailableTime[]
 }
 
 model Reservation {
@@ -64,7 +66,7 @@ enum DayOfTheWeek {
   saturday
 }
 
-model HorarioIndisponivel {
+model unavailableTime {
   id              String       @id @default(uuid()) @db.Uuid
   dayOfTheWeek    DayOfTheWeek
   startTime       DateTime     @db.Date
@@ -81,7 +83,7 @@ model CourtHasSports {
   active     Boolean   @default(true) @db.Boolean
   created_at DateTime  @default(now()) @db.Date
   updated_at DateTime? @db.Date
-  Sport      Sport?    @relation(fields: [sportsId], references: [id])
+  sport      Sport?    @relation(fields: [sportsId], references: [id])
   sportsId   String?   @db.Uuid
 
   @@id([court_id])
