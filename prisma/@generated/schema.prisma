@@ -41,8 +41,9 @@ model Court {
 }
 
 model Reservation {
-  id                     String                         @id @default(uuid()) @db.Uuid
-  date                   DateTime?                      @db.Date
+  id            String    @id @default(uuid()) @db.Uuid
+  startDateTime DateTime? @db.Date
+  endDateTime   DateTime? @db.Date
   created_at             DateTime                       @default(now()) @db.Date
   manager_id             String                         @db.Uuid
   manager                User                           @relation(fields: [manager_id], references: [id])

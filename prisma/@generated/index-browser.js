@@ -120,7 +120,8 @@ exports.Prisma.ReservationHasUsersScalarFieldEnum = makeEnum({
 
 exports.Prisma.ReservationScalarFieldEnum = makeEnum({
   id: 'id',
-  date: 'date',
+  startDateTime: 'startDateTime',
+  endDateTime: 'endDateTime',
   created_at: 'created_at',
   manager_id: 'manager_id',
   max_participants: 'max_participants',

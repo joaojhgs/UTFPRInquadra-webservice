@@ -51,7 +51,8 @@ export type Court = {
  */
 export type Reservation = {
   id: string
-  date: Date | null
+  startDateTime: Date | null
+  endDateTime: Date | null
   created_at: Date
   manager_id: string
   max_participants: number
@@ -4047,7 +4048,8 @@ export namespace Prisma {
 
   export type ReservationMinAggregateOutputType = {
     id: string | null
-    date: Date | null
+    startDateTime: Date | null
+    endDateTime: Date | null
     created_at: Date | null
     manager_id: string | null
     max_participants: number | null
@@ -4058,7 +4060,8 @@ export namespace Prisma {
 
   export type ReservationMaxAggregateOutputType = {
     id: string | null
-    date: Date | null
+    startDateTime: Date | null
+    endDateTime: Date | null
     created_at: Date | null
     manager_id: string | null
     max_participants: number | null
@@ -4069,7 +4072,8 @@ export namespace Prisma {
 
   export type ReservationCountAggregateOutputType = {
     id: number
-    date: number
+    startDateTime: number
+    endDateTime: number
     created_at: number
     manager_id: number
     max_participants: number
@@ -4090,7 +4094,8 @@ export namespace Prisma {
 
   export type ReservationMinAggregateInputType = {
     id?: true
-    date?: true
+    startDateTime?: true
+    endDateTime?: true
     created_at?: true
     manager_id?: true
     max_participants?: true
@@ -4101,7 +4106,8 @@ export namespace Prisma {
 
   export type ReservationMaxAggregateInputType = {
     id?: true
-    date?: true
+    startDateTime?: true
+    endDateTime?: true
     created_at?: true
     manager_id?: true
     max_participants?: true
@@ -4112,7 +4118,8 @@ export namespace Prisma {
 
   export type ReservationCountAggregateInputType = {
     id?: true
-    date?: true
+    startDateTime?: true
+    endDateTime?: true
     created_at?: true
     manager_id?: true
     max_participants?: true
@@ -4216,7 +4223,8 @@ export namespace Prisma {
 
   export type ReservationGroupByOutputType = {
     id: string
-    date: Date | null
+    startDateTime: Date | null
+    endDateTime: Date | null
     created_at: Date
     manager_id: string
     max_participants: number
@@ -4246,7 +4254,8 @@ export namespace Prisma {
 
   export type ReservationSelect = {
     id?: boolean
-    date?: boolean
+    startDateTime?: boolean
+    endDateTime?: boolean
     created_at?: boolean
     manager_id?: boolean
     manager?: boolean | UserArgs
@@ -8791,7 +8800,8 @@ export namespace Prisma {
 
   export const ReservationScalarFieldEnum: {
     id: 'id',
-    date: 'date',
+    startDateTime: 'startDateTime',
+    endDateTime: 'endDateTime',
     created_at: 'created_at',
     manager_id: 'manager_id',
     max_participants: 'max_participants',
@@ -9007,7 +9017,8 @@ export namespace Prisma {
     OR?: Enumerable<ReservationWhereInput>
     NOT?: Enumerable<ReservationWhereInput>
     id?: StringFilter | string
-    date?: DateTimeNullableFilter | Date | string | null
+    startDateTime?: DateTimeNullableFilter | Date | string | null
+    endDateTime?: DateTimeNullableFilter | Date | string | null
     created_at?: DateTimeFilter | Date | string
     manager_id?: StringFilter | string
     manager?: XOR<UserRelationFilter, UserWhereInput>
@@ -9023,7 +9034,8 @@ export namespace Prisma {
 
   export type ReservationOrderByWithRelationInput = {
     id?: SortOrder
-    date?: SortOrder
+    startDateTime?: SortOrder
+    endDateTime?: SortOrder
     created_at?: SortOrder
     manager_id?: SortOrder
     manager?: UserOrderByWithRelationInput
@@ -9043,7 +9055,8 @@ export namespace Prisma {
 
   export type ReservationOrderByWithAggregationInput = {
     id?: SortOrder
-    date?: SortOrder
+    startDateTime?: SortOrder
+    endDateTime?: SortOrder
     created_at?: SortOrder
     manager_id?: SortOrder
     max_participants?: SortOrder
@@ -9062,7 +9075,8 @@ export namespace Prisma {
     OR?: Enumerable<ReservationScalarWhereWithAggregatesInput>
     NOT?: Enumerable<ReservationScalarWhereWithAggregatesInput>
     id?: StringWithAggregatesFilter | string
-    date?: DateTimeNullableWithAggregatesFilter | Date | string | null
+    startDateTime?: DateTimeNullableWithAggregatesFilter | Date | string | null
+    endDateTime?: DateTimeNullableWithAggregatesFilter | Date | string | null
     created_at?: DateTimeWithAggregatesFilter | Date | string
     manager_id?: StringWithAggregatesFilter | string
     max_participants?: IntWithAggregatesFilter | number
@@ -9438,7 +9452,8 @@ export namespace Prisma {
 
   export type ReservationCreateInput = {
     id?: string
-    date?: Date | string | null
+    startDateTime?: Date | string | null
+    endDateTime?: Date | string | null
     created_at?: Date | string
     manager: UserCreateNestedOneWithoutManagerOfReservationsInput
     participants?: ReservationHasUsersCreateNestedManyWithoutReservationInput
@@ -9451,7 +9466,8 @@ export namespace Prisma {
 
   export type ReservationUncheckedCreateInput = {
     id?: string
-    date?: Date | string | null
+    startDateTime?: Date | string | null
+    endDateTime?: Date | string | null
     created_at?: Date | string
     manager_id: string
     participants?: ReservationHasUsersUncheckedCreateNestedManyWithoutReservationInput
@@ -9464,7 +9480,8 @@ export namespace Prisma {
 
   export type ReservationUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     manager?: UserUpdateOneRequiredWithoutManagerOfReservationsNestedInput
     participants?: ReservationHasUsersUpdateManyWithoutReservationNestedInput
@@ -9477,7 +9494,8 @@ export namespace Prisma {
 
   export type ReservationUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     manager_id?: StringFieldUpdateOperationsInput | string
     participants?: ReservationHasUsersUncheckedUpdateManyWithoutReservationNestedInput
@@ -9490,7 +9508,8 @@ export namespace Prisma {
 
   export type ReservationCreateManyInput = {
     id?: string
-    date?: Date | string | null
+    startDateTime?: Date | string | null
+    endDateTime?: Date | string | null
     created_at?: Date | string
     manager_id: string
     max_participants: number
@@ -9501,7 +9520,8 @@ export namespace Prisma {
 
   export type ReservationUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     max_participants?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
@@ -9509,7 +9529,8 @@ export namespace Prisma {
 
   export type ReservationUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     manager_id?: StringFieldUpdateOperationsInput | string
     max_participants?: IntFieldUpdateOperationsInput | number
@@ -9974,7 +9995,8 @@ export namespace Prisma {
 
   export type ReservationCountOrderByAggregateInput = {
     id?: SortOrder
-    date?: SortOrder
+    startDateTime?: SortOrder
+    endDateTime?: SortOrder
     created_at?: SortOrder
     manager_id?: SortOrder
     max_participants?: SortOrder
@@ -9989,7 +10011,8 @@ export namespace Prisma {
 
   export type ReservationMaxOrderByAggregateInput = {
     id?: SortOrder
-    date?: SortOrder
+    startDateTime?: SortOrder
+    endDateTime?: SortOrder
     created_at?: SortOrder
     manager_id?: SortOrder
     max_participants?: SortOrder
@@ -10000,7 +10023,8 @@ export namespace Prisma {
 
   export type ReservationMinOrderByAggregateInput = {
     id?: SortOrder
-    date?: SortOrder
+    startDateTime?: SortOrder
+    endDateTime?: SortOrder
     created_at?: SortOrder
     manager_id?: SortOrder
     max_participants?: SortOrder
@@ -11003,7 +11027,8 @@ export namespace Prisma {
 
   export type ReservationCreateWithoutManagerInput = {
     id?: string
-    date?: Date | string | null
+    startDateTime?: Date | string | null
+    endDateTime?: Date | string | null
     created_at?: Date | string
     participants?: ReservationHasUsersCreateNestedManyWithoutReservationInput
     requested_participants?: ReservationHasRequestedUsersCreateNestedManyWithoutReservationInput
@@ -11015,7 +11040,8 @@ export namespace Prisma {
 
   export type ReservationUncheckedCreateWithoutManagerInput = {
     id?: string
-    date?: Date | string | null
+    startDateTime?: Date | string | null
+    endDateTime?: Date | string | null
     created_at?: Date | string
     participants?: ReservationHasUsersUncheckedCreateNestedManyWithoutReservationInput
     requested_participants?: ReservationHasRequestedUsersUncheckedCreateNestedManyWithoutReservationInput
@@ -11106,7 +11132,8 @@ export namespace Prisma {
     OR?: Enumerable<ReservationScalarWhereInput>
     NOT?: Enumerable<ReservationScalarWhereInput>
     id?: StringFilter | string
-    date?: DateTimeNullableFilter | Date | string | null
+    startDateTime?: DateTimeNullableFilter | Date | string | null
+    endDateTime?: DateTimeNullableFilter | Date | string | null
     created_at?: DateTimeFilter | Date | string
     manager_id?: StringFilter | string
     max_participants?: IntFilter | number
@@ -11141,7 +11168,8 @@ export namespace Prisma {
 
   export type ReservationCreateWithoutSportInput = {
     id?: string
-    date?: Date | string | null
+    startDateTime?: Date | string | null
+    endDateTime?: Date | string | null
     created_at?: Date | string
     manager: UserCreateNestedOneWithoutManagerOfReservationsInput
     participants?: ReservationHasUsersCreateNestedManyWithoutReservationInput
@@ -11153,7 +11181,8 @@ export namespace Prisma {
 
   export type ReservationUncheckedCreateWithoutSportInput = {
     id?: string
-    date?: Date | string | null
+    startDateTime?: Date | string | null
+    endDateTime?: Date | string | null
     created_at?: Date | string
     manager_id: string
     participants?: ReservationHasUsersUncheckedCreateNestedManyWithoutReservationInput
@@ -11242,7 +11271,8 @@ export namespace Prisma {
 
   export type ReservationCreateWithoutCourtInput = {
     id?: string
-    date?: Date | string | null
+    startDateTime?: Date | string | null
+    endDateTime?: Date | string | null
     created_at?: Date | string
     manager: UserCreateNestedOneWithoutManagerOfReservationsInput
     participants?: ReservationHasUsersCreateNestedManyWithoutReservationInput
@@ -11254,7 +11284,8 @@ export namespace Prisma {
 
   export type ReservationUncheckedCreateWithoutCourtInput = {
     id?: string
-    date?: Date | string | null
+    startDateTime?: Date | string | null
+    endDateTime?: Date | string | null
     created_at?: Date | string
     manager_id: string
     participants?: ReservationHasUsersUncheckedCreateNestedManyWithoutReservationInput
@@ -11685,7 +11716,8 @@ export namespace Prisma {
 
   export type ReservationCreateWithoutParticipantsInput = {
     id?: string
-    date?: Date | string | null
+    startDateTime?: Date | string | null
+    endDateTime?: Date | string | null
     created_at?: Date | string
     manager: UserCreateNestedOneWithoutManagerOfReservationsInput
     requested_participants?: ReservationHasRequestedUsersCreateNestedManyWithoutReservationInput
@@ -11697,7 +11729,8 @@ export namespace Prisma {
 
   export type ReservationUncheckedCreateWithoutParticipantsInput = {
     id?: string
-    date?: Date | string | null
+    startDateTime?: Date | string | null
+    endDateTime?: Date | string | null
     created_at?: Date | string
     manager_id: string
     requested_participants?: ReservationHasRequestedUsersUncheckedCreateNestedManyWithoutReservationInput
@@ -11748,7 +11781,8 @@ export namespace Prisma {
 
   export type ReservationUpdateWithoutParticipantsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     manager?: UserUpdateOneRequiredWithoutManagerOfReservationsNestedInput
     requested_participants?: ReservationHasRequestedUsersUpdateManyWithoutReservationNestedInput
@@ -11760,7 +11794,8 @@ export namespace Prisma {
 
   export type ReservationUncheckedUpdateWithoutParticipantsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     manager_id?: StringFieldUpdateOperationsInput | string
     requested_participants?: ReservationHasRequestedUsersUncheckedUpdateManyWithoutReservationNestedInput
@@ -11801,7 +11836,8 @@ export namespace Prisma {
 
   export type ReservationCreateWithoutRequested_participantsInput = {
     id?: string
-    date?: Date | string | null
+    startDateTime?: Date | string | null
+    endDateTime?: Date | string | null
     created_at?: Date | string
     manager: UserCreateNestedOneWithoutManagerOfReservationsInput
     participants?: ReservationHasUsersCreateNestedManyWithoutReservationInput
@@ -11813,7 +11849,8 @@ export namespace Prisma {
 
   export type ReservationUncheckedCreateWithoutRequested_participantsInput = {
     id?: string
-    date?: Date | string | null
+    startDateTime?: Date | string | null
+    endDateTime?: Date | string | null
     created_at?: Date | string
     manager_id: string
     participants?: ReservationHasUsersUncheckedCreateNestedManyWithoutReservationInput
@@ -11864,7 +11901,8 @@ export namespace Prisma {
 
   export type ReservationUpdateWithoutRequested_participantsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     manager?: UserUpdateOneRequiredWithoutManagerOfReservationsNestedInput
     participants?: ReservationHasUsersUpdateManyWithoutReservationNestedInput
@@ -11876,7 +11914,8 @@ export namespace Prisma {
 
   export type ReservationUncheckedUpdateWithoutRequested_participantsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     manager_id?: StringFieldUpdateOperationsInput | string
     participants?: ReservationHasUsersUncheckedUpdateManyWithoutReservationNestedInput
@@ -11927,7 +11966,8 @@ export namespace Prisma {
 
   export type ReservationCreateManyManagerInput = {
     id?: string
-    date?: Date | string | null
+    startDateTime?: Date | string | null
+    endDateTime?: Date | string | null
     created_at?: Date | string
     max_participants: number
     sportId: string
@@ -11967,7 +12007,8 @@ export namespace Prisma {
 
   export type ReservationUpdateWithoutManagerInput = {
     id?: StringFieldUpdateOperationsInput | string
-    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     participants?: ReservationHasUsersUpdateManyWithoutReservationNestedInput
     requested_participants?: ReservationHasRequestedUsersUpdateManyWithoutReservationNestedInput
@@ -11979,7 +12020,8 @@ export namespace Prisma {
 
   export type ReservationUncheckedUpdateWithoutManagerInput = {
     id?: StringFieldUpdateOperationsInput | string
-    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     participants?: ReservationHasUsersUncheckedUpdateManyWithoutReservationNestedInput
     requested_participants?: ReservationHasRequestedUsersUncheckedUpdateManyWithoutReservationNestedInput
@@ -11991,7 +12033,8 @@ export namespace Prisma {
 
   export type ReservationUncheckedUpdateManyWithoutManagerOfReservationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     max_participants?: IntFieldUpdateOperationsInput | number
     sportId?: StringFieldUpdateOperationsInput | string
@@ -12008,7 +12051,8 @@ export namespace Prisma {
 
   export type ReservationCreateManySportInput = {
     id?: string
-    date?: Date | string | null
+    startDateTime?: Date | string | null
+    endDateTime?: Date | string | null
     created_at?: Date | string
     manager_id: string
     max_participants: number
@@ -12039,7 +12083,8 @@ export namespace Prisma {
 
   export type ReservationUpdateWithoutSportInput = {
     id?: StringFieldUpdateOperationsInput | string
-    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     manager?: UserUpdateOneRequiredWithoutManagerOfReservationsNestedInput
     participants?: ReservationHasUsersUpdateManyWithoutReservationNestedInput
@@ -12051,7 +12096,8 @@ export namespace Prisma {
 
   export type ReservationUncheckedUpdateWithoutSportInput = {
     id?: StringFieldUpdateOperationsInput | string
-    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     manager_id?: StringFieldUpdateOperationsInput | string
     participants?: ReservationHasUsersUncheckedUpdateManyWithoutReservationNestedInput
@@ -12063,7 +12109,8 @@ export namespace Prisma {
 
   export type ReservationUncheckedUpdateManyWithoutReservationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     manager_id?: StringFieldUpdateOperationsInput | string
     max_participants?: IntFieldUpdateOperationsInput | number
@@ -12080,7 +12127,8 @@ export namespace Prisma {
 
   export type ReservationCreateManyCourtInput = {
     id?: string
-    date?: Date | string | null
+    startDateTime?: Date | string | null
+    endDateTime?: Date | string | null
     created_at?: Date | string
     manager_id: string
     max_participants: number
@@ -12120,7 +12168,8 @@ export namespace Prisma {
 
   export type ReservationUpdateWithoutCourtInput = {
     id?: StringFieldUpdateOperationsInput | string
-    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     manager?: UserUpdateOneRequiredWithoutManagerOfReservationsNestedInput
     participants?: ReservationHasUsersUpdateManyWithoutReservationNestedInput
@@ -12132,7 +12181,8 @@ export namespace Prisma {
 
   export type ReservationUncheckedUpdateWithoutCourtInput = {
     id?: StringFieldUpdateOperationsInput | string
-    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDateTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     manager_id?: StringFieldUpdateOperationsInput | string
     participants?: ReservationHasUsersUncheckedUpdateManyWithoutReservationNestedInput
