@@ -8,12 +8,29 @@ Instale as dependencias de dev:
 
 `apt install curl git docker docker-compose`
 
-Instale o Tilt:
+**Instale o Node Version Manager (NVM)**
+
+`curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash`
+
+`
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+`
+
+**Instale a versão do node a ser utilizada**
+
+`
+nvm install 14.18.0
+`
+
+`nvm use 14.18.0`
+
+**Instale o Tilt:**
 
 `curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash`
 
 Adicione o yarn package manager ao seu computador:
-`npm i -g corepack && corepack prepare yarn@stable --activate`
+`npm install --global yarn`
 
 **Clone esse projeto**
 
