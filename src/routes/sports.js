@@ -6,6 +6,8 @@ module.exports = app => {
     app.post('/sports/create', (req, res, next) => auth(req, res, next, 'ADMIN'), async (req, res) => {
         const { name, maxAmount} = req.body
         if (!name) return res.send("Nome do esporte não inserido!");
+        if(await prisma.user.findFirst({ where: { name: { equals: name } } })) return res.send("Um esporte com esse nome já existe!");
+
         const sports = await prisma.sport.create({
             data: {
                 name: name,

@@ -8,6 +8,7 @@ module.exports = app => {
         const { name } = req.body
         // const { campi } = req.body;
         if (!name) return res.send("Nome não inserido!");
+        if(await prisma.court.findFirst({ where: { name: { equals: name } } })) return res.send("Uma quadra com esse nome já existe!");
         // if (!campi) return res.send("Campi não inserido!");
         const courts = await prisma.court.create({
             data: {
