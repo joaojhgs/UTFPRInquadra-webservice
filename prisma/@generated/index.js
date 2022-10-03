@@ -206,7 +206,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/skyron/Documents/UTFPRInquadra-webservice/prisma/@generated",
+      "value": "/home/pedro/Área de Trabalho/UTFPRInquadra-webservice/prisma/@generated",
       "fromEnvVar": null
     },
     "config": {
@@ -217,8 +217,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../.env",
-    "schemaEnvPath": "../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "..",
   "clientVersion": "4.3.1",
