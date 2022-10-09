@@ -41,10 +41,9 @@ module.exports = app =>{
             }
         })  
         reservated.forEach(reservation => {
-            if(moment(startDateTime).isBetween(reservation.startDateTime, reservation.endDateTime, 'minutes')){
-                res.send(`Uma reserva já foi feita entro do horário passado.`);
-                return;
-            }
+            if(moment(startDateTime).isBetween(reservation.startDateTime, reservation.endDateTime, 'minutes'))
+                return res.send(`Uma reserva já foi feita entro do horário passado.`);
+                
             if(moment(endDateTime).isBetween(reservation.startDateTime, reservation.endDateTime, 'minutes'))
             return res.send('Uma reserva já foi feita entro do horário passado.')
         })
