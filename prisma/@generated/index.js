@@ -206,7 +206,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/hugo/UTFPRInquadra-webservice/prisma/@generated",
+      "value": "/home/skyron/Documents/UTFPRInquadra-webservice/prisma/@generated",
       "fromEnvVar": null
     },
     "config": {

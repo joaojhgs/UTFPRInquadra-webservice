@@ -6,8 +6,8 @@ module.exports = app => {
 
     app.post('/login', async (req, res) => {
         const {ra, password} = req.body;
-        if(!ra) return req.send("RA invalido");
-        if(!password) return req.send("Senha invalido");
+        if(!ra) return res.send("RA invalido");
+        if(!password) return res.send("Senha invalida");
 
         const user = await prisma.user.findFirst({
             where:{
@@ -26,7 +26,7 @@ module.exports = app => {
                 return res.send(jsonwebtoken.sign({id: user.id, ra: ra, role: user.role}, process.env.JWT_SECRET_TOKEN, {expiresIn: process.env.JWT_EXPIRATION_TIME}));
             }   
             else {
-              console.log("Invalid password!");
+                return res.send("Senha invalida");
             }
           });
     })

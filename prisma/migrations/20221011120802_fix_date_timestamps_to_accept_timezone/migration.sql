@@ -1,0 +1,20 @@
+-- AlterTable
+ALTER TABLE "Reservation" ALTER COLUMN "created_at" SET DATA TYPE TIMESTAMPTZ(6),
+ALTER COLUMN "endDateTime" SET DATA TYPE TIMESTAMPTZ(6),
+ALTER COLUMN "startDateTime" SET DATA TYPE TIMESTAMPTZ(6);
+
+-- AlterTable
+ALTER TABLE "court_has_sports" ALTER COLUMN "created_at" SET DATA TYPE TIMESTAMPTZ(6),
+ALTER COLUMN "updated_at" SET DATA TYPE TIMESTAMPTZ(6);
+
+-- AlterTable
+ALTER TABLE "reservation_has_requested_users" ALTER COLUMN "created_at" SET DATA TYPE TIMESTAMPTZ(6);
+
+-- AlterTable
+ALTER TABLE "reservation_has_users" ALTER COLUMN "created_at" SET DATA TYPE TIMESTAMPTZ(6);
+
+-- AlterTable
+ALTER TABLE "unavailableTime" ALTER COLUMN "startTime" SET DATA TYPE TIMESTAMPTZ(6),
+ALTER COLUMN "endTime" SET DATA TYPE TIMESTAMPTZ(6),
+ALTER COLUMN "singleOccurency" SET DATA TYPE TIMESTAMPTZ(6),
+ALTER COLUMN "created_at" SET DATA TYPE TIMESTAMPTZ(6);

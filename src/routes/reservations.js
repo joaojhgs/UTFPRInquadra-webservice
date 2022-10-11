@@ -2,6 +2,7 @@ const {PrismaClient} = require('../../prisma/@generated');
 const prisma = new PrismaClient();
 const auth = require('../middlewares/auth');
 const moment = require('moment');
+const { nextTick } = require('process');
 
 module.exports = app =>{
 
@@ -17,73 +18,61 @@ module.exports = app =>{
     });
 
     app.post('/reservations/create/', auth, async (req, res) => {
-
-        const{ startDateTime, endDateTime, manager_id, participants, requested_participants, max_participants, sportId, courtId, description} = req.body;
-
-        if(!startDateTime || !endDateTime || !manager_id || !max_participants || !sportId || !courtId){
-            res.send('Favor, insira todos os dados necessários');
+        try{
+            const{startDateTime, endDateTime, manager_id, participants, requested_participants, max_participants, sportId, courtId, description} = req.body;
+            if(!startDateTime || !endDateTime || !manager_id || !max_participants || !sportId || !courtId)
+            throw 400
+    
+            const start = new Date(startDateTime)
+            const end = new Date(endDateTime)
+    
+            const reservated = await prisma.reservation.findMany({
+                where: {
+                    startDateTime:{
+                        gte: start,
+                        lte: end
+                    },
+                    endDateTime:{
+                        gte: start,
+                        lte: end
+                    }
+                }
+            })
+            reservated.forEach(reservation => {
+                if(moment(start).isBetween(reservation.startDateTime, reservation.endDateTime, 'minutes', '[]'))
+                throw 402;
+    
+                if(moment(end).isBetween(reservation.startDateTime, reservation.endDateTime, 'minutes', '[]'))
+                throw 402;
+            });
+    
+            const reservations = await prisma.reservation.create({
+                data: {
+                    startDateTime: new Date(startDateTime),
+                    endDateTime: new Date(endDateTime),
+                    manager_id: manager_id,
+                    participants: participants,
+                    requested_participants: requested_participants,                
+                    max_participants: max_participants,
+                    sportId: sportId,
+                    courtId: courtId,
+                    description: description
+                }
+            })
+    
+            return res.json(reservations);
+     
+        } catch(error){
+    
+            if(error == 400){
+                return res.send('Favor, insira todos os dados necessários')
+            }
+    
+            else if(error == 402){
+                return res.send('Uma reserva já foi feita dentro do horário passado.')
+            }
         }
 
-        const start = new Date(startDateTime)
-        console.log(start)
-
-        const reservated = await prisma.reservation.findMany({
-            where: {
-                startDateTime:{
-                    gte: new Date(startDateTime),
-                    lte: new Date(endDateTime)
-    
-                },
-                endDateTime:{
-                    gte: new Date(startDateTime),
-                    lte: new Date(endDateTime)
-                }
-            }
-        })  
-        reservated.forEach(reservation => {
-            if(moment(startDateTime).isBetween(reservation.startDateTime, reservation.endDateTime, 'minutes'))
-                return res.send(`Uma reserva já foi feita entro do horário passado.`);
-                
-            if(moment(endDateTime).isBetween(reservation.startDateTime, reservation.endDateTime, 'minutes'))
-            return res.send('Uma reserva já foi feita entro do horário passado.')
-        })
-
-        const reservations = await prisma.reservation.create({
-            data: {
-                startDateTime: new Date(startDateTime),
-                endDateTime: new Date(endDateTime),
-                manager_id: manager_id,
-                participants: participants,
-                requested_participants: requested_participants,                
-                max_participants: max_participants,
-                sportId: sportId,
-                courtId: courtId,
-                description: description
-            }
-        })
-
-        return res.json(reservations);
-    });
-
-    app.put('/reservations/update', auth, async (req, res) => {
-
-        const {reservationId, startDateTime, endDateTime, max_participants, sportId, courtId, description} = req.body;
-
-        const reservation = await prisma.reservation.update({
-            where: {
-                id: reservationId
-            },
-            data: {
-                startDateTime: startDateTime,
-                endDateTime: endDateTime,
-                max_participants: max_participants,
-                sportId: sportId,
-                courtId: courtId,
-                description: description
-            }
-        })
-
-        res.json(reservation);
     });
 
 
@@ -101,3 +90,4 @@ module.exports = app =>{
 
 
 }
+
