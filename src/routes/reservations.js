@@ -2,11 +2,10 @@ const {PrismaClient} = require('../../prisma/@generated');
 const prisma = new PrismaClient();
 const auth = require('../middlewares/auth');
 const moment = require('moment');
-const { nextTick } = require('process');
 
 module.exports = app =>{
 
-    app.get('/reservations', auth, async (req, res) => {
+    app.get('/reservations', (req, res, next) => auth(req, res, next, 'User'), async (req, res) => {
 
         const reservations = await prisma.reservation.findMany({
             where:{
@@ -17,10 +16,10 @@ module.exports = app =>{
         res.json(reservations);
     });
 
-    app.post('/reservations/create/', auth, async (req, res) => {
+    app.post('/reservations/create/', (req, res, next) => auth(req, res, next, 'User'), async (req, res) => {
         try{
-            const{startDateTime, endDateTime, manager_id, participants, requested_participants, max_participants, sportId, courtId, description} = req.body;
-            if(!startDateTime || !endDateTime || !manager_id || !max_participants || !sportId || !courtId)
+            const{startDateTime, endDateTime, managerId, maxParticipants, sportId, courtId, description} = req.body;
+            if(!startDateTime || !endDateTime || !managerId || !maxParticipants || !sportId || !courtId)
             throw 400
     
             const start = new Date(startDateTime)
@@ -30,10 +29,10 @@ module.exports = app =>{
                 where: {
                     startDateTime:{
                         gte: start,
-                        lte: end
+                        lt: end
                     },
                     endDateTime:{
-                        gte: start,
+                        gt: start,
                         lte: end
                     }
                 }
@@ -48,12 +47,10 @@ module.exports = app =>{
     
             const reservations = await prisma.reservation.create({
                 data: {
-                    startDateTime: new Date(startDateTime),
-                    endDateTime: new Date(endDateTime),
-                    manager_id: manager_id,
-                    participants: participants,
-                    requested_participants: requested_participants,                
-                    max_participants: max_participants,
+                    startDateTime: start,
+                    endDateTime: end,
+                    manager_id: managerId,
+                    max_participants: maxParticipants,
                     sportId: sportId,
                     courtId: courtId,
                     description: description
@@ -75,19 +72,107 @@ module.exports = app =>{
 
     });
 
+    app.put('/reservations/update/', ( req, res, next) => auth( req, res, next, 'User'), async (req, res) =>{
 
-    app.delete('/reservations/delete', auth, async (req, res) => { 
+        const {reservationId, userId, startDateTime, endDateTime, sportId, courtId, maxParticipants, description} = req.body
+        if(!reservationId || !userId || !startDateTime || ! endDateTime || !sportId || !courtId || !maxParticipants)
+        return res.send('Favor, insira todos os dados necessários')
 
-        const {reservationId} = req.body;
+        try{
+            const reservation = await prisma.reservation.findUnique({
+                where: {
+                    id: reservationId
+                }
+            })
+            if(reservation.manager_id != userId)
+            throw new Error(401)
+        }catch(error){
+            return res.send(`Não é possível atualizar a reserva. ${error}. Usuário não possui permissão para efetuar a atualização`)
+        }
 
-        const reservations = await prisma.reservation.delete({
-            where: {
-                id: reservationId
-            },
-        })
-        res.json(reservations);
+        const start = new Date(startDateTime)
+        const end = new Date(endDateTime)
+        try{
+            const reservated = await prisma.reservation.findMany({
+                where: {
+                    startDateTime:{
+                        gte: start,
+                        lt: end
+                    },
+                    endDateTime:{
+                        gt: start,
+                        lte: end
+                    }
+                }
+            })
+            reservated.forEach(reservation => {
+                if(reservation.id == reservationId);
+
+                else if(moment(start).isBetween(reservation.startDateTime, reservation.endDateTime, 'minutes', '[]'))
+                throw new Error(402);
+    
+                else if(moment(end).isBetween(reservation.startDateTime, reservation.endDateTime, 'minutes', '[]'))
+                throw new Error(402);
+            })
+        }catch(error){
+            return res.send(`Uma reserva já foi feita dentro do horário passado. ${error}`)
+        }
+
+        try{
+            const updated = await prisma.reservation.update({
+                where: {
+                    id: reservationId,
+                },
+                data:{
+                    startDateTime: start,
+                    endDateTime: end,
+                    sportId: sportId,
+                    courtId: courtId,
+                    max_participants: maxParticipants,
+                    description: description
+                }
+            })
+            if(!updated) 
+            throw new Error(500)
+
+            return res.json(updated)
+
+        }catch(error){
+            return res.status(error).send('Não foi possível realizar a atualização tente novamente')
+        }
+
     });
 
+    app.delete('/reservations/delete/', (req, res, next) => auth(req, res, next, 'User'), async (req, res) => { 
+        
+        const{reservationId, userId} = req.body
+        if(!reservationId || !userId)
+        return res.send('Favor insira os dados corretamente');
 
+        try{
+            const reservation = await prisma.reservation.findUnique({
+                where: {
+                    id: reservationId
+                }
+            })
+            if(reservation.manager_id != userId)
+            throw new Error(402)
+        }catch(error){
+            return res.send(`Não é possível desfazer a reserva. ${error}. Usuário não possui permissão para efetuar a atualização`)
+        }
+
+        try{
+            const deleted = await prisma.reservation.delete({
+                where: {
+                    id: reservationId
+                }
+            })
+            if(!deleted)
+            throw new Error(500)
+
+            return res.json(deleted)
+        }catch(error){
+            return res.status(error).send('Não foi possível desfazer a reserva. Tente novamente')
+        }
+    });
 }
-
