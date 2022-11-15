@@ -2,6 +2,8 @@ const {PrismaClient} = require('../../prisma/@generated');
 const prisma = new PrismaClient();
 const auth = require('../middlewares/auth');
 const moment = require('moment');
+const jsonwebtoken = require("jsonwebtoken");
+
 
 module.exports = app =>{
 
@@ -14,6 +16,70 @@ module.exports = app =>{
                 }},
         })
         res.json(reservations);
+    });
+
+    app.post('/reservations/join', (req, res, next) => auth(req, res, next, 'User'), async (req, res) => {
+        const { authorization } = req.headers
+        const token = authorization?.split(' ')[1]
+        const user = jsonwebtoken.verify(token, process.env.JWT_SECRET_TOKEN, {complete: true});
+        
+        try{
+            const {reservationId} = req.body;
+            if(!reservationId)
+                throw 400
+
+            
+        await prisma.reservation.findFirstOrThrow({
+            where:{
+                id: {
+                    equals: reservationId
+                }},
+        }).catch(() => {
+            throw 401
+        });
+
+        const alreadyRequested = await prisma.reservationHasRequestedUsers.findFirst({
+            where:{
+                AND:{
+                    reservation_id: reservationId,
+                    user_id: user.payload.id,
+                }
+            }
+        })
+
+        if(alreadyRequested) throw 403;
+
+        await prisma.reservationHasRequestedUsers.create({
+            data:{
+                reservation_id: reservationId,
+                user_id: user.payload.id,
+            }
+        }).then(() => {
+            return res.send('Pedido completo com sucesso');
+        })
+        .catch(() => {
+            throw 402;
+        });
+        
+
+        } catch(error){
+    
+            if(error == 400){
+                return res.send('Favor, insira todos os dados necessários')
+            }
+    
+            else if(error == 401){
+                return res.send('Essa reserva não existe.')
+            }
+
+            else if(error == 402){
+                return res.send('Falha ao criar pedido.')
+            }
+
+            else if(error == 403){
+                return res.send('Você já pediu para participar desta reserva.')
+            }
+        }
     });
 
     app.post('/reservations/create/', (req, res, next) => auth(req, res, next, 'User'), async (req, res) => {
