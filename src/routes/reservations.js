@@ -49,6 +49,17 @@ module.exports = app =>{
 
         if(alreadyRequested) throw 403;
 
+        const alreadyParticipant = await prisma.reservationHasUsers.findFirst({
+            where:{
+                AND:{
+                    reservation_id: reservationId,
+                    user_id: user.payload.id,
+                }
+            }
+        })
+
+        if(alreadyParticipant) throw 404;
+
         await prisma.reservationHasRequestedUsers.create({
             data:{
                 reservation_id: reservationId,
@@ -57,28 +68,18 @@ module.exports = app =>{
         }).then(() => {
             return res.send('Pedido completo com sucesso');
         })
-        .catch(() => {
+        .catch(err => {
+            console.log(err);
             throw 402;
         });
         
 
         } catch(error){
-    
-            if(error == 400){
-                return res.send('Favor, insira todos os dados necessários')
-            }
-    
-            else if(error == 401){
-                return res.send('Essa reserva não existe.')
-            }
-
-            else if(error == 402){
-                return res.send('Falha ao criar pedido.')
-            }
-
-            else if(error == 403){
-                return res.send('Você já pediu para participar desta reserva.')
-            }
+            if(error == 400) return res.send('Favor, insira todos os dados necessários')
+            if(error == 401) return res.send('Essa reserva não existe.')
+            if(error == 402) return res.send('Falha ao criar pedido.')
+            if(error == 403) return res.send('Você já pediu para participar desta reserva.')
+            if(error == 404) return res.send('Você já é um participante desta reserva.')
         }
     });
 
@@ -111,13 +112,17 @@ module.exports = app =>{
 
             if(reservation.manager_id !== user.payload.id) throw 403
 
+            const currentUsersAmount = await prisma.reservationHasUsers.count();
+
+            if(!(currentUsersAmount < reservation.max_participants)) throw 404
+
             await prisma.reservationHasUsers.create({
                 data:{
                     reservation_id: reservationId,
                     user_id: request.user_id,
                 }
             }).catch(() => {
-                throw 404
+                throw 405
             });
 
             await prisma.reservationHasRequestedUsers.delete({
@@ -125,8 +130,10 @@ module.exports = app =>{
                     id: requestId,
                 }
             }).catch(() => {
-                throw 405
+                throw 406
             });
+
+            return res.send("Criação completa com sucesso");
       
 
         } catch(error){
@@ -134,8 +141,9 @@ module.exports = app =>{
             if(error == 401) return res.send('Essa reserva não existe.')
             if(error == 402) return res.send('Esse pedido não existe.')
             if(error == 403) return res.send('Você não tem permissão para aceitar pedidos nesta reserva.')
-            if(error == 404) return res.send('Falha ao aceitar o pedido.')
-            if(error == 405) return res.send('Falha ao deletar o pedido.')
+            if(error == 404) return res.send('Essa reserva já não possui mais vagas.')
+            if(error == 405) return res.send('Falha ao aceitar o pedido.')
+            if(error == 406) return res.send('Falha ao deletar o pedido.')
         }
     });
 
