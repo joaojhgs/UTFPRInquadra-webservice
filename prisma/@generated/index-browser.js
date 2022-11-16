@@ -107,6 +107,7 @@ exports.Prisma.QueryMode = makeEnum({
 });
 
 exports.Prisma.ReservationHasRequestedUsersScalarFieldEnum = makeEnum({
+  id: 'id',
   reservation_id: 'reservation_id',
   user_id: 'user_id',
   created_at: 'created_at'
