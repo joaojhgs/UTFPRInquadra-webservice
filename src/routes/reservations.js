@@ -82,6 +82,63 @@ module.exports = app =>{
         }
     });
 
+    app.post('/reservations/accept', (req, res, next) => auth(req, res, next, 'User'), async (req, res) => {
+        const { authorization } = req.headers
+        const token = authorization?.split(' ')[1]
+        const user = jsonwebtoken.verify(token, process.env.JWT_SECRET_TOKEN, {complete: true});
+        
+        try{
+            const {reservationId, requestId} = req.body;
+            if(!requestId)
+                throw 400
+
+            const reservation = await prisma.reservation.findFirstOrThrow({
+                where:{
+                    id: {
+                        equals: reservationId
+                    }},
+            }).catch(() => {
+                throw 401
+            });
+
+            const request = await prisma.reservationHasRequestedUsers.findUnique({
+                where:{
+                    id: requestId
+                }
+            }).catch(() => {
+                throw 402
+            });
+
+            if(reservation.manager_id !== user.payload.id) throw 403
+
+            await prisma.reservationHasUsers.create({
+                data:{
+                    reservation_id: reservationId,
+                    user_id: request.user_id,
+                }
+            }).catch(() => {
+                throw 404
+            });
+
+            await prisma.reservationHasRequestedUsers.delete({
+                where:{
+                    id: requestId,
+                }
+            }).catch(() => {
+                throw 405
+            });
+      
+
+        } catch(error){
+            if(error == 400) 
+            if(error == 401) return res.send('Essa reserva não existe.')
+            if(error == 402) return res.send('Esse pedido não existe.')
+            if(error == 403) return res.send('Você não tem permissão para aceitar pedidos nesta reserva.')
+            if(error == 404) return res.send('Falha ao aceitar o pedido.')
+            if(error == 405) return res.send('Falha ao deletar o pedido.')
+        }
+    });
+
     app.post('/reservations/create/', (req, res, next) => auth(req, res, next, 'User'), async (req, res) => {
         try{
             const{startDateTime, endDateTime, managerId, maxParticipants, sportId, courtId, description} = req.body;
