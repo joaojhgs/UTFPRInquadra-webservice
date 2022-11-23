@@ -18,7 +18,7 @@ module.exports = app =>{
         res.json(reservations);
     });
 
-    app.post('/reservations/join', (req, res, next) => auth(req, res, next, 'User'), async (req, res) => {
+    app.post('/reservations/request/join', (req, res, next) => auth(req, res, next, 'User'), async (req, res) => {
         const { authorization } = req.headers
         const token = authorization?.split(' ')[1]
         const user = jsonwebtoken.verify(token, process.env.JWT_SECRET_TOKEN, {complete: true});
@@ -83,14 +83,70 @@ module.exports = app =>{
         }
     });
 
-    app.post('/reservations/accept', (req, res, next) => auth(req, res, next, 'User'), async (req, res) => {
+    app.post('/reservations/request/cancel', (req, res, next) => auth(req, res, next, 'User'), async (req, res) => {
         const { authorization } = req.headers
         const token = authorization?.split(' ')[1]
         const user = jsonwebtoken.verify(token, process.env.JWT_SECRET_TOKEN, {complete: true});
         
         try{
-            const {reservationId, requestId} = req.body;
-            if(!requestId || !reservationId)
+            const {reservationId} = req.body;
+            if(!reservationId)
+                throw 400
+
+            
+        await prisma.reservation.findFirstOrThrow({
+            where:{
+                id: {
+                    equals: reservationId
+                }},
+        }).catch(() => {
+            throw 401
+        });
+
+        const hasRequested = await prisma.reservationHasRequestedUsers.findFirst({
+            where:{
+                AND:{
+                    reservation_id: reservationId,
+                    user_id: user.payload.id,
+                }
+            }
+        })
+
+        if(!hasRequested) throw 402;
+
+        await prisma.reservationHasRequestedUsers.delete({
+            where:{
+                reservation_id_user_id:{
+                    reservation_id: reservationId,
+                    user_id: user.payload.id
+                }
+            }
+        }).then(() => {
+            return res.send('Pedido completo com sucesso');
+        })
+        .catch(err => {
+            console.log(err);
+            throw 403;
+        });
+        
+
+        } catch(error){
+            if(error == 400) return res.send('Favor, insira todos os dados necessários')
+            if(error == 401) return res.send('Essa reserva não existe.')
+            if(error == 402) return res.send('Falha ao criar pedido.')
+            if(error == 403) return res.send('Você já pediu para participar desta reserva.')
+            if(error == 404) return res.send('Você já é um participante desta reserva.')
+        }
+    });
+
+    app.post('/reservations/request/accept', (req, res, next) => auth(req, res, next, 'User'), async (req, res) => {
+        const { authorization } = req.headers
+        const token = authorization?.split(' ')[1]
+        const user = jsonwebtoken.verify(token, process.env.JWT_SECRET_TOKEN, {complete: true});
+        
+        try{
+            const {reservationId, userId} = req.body;
+            if(!reservationId || !userId)
                 throw 400
 
             const reservation = await prisma.reservation.findFirstOrThrow({
@@ -98,15 +154,22 @@ module.exports = app =>{
                     id: {
                         equals: reservationId
                     }},
-            }).catch(() => {
+            }).catch((err) => {
+                console.log(err)
+
                 throw 401
             });
 
             const request = await prisma.reservationHasRequestedUsers.findUnique({
                 where:{
-                    id: requestId
+                    reservation_id_user_id:{
+                        reservation_id: reservationId,
+                        user_id: userId,
+                    }
                 }
-            }).catch(() => {
+            }).catch((err) => {
+                console.log(err)
+
                 throw 402
             });
 
@@ -121,15 +184,21 @@ module.exports = app =>{
                     reservation_id: reservationId,
                     user_id: request.user_id,
                 }
-            }).catch(() => {
+            }).catch((err) => {
+                console.log(err)
+
                 throw 405
             });
 
             await prisma.reservationHasRequestedUsers.delete({
                 where:{
-                    id: requestId,
+                    reservation_id_user_id: {
+                        reservation_id: reservationId,
+                        user_id: userId,
+                    }
                 }
-            }).catch(() => {
+            }).catch((err) => {
+                console.log(err)
                 throw 406
             });
 

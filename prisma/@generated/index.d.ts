@@ -102,7 +102,6 @@ export type ReservationHasUsers = {
  * 
  */
 export type ReservationHasRequestedUsers = {
-  id: string
   reservation_id: string
   user_id: string
   created_at: Date
@@ -7844,21 +7843,18 @@ export namespace Prisma {
   }
 
   export type ReservationHasRequestedUsersMinAggregateOutputType = {
-    id: string | null
     reservation_id: string | null
     user_id: string | null
     created_at: Date | null
   }
 
   export type ReservationHasRequestedUsersMaxAggregateOutputType = {
-    id: string | null
     reservation_id: string | null
     user_id: string | null
     created_at: Date | null
   }
 
   export type ReservationHasRequestedUsersCountAggregateOutputType = {
-    id: number
     reservation_id: number
     user_id: number
     created_at: number
@@ -7867,21 +7863,18 @@ export namespace Prisma {
 
 
   export type ReservationHasRequestedUsersMinAggregateInputType = {
-    id?: true
     reservation_id?: true
     user_id?: true
     created_at?: true
   }
 
   export type ReservationHasRequestedUsersMaxAggregateInputType = {
-    id?: true
     reservation_id?: true
     user_id?: true
     created_at?: true
   }
 
   export type ReservationHasRequestedUsersCountAggregateInputType = {
-    id?: true
     reservation_id?: true
     user_id?: true
     created_at?: true
@@ -7967,7 +7960,6 @@ export namespace Prisma {
 
 
   export type ReservationHasRequestedUsersGroupByOutputType = {
-    id: string
     reservation_id: string
     user_id: string
     created_at: Date
@@ -7991,7 +7983,6 @@ export namespace Prisma {
 
 
   export type ReservationHasRequestedUsersSelect = {
-    id?: boolean
     reservation?: boolean | ReservationArgs
     reservation_id?: boolean
     user?: boolean | UserArgs
@@ -8079,8 +8070,8 @@ export namespace Prisma {
      * // Get first 10 ReservationHasRequestedUsers
      * const reservationHasRequestedUsers = await prisma.reservationHasRequestedUsers.findMany({ take: 10 })
      * 
-     * // Only select the `id`
-     * const reservationHasRequestedUsersWithIdOnly = await prisma.reservationHasRequestedUsers.findMany({ select: { id: true } })
+     * // Only select the `reservation_id`
+     * const reservationHasRequestedUsersWithReservation_idOnly = await prisma.reservationHasRequestedUsers.findMany({ select: { reservation_id: true } })
      * 
     **/
     findMany<T extends ReservationHasRequestedUsersFindManyArgs>(
@@ -8790,7 +8781,6 @@ export namespace Prisma {
 
 
   export const ReservationHasRequestedUsersScalarFieldEnum: {
-    id: 'id',
     reservation_id: 'reservation_id',
     user_id: 'user_id',
     created_at: 'created_at'
@@ -9244,7 +9234,6 @@ export namespace Prisma {
     AND?: Enumerable<ReservationHasRequestedUsersWhereInput>
     OR?: Enumerable<ReservationHasRequestedUsersWhereInput>
     NOT?: Enumerable<ReservationHasRequestedUsersWhereInput>
-    id?: StringFilter | string
     reservation?: XOR<ReservationRelationFilter, ReservationWhereInput>
     reservation_id?: StringFilter | string
     user?: XOR<UserRelationFilter, UserWhereInput>
@@ -9253,7 +9242,6 @@ export namespace Prisma {
   }
 
   export type ReservationHasRequestedUsersOrderByWithRelationInput = {
-    id?: SortOrder
     reservation?: ReservationOrderByWithRelationInput
     reservation_id?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -9262,11 +9250,10 @@ export namespace Prisma {
   }
 
   export type ReservationHasRequestedUsersWhereUniqueInput = {
-    id?: string
+    reservation_id_user_id?: ReservationHasRequestedUsersReservation_idUser_idCompoundUniqueInput
   }
 
   export type ReservationHasRequestedUsersOrderByWithAggregationInput = {
-    id?: SortOrder
     reservation_id?: SortOrder
     user_id?: SortOrder
     created_at?: SortOrder
@@ -9279,7 +9266,6 @@ export namespace Prisma {
     AND?: Enumerable<ReservationHasRequestedUsersScalarWhereWithAggregatesInput>
     OR?: Enumerable<ReservationHasRequestedUsersScalarWhereWithAggregatesInput>
     NOT?: Enumerable<ReservationHasRequestedUsersScalarWhereWithAggregatesInput>
-    id?: StringWithAggregatesFilter | string
     reservation_id?: StringWithAggregatesFilter | string
     user_id?: StringWithAggregatesFilter | string
     created_at?: DateTimeWithAggregatesFilter | Date | string
@@ -9717,47 +9703,40 @@ export namespace Prisma {
   }
 
   export type ReservationHasRequestedUsersCreateInput = {
-    id?: string
     reservation: ReservationCreateNestedOneWithoutRequested_participantsInput
     user: UserCreateNestedOneWithoutRequestedReservationsInput
     created_at?: Date | string
   }
 
   export type ReservationHasRequestedUsersUncheckedCreateInput = {
-    id?: string
     reservation_id: string
     user_id: string
     created_at?: Date | string
   }
 
   export type ReservationHasRequestedUsersUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
     reservation?: ReservationUpdateOneRequiredWithoutRequested_participantsNestedInput
     user?: UserUpdateOneRequiredWithoutRequestedReservationsNestedInput
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReservationHasRequestedUsersUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
     reservation_id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReservationHasRequestedUsersCreateManyInput = {
-    id?: string
     reservation_id: string
     user_id: string
     created_at?: Date | string
   }
 
   export type ReservationHasRequestedUsersUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReservationHasRequestedUsersUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
     reservation_id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10198,22 +10177,24 @@ export namespace Prisma {
     created_at?: SortOrder
   }
 
+  export type ReservationHasRequestedUsersReservation_idUser_idCompoundUniqueInput = {
+    reservation_id: string
+    user_id: string
+  }
+
   export type ReservationHasRequestedUsersCountOrderByAggregateInput = {
-    id?: SortOrder
     reservation_id?: SortOrder
     user_id?: SortOrder
     created_at?: SortOrder
   }
 
   export type ReservationHasRequestedUsersMaxOrderByAggregateInput = {
-    id?: SortOrder
     reservation_id?: SortOrder
     user_id?: SortOrder
     created_at?: SortOrder
   }
 
   export type ReservationHasRequestedUsersMinOrderByAggregateInput = {
-    id?: SortOrder
     reservation_id?: SortOrder
     user_id?: SortOrder
     created_at?: SortOrder
@@ -11025,13 +11006,11 @@ export namespace Prisma {
   }
 
   export type ReservationHasRequestedUsersCreateWithoutUserInput = {
-    id?: string
     reservation: ReservationCreateNestedOneWithoutRequested_participantsInput
     created_at?: Date | string
   }
 
   export type ReservationHasRequestedUsersUncheckedCreateWithoutUserInput = {
-    id?: string
     reservation_id: string
     created_at?: Date | string
   }
@@ -11127,7 +11106,6 @@ export namespace Prisma {
     AND?: Enumerable<ReservationHasRequestedUsersScalarWhereInput>
     OR?: Enumerable<ReservationHasRequestedUsersScalarWhereInput>
     NOT?: Enumerable<ReservationHasRequestedUsersScalarWhereInput>
-    id?: StringFilter | string
     reservation_id?: StringFilter | string
     user_id?: StringFilter | string
     created_at?: DateTimeFilter | Date | string
@@ -11466,13 +11444,11 @@ export namespace Prisma {
   }
 
   export type ReservationHasRequestedUsersCreateWithoutReservationInput = {
-    id?: string
     user: UserCreateNestedOneWithoutRequestedReservationsInput
     created_at?: Date | string
   }
 
   export type ReservationHasRequestedUsersUncheckedCreateWithoutReservationInput = {
-    id?: string
     user_id: string
     created_at?: Date | string
   }
@@ -11984,7 +11960,6 @@ export namespace Prisma {
   }
 
   export type ReservationHasRequestedUsersCreateManyUserInput = {
-    id?: string
     reservation_id: string
     created_at?: Date | string
   }
@@ -12016,19 +11991,16 @@ export namespace Prisma {
   }
 
   export type ReservationHasRequestedUsersUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
     reservation?: ReservationUpdateOneRequiredWithoutRequested_participantsNestedInput
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReservationHasRequestedUsersUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
     reservation_id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReservationHasRequestedUsersUncheckedUpdateManyWithoutRequestedReservationsInput = {
-    id?: StringFieldUpdateOperationsInput | string
     reservation_id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12253,7 +12225,6 @@ export namespace Prisma {
   }
 
   export type ReservationHasRequestedUsersCreateManyReservationInput = {
-    id?: string
     user_id: string
     created_at?: Date | string
   }
@@ -12274,19 +12245,16 @@ export namespace Prisma {
   }
 
   export type ReservationHasRequestedUsersUpdateWithoutReservationInput = {
-    id?: StringFieldUpdateOperationsInput | string
     user?: UserUpdateOneRequiredWithoutRequestedReservationsNestedInput
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReservationHasRequestedUsersUncheckedUpdateWithoutReservationInput = {
-    id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReservationHasRequestedUsersUncheckedUpdateManyWithoutRequested_participantsInput = {
-    id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
