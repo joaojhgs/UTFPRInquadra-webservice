@@ -148,9 +148,12 @@ module.exports = app =>{
     });
 
     app.post('/reservations/create/', (req, res, next) => auth(req, res, next, 'User'), async (req, res) => {
+        const { authorization } = req.headers
+        const token = authorization?.split(' ')[1]
+        const user = jsonwebtoken.verify(token, process.env.JWT_SECRET_TOKEN, {complete: true});
         try{
-            const{startDateTime, endDateTime, managerId, maxParticipants, sportId, courtId, description} = req.body;
-            if(!startDateTime || !endDateTime || !managerId || !maxParticipants || !sportId || !courtId)
+            const{startDateTime, endDateTime, maxParticipants, sportId, courtId, description} = req.body;
+            if(!startDateTime || !endDateTime || !maxParticipants || !sportId || !courtId)
             throw 400
     
             const start = new Date(startDateTime)
@@ -180,11 +183,18 @@ module.exports = app =>{
                 data: {
                     startDateTime: start,
                     endDateTime: end,
-                    manager_id: managerId,
+                    manager_id: user.payload.id,
                     max_participants: maxParticipants,
                     sportId: sportId,
                     courtId: courtId,
                     description: description
+                }
+            })
+
+            await prisma.reservationHasUsers.create({
+                data:{
+                    reservation_id: reservations.id,
+                    user_id: user.payload.id
                 }
             })
     
