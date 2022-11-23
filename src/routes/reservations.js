@@ -90,7 +90,7 @@ module.exports = app =>{
         
         try{
             const {reservationId, requestId} = req.body;
-            if(!requestId)
+            if(!requestId || !reservationId)
                 throw 400
 
             const reservation = await prisma.reservation.findFirstOrThrow({
@@ -144,6 +144,74 @@ module.exports = app =>{
             if(error == 404) return res.send('Essa reserva já não possui mais vagas.')
             if(error == 405) return res.send('Falha ao aceitar o pedido.')
             if(error == 406) return res.send('Falha ao deletar o pedido.')
+        }
+    });
+
+    app.post('/reservations/cancel', (req, res, next) => auth(req, res, next, 'User'), async (req, res) => {
+        const { authorization } = req.headers
+        const token = authorization?.split(' ')[1]
+        const user = jsonwebtoken.verify(token, process.env.JWT_SECRET_TOKEN, {complete: true});
+        
+        try{
+            const {reservationId} = req.body;
+            if(!reservationId)
+                throw 400
+
+            const reservation = await prisma.reservation.findFirstOrThrow({
+                include:{
+                    participants: true
+                },
+                where:{
+                    id: {
+                        equals: reservationId
+                    }},
+            }).catch(() => {
+                throw 401
+            });
+
+            if(!(reservation.participants.some(participant => participant.user_id === user.payload.id))) throw 402;
+
+            if(reservation.manager_id === user.payload.id) {
+                await prisma.reservationHasUsers.deleteMany({
+                    where:{
+                        reservation_id: reservationId,
+                    }
+                }).catch(() => {throw 403});
+
+                await prisma.reservationHasRequestedUsers.deleteMany({
+                    where:{
+                        reservation_id: reservationId,
+                    }
+                }).catch(() => {throw 404});
+
+                await prisma.reservation.delete({
+                    where:{
+                        id: reservationId
+                    }
+                }).catch(() => {throw 405});
+            } else {
+                await prisma.reservationHasUsers.delete({
+                    where:{
+                        reservation_id_user_id: {
+                            reservation_id: reservationId,
+                            user_id: user.payload.id,
+                        }
+                    }
+                }).catch(() => {throw 406});
+            }
+
+
+            return res.send("Operação completa com sucesso");
+      
+
+        } catch(error){
+            if(error == 400) 
+            if(error == 401) return res.send('Essa reserva não existe.')
+            if(error == 402) return res.send('Você não é um participante desta reserva.')
+            if(error == 403) return res.send('Falha ao deletar os participantes da reserva, operação cancelada.')
+            if(error == 404) return res.send('Falha ao deletar os pedidos de participação da reserva, operação cancelada.')
+            if(error == 405) return res.send('Falha ao deletar esta reserva.')
+            if(error == 406) return res.send('Falha ao sair desta reserva.')
         }
     });
 
