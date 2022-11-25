@@ -70,7 +70,7 @@ export type unavailableTime = {
   dayOfTheWeek: DayOfTheWeek
   startTime: Date
   endTime: Date
-  singleOccurency: Date
+  singleOccurency: boolean
   created_at: Date
   courtId: string
 }
@@ -5060,7 +5060,7 @@ export namespace Prisma {
     dayOfTheWeek: DayOfTheWeek | null
     startTime: Date | null
     endTime: Date | null
-    singleOccurency: Date | null
+    singleOccurency: boolean | null
     created_at: Date | null
     courtId: string | null
   }
@@ -5070,7 +5070,7 @@ export namespace Prisma {
     dayOfTheWeek: DayOfTheWeek | null
     startTime: Date | null
     endTime: Date | null
-    singleOccurency: Date | null
+    singleOccurency: boolean | null
     created_at: Date | null
     courtId: string | null
   }
@@ -5201,7 +5201,7 @@ export namespace Prisma {
     dayOfTheWeek: DayOfTheWeek
     startTime: Date
     endTime: Date
-    singleOccurency: Date
+    singleOccurency: boolean
     created_at: Date
     courtId: string
     _count: UnavailableTimeCountAggregateOutputType | null
@@ -9093,7 +9093,7 @@ export namespace Prisma {
     dayOfTheWeek?: EnumDayOfTheWeekFilter | DayOfTheWeek
     startTime?: DateTimeFilter | Date | string
     endTime?: DateTimeFilter | Date | string
-    singleOccurency?: DateTimeFilter | Date | string
+    singleOccurency?: BoolFilter | boolean
     court?: XOR<CourtRelationFilter, CourtWhereInput>
     created_at?: DateTimeFilter | Date | string
     courtId?: StringFilter | string
@@ -9135,7 +9135,7 @@ export namespace Prisma {
     dayOfTheWeek?: EnumDayOfTheWeekWithAggregatesFilter | DayOfTheWeek
     startTime?: DateTimeWithAggregatesFilter | Date | string
     endTime?: DateTimeWithAggregatesFilter | Date | string
-    singleOccurency?: DateTimeWithAggregatesFilter | Date | string
+    singleOccurency?: BoolWithAggregatesFilter | boolean
     created_at?: DateTimeWithAggregatesFilter | Date | string
     courtId?: StringWithAggregatesFilter | string
   }
@@ -9544,7 +9544,7 @@ export namespace Prisma {
     dayOfTheWeek: DayOfTheWeek
     startTime: Date | string
     endTime: Date | string
-    singleOccurency: Date | string
+    singleOccurency?: boolean
     court: CourtCreateNestedOneWithoutUnavailableTimeInput
     created_at?: Date | string
   }
@@ -9554,7 +9554,7 @@ export namespace Prisma {
     dayOfTheWeek: DayOfTheWeek
     startTime: Date | string
     endTime: Date | string
-    singleOccurency: Date | string
+    singleOccurency?: boolean
     created_at?: Date | string
     courtId: string
   }
@@ -9564,7 +9564,7 @@ export namespace Prisma {
     dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    singleOccurency?: DateTimeFieldUpdateOperationsInput | Date | string
+    singleOccurency?: BoolFieldUpdateOperationsInput | boolean
     court?: CourtUpdateOneRequiredWithoutUnavailableTimeNestedInput
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9574,7 +9574,7 @@ export namespace Prisma {
     dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    singleOccurency?: DateTimeFieldUpdateOperationsInput | Date | string
+    singleOccurency?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     courtId?: StringFieldUpdateOperationsInput | string
   }
@@ -9584,7 +9584,7 @@ export namespace Prisma {
     dayOfTheWeek: DayOfTheWeek
     startTime: Date | string
     endTime: Date | string
-    singleOccurency: Date | string
+    singleOccurency?: boolean
     created_at?: Date | string
     courtId: string
   }
@@ -9594,7 +9594,7 @@ export namespace Prisma {
     dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    singleOccurency?: DateTimeFieldUpdateOperationsInput | Date | string
+    singleOccurency?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -9603,7 +9603,7 @@ export namespace Prisma {
     dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    singleOccurency?: DateTimeFieldUpdateOperationsInput | Date | string
+    singleOccurency?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     courtId?: StringFieldUpdateOperationsInput | string
   }
@@ -10072,6 +10072,11 @@ export namespace Prisma {
     not?: NestedEnumDayOfTheWeekFilter | DayOfTheWeek
   }
 
+  export type BoolFilter = {
+    equals?: boolean
+    not?: NestedBoolFilter | boolean
+  }
+
   export type unavailableTimeCountOrderByAggregateInput = {
     id?: SortOrder
     dayOfTheWeek?: SortOrder
@@ -10112,9 +10117,12 @@ export namespace Prisma {
     _max?: NestedEnumDayOfTheWeekFilter
   }
 
-  export type BoolFilter = {
+  export type BoolWithAggregatesFilter = {
     equals?: boolean
-    not?: NestedBoolFilter | boolean
+    not?: NestedBoolWithAggregatesFilter | boolean
+    _count?: NestedIntFilter
+    _min?: NestedBoolFilter
+    _max?: NestedBoolFilter
   }
 
   export type CourtHasSportsCountOrderByAggregateInput = {
@@ -10139,14 +10147,6 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     sportsId?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter = {
-    equals?: boolean
-    not?: NestedBoolWithAggregatesFilter | boolean
-    _count?: NestedIntFilter
-    _min?: NestedBoolFilter
-    _max?: NestedBoolFilter
   }
 
   export type ReservationRelationFilter = {
@@ -10696,6 +10696,10 @@ export namespace Prisma {
     set?: DayOfTheWeek
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type CourtUpdateOneRequiredWithoutUnavailableTimeNestedInput = {
     create?: XOR<CourtCreateWithoutUnavailableTimeInput, CourtUncheckedCreateWithoutUnavailableTimeInput>
     connectOrCreate?: CourtCreateOrConnectWithoutUnavailableTimeInput
@@ -10722,10 +10726,6 @@ export namespace Prisma {
     upsert?: CourtUpsertWithoutSportsInput
     connect?: CourtWhereUniqueInput
     update?: XOR<CourtUpdateWithoutSportsInput, CourtUncheckedUpdateWithoutSportsInput>
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type SportUpdateOneWithoutCourtsNestedInput = {
@@ -10962,6 +10962,11 @@ export namespace Prisma {
     not?: NestedEnumDayOfTheWeekFilter | DayOfTheWeek
   }
 
+  export type NestedBoolFilter = {
+    equals?: boolean
+    not?: NestedBoolFilter | boolean
+  }
+
   export type NestedEnumDayOfTheWeekWithAggregatesFilter = {
     equals?: DayOfTheWeek
     in?: Enumerable<DayOfTheWeek>
@@ -10970,11 +10975,6 @@ export namespace Prisma {
     _count?: NestedIntFilter
     _min?: NestedEnumDayOfTheWeekFilter
     _max?: NestedEnumDayOfTheWeekFilter
-  }
-
-  export type NestedBoolFilter = {
-    equals?: boolean
-    not?: NestedBoolFilter | boolean
   }
 
   export type NestedBoolWithAggregatesFilter = {
@@ -11310,7 +11310,7 @@ export namespace Prisma {
     dayOfTheWeek: DayOfTheWeek
     startTime: Date | string
     endTime: Date | string
-    singleOccurency: Date | string
+    singleOccurency?: boolean
     created_at?: Date | string
   }
 
@@ -11319,7 +11319,7 @@ export namespace Prisma {
     dayOfTheWeek: DayOfTheWeek
     startTime: Date | string
     endTime: Date | string
-    singleOccurency: Date | string
+    singleOccurency?: boolean
     created_at?: Date | string
   }
 
@@ -11389,7 +11389,7 @@ export namespace Prisma {
     dayOfTheWeek?: EnumDayOfTheWeekFilter | DayOfTheWeek
     startTime?: DateTimeFilter | Date | string
     endTime?: DateTimeFilter | Date | string
-    singleOccurency?: DateTimeFilter | Date | string
+    singleOccurency?: BoolFilter | boolean
     created_at?: DateTimeFilter | Date | string
     courtId?: StringFilter | string
   }
@@ -12141,7 +12141,7 @@ export namespace Prisma {
     dayOfTheWeek: DayOfTheWeek
     startTime: Date | string
     endTime: Date | string
-    singleOccurency: Date | string
+    singleOccurency?: boolean
     created_at?: Date | string
   }
 
@@ -12197,7 +12197,7 @@ export namespace Prisma {
     dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    singleOccurency?: DateTimeFieldUpdateOperationsInput | Date | string
+    singleOccurency?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -12206,7 +12206,7 @@ export namespace Prisma {
     dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    singleOccurency?: DateTimeFieldUpdateOperationsInput | Date | string
+    singleOccurency?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -12215,7 +12215,7 @@ export namespace Prisma {
     dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    singleOccurency?: DateTimeFieldUpdateOperationsInput | Date | string
+    singleOccurency?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
