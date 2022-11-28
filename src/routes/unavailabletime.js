@@ -12,7 +12,6 @@ module.exports = app => {
     app.post('/unavailableTime/create', (req, res, next) => auth(req, res, next, 'ADMIN'), async (req, res) => {
         try{
         const {courtId, startTime, endTime, dayOfTheWeek, singleOccurency } = req.body;
-        console.log(`${courtId}, ${startTime}, ${endTime}, ${dayOfTheWeek}, ${singleOccurency}`);
         
         if(!courtId || !startTime || !endTime || !dayOfTheWeek)
         throw 400;
