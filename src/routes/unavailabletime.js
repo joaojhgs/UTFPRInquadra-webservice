@@ -38,7 +38,6 @@ module.exports = app => {
                 throw 402;
             })
             
-            console.log('ok!');
             const unavailableTime = await prisma.unavailableTime.create({
                 data: {
                     startTime: start,
