@@ -31,7 +31,6 @@ module.exports = app => {
                 }
             }
         })
-        console.log('ok!');
         unavailable.forEach(unavailableTime => {
             if(moment(start).isBetween(unavailableTime.startTime, unavailableTime.endTime, 'minutes', '[]'))
             throw 402;
