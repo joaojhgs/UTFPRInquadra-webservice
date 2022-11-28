@@ -19,7 +19,6 @@ module.exports = app => {
         const start = new Date(startTime);
         const end = new Date(endTime);
 
-        console.log('ok!');
         const unavailable = await prisma.unavailableTime.findMany({
             where: {
                 startTime:{
