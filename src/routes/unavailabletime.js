@@ -49,7 +49,6 @@ module.exports = app => {
                 },
             })
             
-            console.log('ok!');
             res.json(unavailableTime);
         }catch(error){
             if(error == 400)
