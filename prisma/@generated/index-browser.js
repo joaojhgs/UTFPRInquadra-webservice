@@ -101,6 +101,11 @@ exports.Prisma.CourtScalarFieldEnum = makeEnum({
   name: 'name'
 });
 
+exports.Prisma.DayOfTheWeekScalarFieldEnum = makeEnum({
+  id: 'id',
+  name: 'name'
+});
+
 exports.Prisma.QueryMode = makeEnum({
   default: 'default',
   insensitive: 'insensitive'
@@ -148,12 +153,20 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.UnavailableTimeHasDayOfTheWeekScalarFieldEnum = makeEnum({
+  unavailableTimeId: 'unavailableTimeId',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  dayOfTheWeekId: 'dayOfTheWeekId'
+});
+
 exports.Prisma.UnavailableTimeScalarFieldEnum = makeEnum({
   id: 'id',
-  dayOfTheWeek: 'dayOfTheWeek',
+  startDateTime: 'startDateTime',
+  endDateTime: 'endDateTime',
   startTime: 'startTime',
   endTime: 'endTime',
-  singleOccurency: 'singleOccurency',
   created_at: 'created_at',
   courtId: 'courtId'
 });
@@ -167,22 +180,16 @@ exports.Prisma.UserScalarFieldEnum = makeEnum({
   campi: 'campi',
   role: 'role'
 });
-exports.DayOfTheWeek = makeEnum({
-  sunday: 'sunday',
-  monday: 'monday',
-  tuesday: 'tuesday',
-  wednesday: 'wednesday',
-  thursday: 'thursday',
-  friday: 'friday',
-  saturday: 'saturday'
-});
+
 
 exports.Prisma.ModelName = makeEnum({
   User: 'User',
   Sport: 'Sport',
   Court: 'Court',
   Reservation: 'Reservation',
+  dayOfTheWeek: 'dayOfTheWeek',
   unavailableTime: 'unavailableTime',
+  UnavailableTimeHasDayOfTheWeek: 'UnavailableTimeHasDayOfTheWeek',
   CourtHasSports: 'CourtHasSports',
   ReservationHasUsers: 'ReservationHasUsers',
   ReservationHasRequestedUsers: 'ReservationHasRequestedUsers'

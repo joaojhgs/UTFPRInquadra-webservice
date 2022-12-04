@@ -4,23 +4,22 @@ const prisma = new PrismaClient();
 const auth = require('../middlewares/auth');
 const moment = require('moment');
 
-// import {dayOfTheWeek} from "@prisma/client"
-
 module.exports = app => {
-    // (req, res, next) => auth(req, res, next, 'ADMIN'),   
 
     app.post('/unavailableTime/create', (req, res, next) => auth(req, res, next, 'ADMIN'), async (req, res) => {
         try{
-        const {courtId, startTime, endTime, dayOfTheWeek, singleOccurency } = req.body;
-        console.log(`${courtId}, ${startTime}, ${endTime}, ${dayOfTheWeek}, ${singleOccurency}`);
+        const { courtId, startDateTime, endDateTime, startTime, endTime, daysOfTheWeek, singleOccurency} = req.body;
         
-        if(!courtId || !startTime || !endTime || !dayOfTheWeek)
-        throw 400;
+        if(courtId){
+            if(!(daysOfTheWeek && startTime && endTime) | !(startDateTime && endDateTime))
+                throw 400;
+        } else {
+            throw 400;
+        }
         
         const start = new Date(startTime);
         const end = new Date(endTime);
 
-        console.log('ok!');
         const unavailable = await prisma.unavailableTime.findMany({
             where: {
                 startTime:{
@@ -33,7 +32,6 @@ module.exports = app => {
                 }
             }
         })
-        console.log('ok!');
         unavailable.forEach(unavailableTime => {
             if(moment(start).isBetween(unavailableTime.startTime, unavailableTime.endTime, 'minutes', '[]'))
             throw 402;
@@ -41,14 +39,15 @@ module.exports = app => {
                 throw 402;
             })
             
-            console.log('ok!');
             const unavailableTime = await prisma.unavailableTime.create({
                 data: {
                     startTime: start,
                     endTime: end,
-                    dayOfTheWeek: dayOfTheWeek,
                     singleOccurency: singleOccurency,
-                    courtId: courtId
+                    daysOfTheWeek: {
+                        connectOrCreate:{create:{dayOfTheWeekId: daysOfTheWeek}}
+                    },
+                    courtId: courtId,
                 },
             })
             
