@@ -1,4 +1,4 @@
-FROM node:14.17.6-slim
+FROM node:14.17.6
 
 WORKDIR /usr/src/app
 
@@ -13,4 +13,4 @@ RUN yarn install && yarn prisma generate
 RUN yarn cache clean
 
 EXPOSE 3000
-CMD [ "node", "server.js" ]
+CMD [ "node", "src/server.js" ]
