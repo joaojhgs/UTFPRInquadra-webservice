@@ -8,7 +8,9 @@ ENV DATABASE_URL $DATABASE_URL
 
 COPY . .
 
-RUN yarn install && yarn prisma generate
+RUN yarn install && yarn prisma generate 
+
+RUN yarn prisma migrate deploy
 
 RUN yarn cache clean
 
