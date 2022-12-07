@@ -41,9 +41,9 @@ model Court {
 }
 
 model Reservation {
-  id            String    @id @default(uuid()) @db.Uuid
-  startDateTime DateTime? @db.Timestamptz(6)
-  endDateTime   DateTime? @db.Timestamptz(6)
+  id                     String                         @id @default(uuid()) @db.Uuid
+  startDateTime          DateTime?                      @db.Timestamptz(6)
+  endDateTime            DateTime?                      @db.Timestamptz(6)
   created_at             DateTime                       @default(now()) @db.Timestamptz(6)
   manager_id             String                         @db.Uuid
   manager                User                           @relation(fields: [manager_id], references: [id])
@@ -67,15 +67,35 @@ enum DayOfTheWeek {
   saturday
 }
 
+model dayOfTheWeek {
+  id                             String                           @id @default(uuid()) @db.Uuid
+  name                           String
+  UnavailableTimeHasDayOfTheWeek UnavailableTimeHasDayOfTheWeek[]
+}
+
 model unavailableTime {
-  id              String       @id @default(uuid()) @db.Uuid
-  dayOfTheWeek    DayOfTheWeek
-  startTime       DateTime     @db.Timestamptz(6)
-  endTime         DateTime     @db.Timestamptz(6)
-  singleOccurency DateTime     @db.Timestamptz(6)
-  court           Court        @relation(fields: [courtId], references: [id])
-  created_at      DateTime     @default(now()) @db.Timestamptz(6)
-  courtId         String       @db.Uuid
+  id                             String                          @id @default(uuid()) @db.Uuid
+  startDateTime                  DateTime                        @db.Timestamptz(6)
+  endDateTime                    DateTime                        @db.Timestamptz(6)
+  startTime                      DateTime                        @db.Time()
+  endTime                        DateTime                        @db.Time()
+  court                          Court                           @relation(fields: [courtId], references: [id])
+  created_at                     DateTime                        @default(now()) @db.Timestamptz(6)
+  courtId                        String                          @db.Uuid
+  daysOfTheWeek UnavailableTimeHasDayOfTheWeek?
+}
+
+model UnavailableTimeHasDayOfTheWeek {
+  unavailableTime   unavailableTime @relation(fields: [unavailableTimeId], references: [id])
+  unavailableTimeId String          @unique @db.Uuid
+  active            Boolean         @default(true) @db.Boolean
+  created_at        DateTime        @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime?       @db.Timestamptz(6)
+  dayOfTheWeek      dayOfTheWeek    @relation(fields: [dayOfTheWeekId], references: [id])
+  dayOfTheWeekId    String          @db.Uuid
+
+  @@id([unavailableTimeId, dayOfTheWeekId])
+  @@map("unavailableTime_has_dayOfTheWeek")
 }
 
 model CourtHasSports {

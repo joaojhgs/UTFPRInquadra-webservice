@@ -62,17 +62,38 @@ export type Reservation = {
 }
 
 /**
+ * Model dayOfTheWeek
+ * 
+ */
+export type dayOfTheWeek = {
+  id: string
+  name: string
+}
+
+/**
  * Model unavailableTime
  * 
  */
 export type unavailableTime = {
   id: string
-  dayOfTheWeek: DayOfTheWeek
+  startDateTime: Date
+  endDateTime: Date
   startTime: Date
   endTime: Date
-  singleOccurency: Date
   created_at: Date
   courtId: string
+}
+
+/**
+ * Model UnavailableTimeHasDayOfTheWeek
+ * 
+ */
+export type UnavailableTimeHasDayOfTheWeek = {
+  unavailableTimeId: string
+  active: boolean
+  created_at: Date
+  updated_at: Date | null
+  dayOfTheWeekId: string
 }
 
 /**
@@ -106,26 +127,6 @@ export type ReservationHasRequestedUsers = {
   user_id: string
   created_at: Date
 }
-
-
-/**
- * Enums
- */
-
-// Based on
-// https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
-
-export const DayOfTheWeek: {
-  sunday: 'sunday',
-  monday: 'monday',
-  tuesday: 'tuesday',
-  wednesday: 'wednesday',
-  thursday: 'thursday',
-  friday: 'friday',
-  saturday: 'saturday'
-};
-
-export type DayOfTheWeek = (typeof DayOfTheWeek)[keyof typeof DayOfTheWeek]
 
 
 /**
@@ -309,6 +310,16 @@ export class PrismaClient<
   get reservation(): Prisma.ReservationDelegate<GlobalReject>;
 
   /**
+   * `prisma.dayOfTheWeek`: Exposes CRUD operations for the **dayOfTheWeek** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DayOfTheWeeks
+    * const dayOfTheWeeks = await prisma.dayOfTheWeek.findMany()
+    * ```
+    */
+  get dayOfTheWeek(): Prisma.dayOfTheWeekDelegate<GlobalReject>;
+
+  /**
    * `prisma.unavailableTime`: Exposes CRUD operations for the **unavailableTime** model.
     * Example usage:
     * ```ts
@@ -317,6 +328,16 @@ export class PrismaClient<
     * ```
     */
   get unavailableTime(): Prisma.unavailableTimeDelegate<GlobalReject>;
+
+  /**
+   * `prisma.unavailableTimeHasDayOfTheWeek`: Exposes CRUD operations for the **UnavailableTimeHasDayOfTheWeek** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UnavailableTimeHasDayOfTheWeeks
+    * const unavailableTimeHasDayOfTheWeeks = await prisma.unavailableTimeHasDayOfTheWeek.findMany()
+    * ```
+    */
+  get unavailableTimeHasDayOfTheWeek(): Prisma.UnavailableTimeHasDayOfTheWeekDelegate<GlobalReject>;
 
   /**
    * `prisma.courtHasSports`: Exposes CRUD operations for the **CourtHasSports** model.
@@ -824,7 +845,9 @@ export namespace Prisma {
     Sport: 'Sport',
     Court: 'Court',
     Reservation: 'Reservation',
+    dayOfTheWeek: 'dayOfTheWeek',
     unavailableTime: 'unavailableTime',
+    UnavailableTimeHasDayOfTheWeek: 'UnavailableTimeHasDayOfTheWeek',
     CourtHasSports: 'CourtHasSports',
     ReservationHasUsers: 'ReservationHasUsers',
     ReservationHasRequestedUsers: 'ReservationHasRequestedUsers'
@@ -1190,6 +1213,55 @@ export namespace Prisma {
      * 
     **/
     select?: ReservationCountOutputTypeSelect | null
+  }
+
+
+
+  /**
+   * Count Type DayOfTheWeekCountOutputType
+   */
+
+
+  export type DayOfTheWeekCountOutputType = {
+    UnavailableTimeHasDayOfTheWeek: number
+  }
+
+  export type DayOfTheWeekCountOutputTypeSelect = {
+    UnavailableTimeHasDayOfTheWeek?: boolean
+  }
+
+  export type DayOfTheWeekCountOutputTypeGetPayload<
+    S extends boolean | null | undefined | DayOfTheWeekCountOutputTypeArgs,
+    U = keyof S
+      > = S extends true
+        ? DayOfTheWeekCountOutputType
+    : S extends undefined
+    ? never
+    : S extends DayOfTheWeekCountOutputTypeArgs
+    ?'include' extends U
+    ? DayOfTheWeekCountOutputType 
+    : 'select' extends U
+    ? {
+    [P in TrueKeys<S['select']>]:
+    P extends keyof DayOfTheWeekCountOutputType ? DayOfTheWeekCountOutputType[P] : never
+  } 
+    : DayOfTheWeekCountOutputType
+  : DayOfTheWeekCountOutputType
+
+
+
+
+  // Custom InputTypes
+
+  /**
+   * DayOfTheWeekCountOutputType without action
+   */
+  export type DayOfTheWeekCountOutputTypeArgs = {
+    /**
+     * Select specific fields to fetch from the DayOfTheWeekCountOutputType
+     * 
+    **/
+    select?: DayOfTheWeekCountOutputTypeSelect | null
   }
 
 
@@ -5045,6 +5117,911 @@ export namespace Prisma {
 
 
   /**
+   * Model dayOfTheWeek
+   */
+
+
+  export type AggregateDayOfTheWeek = {
+    _count: DayOfTheWeekCountAggregateOutputType | null
+    _min: DayOfTheWeekMinAggregateOutputType | null
+    _max: DayOfTheWeekMaxAggregateOutputType | null
+  }
+
+  export type DayOfTheWeekMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+  }
+
+  export type DayOfTheWeekMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+  }
+
+  export type DayOfTheWeekCountAggregateOutputType = {
+    id: number
+    name: number
+    _all: number
+  }
+
+
+  export type DayOfTheWeekMinAggregateInputType = {
+    id?: true
+    name?: true
+  }
+
+  export type DayOfTheWeekMaxAggregateInputType = {
+    id?: true
+    name?: true
+  }
+
+  export type DayOfTheWeekCountAggregateInputType = {
+    id?: true
+    name?: true
+    _all?: true
+  }
+
+  export type DayOfTheWeekAggregateArgs = {
+    /**
+     * Filter which dayOfTheWeek to aggregate.
+     * 
+    **/
+    where?: dayOfTheWeekWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of dayOfTheWeeks to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<dayOfTheWeekOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     * 
+    **/
+    cursor?: dayOfTheWeekWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` dayOfTheWeeks from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` dayOfTheWeeks.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned dayOfTheWeeks
+    **/
+    _count?: true | DayOfTheWeekCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DayOfTheWeekMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DayOfTheWeekMaxAggregateInputType
+  }
+
+  export type GetDayOfTheWeekAggregateType<T extends DayOfTheWeekAggregateArgs> = {
+        [P in keyof T & keyof AggregateDayOfTheWeek]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDayOfTheWeek[P]>
+      : GetScalarType<T[P], AggregateDayOfTheWeek[P]>
+  }
+
+
+
+
+  export type DayOfTheWeekGroupByArgs = {
+    where?: dayOfTheWeekWhereInput
+    orderBy?: Enumerable<dayOfTheWeekOrderByWithAggregationInput>
+    by: Array<DayOfTheWeekScalarFieldEnum>
+    having?: dayOfTheWeekScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DayOfTheWeekCountAggregateInputType | true
+    _min?: DayOfTheWeekMinAggregateInputType
+    _max?: DayOfTheWeekMaxAggregateInputType
+  }
+
+
+  export type DayOfTheWeekGroupByOutputType = {
+    id: string
+    name: string
+    _count: DayOfTheWeekCountAggregateOutputType | null
+    _min: DayOfTheWeekMinAggregateOutputType | null
+    _max: DayOfTheWeekMaxAggregateOutputType | null
+  }
+
+  type GetDayOfTheWeekGroupByPayload<T extends DayOfTheWeekGroupByArgs> = PrismaPromise<
+    Array<
+      PickArray<DayOfTheWeekGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DayOfTheWeekGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DayOfTheWeekGroupByOutputType[P]>
+            : GetScalarType<T[P], DayOfTheWeekGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type dayOfTheWeekSelect = {
+    id?: boolean
+    name?: boolean
+    UnavailableTimeHasDayOfTheWeek?: boolean | UnavailableTimeHasDayOfTheWeekFindManyArgs
+    _count?: boolean | DayOfTheWeekCountOutputTypeArgs
+  }
+
+  export type dayOfTheWeekInclude = {
+    UnavailableTimeHasDayOfTheWeek?: boolean | UnavailableTimeHasDayOfTheWeekFindManyArgs
+    _count?: boolean | DayOfTheWeekCountOutputTypeArgs
+  }
+
+  export type dayOfTheWeekGetPayload<
+    S extends boolean | null | undefined | dayOfTheWeekArgs,
+    U = keyof S
+      > = S extends true
+        ? dayOfTheWeek
+    : S extends undefined
+    ? never
+    : S extends dayOfTheWeekArgs | dayOfTheWeekFindManyArgs
+    ?'include' extends U
+    ? dayOfTheWeek  & {
+    [P in TrueKeys<S['include']>]:
+        P extends 'UnavailableTimeHasDayOfTheWeek' ? Array < UnavailableTimeHasDayOfTheWeekGetPayload<Exclude<S['include'], undefined | null>[P]>>  :
+        P extends '_count' ? DayOfTheWeekCountOutputTypeGetPayload<Exclude<S['include'], undefined | null>[P]> :  never
+  } 
+    : 'select' extends U
+    ? {
+    [P in TrueKeys<S['select']>]:
+        P extends 'UnavailableTimeHasDayOfTheWeek' ? Array < UnavailableTimeHasDayOfTheWeekGetPayload<Exclude<S['select'], undefined | null>[P]>>  :
+        P extends '_count' ? DayOfTheWeekCountOutputTypeGetPayload<Exclude<S['select'], undefined | null>[P]> :  P extends keyof dayOfTheWeek ? dayOfTheWeek[P] : never
+  } 
+    : dayOfTheWeek
+  : dayOfTheWeek
+
+
+  type dayOfTheWeekCountArgs = Merge<
+    Omit<dayOfTheWeekFindManyArgs, 'select' | 'include'> & {
+      select?: DayOfTheWeekCountAggregateInputType | true
+    }
+  >
+
+  export interface dayOfTheWeekDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+    /**
+     * Find zero or one DayOfTheWeek that matches the filter.
+     * @param {dayOfTheWeekFindUniqueArgs} args - Arguments to find a DayOfTheWeek
+     * @example
+     * // Get one DayOfTheWeek
+     * const dayOfTheWeek = await prisma.dayOfTheWeek.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends dayOfTheWeekFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, dayOfTheWeekFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'dayOfTheWeek'> extends True ? CheckSelect<T, Prisma__dayOfTheWeekClient<dayOfTheWeek>, Prisma__dayOfTheWeekClient<dayOfTheWeekGetPayload<T>>> : CheckSelect<T, Prisma__dayOfTheWeekClient<dayOfTheWeek | null >, Prisma__dayOfTheWeekClient<dayOfTheWeekGetPayload<T> | null >>
+
+    /**
+     * Find the first DayOfTheWeek that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {dayOfTheWeekFindFirstArgs} args - Arguments to find a DayOfTheWeek
+     * @example
+     * // Get one DayOfTheWeek
+     * const dayOfTheWeek = await prisma.dayOfTheWeek.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends dayOfTheWeekFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, dayOfTheWeekFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'dayOfTheWeek'> extends True ? CheckSelect<T, Prisma__dayOfTheWeekClient<dayOfTheWeek>, Prisma__dayOfTheWeekClient<dayOfTheWeekGetPayload<T>>> : CheckSelect<T, Prisma__dayOfTheWeekClient<dayOfTheWeek | null >, Prisma__dayOfTheWeekClient<dayOfTheWeekGetPayload<T> | null >>
+
+    /**
+     * Find zero or more DayOfTheWeeks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {dayOfTheWeekFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DayOfTheWeeks
+     * const dayOfTheWeeks = await prisma.dayOfTheWeek.findMany()
+     * 
+     * // Get first 10 DayOfTheWeeks
+     * const dayOfTheWeeks = await prisma.dayOfTheWeek.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const dayOfTheWeekWithIdOnly = await prisma.dayOfTheWeek.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends dayOfTheWeekFindManyArgs>(
+      args?: SelectSubset<T, dayOfTheWeekFindManyArgs>
+    ): CheckSelect<T, PrismaPromise<Array<dayOfTheWeek>>, PrismaPromise<Array<dayOfTheWeekGetPayload<T>>>>
+
+    /**
+     * Create a DayOfTheWeek.
+     * @param {dayOfTheWeekCreateArgs} args - Arguments to create a DayOfTheWeek.
+     * @example
+     * // Create one DayOfTheWeek
+     * const DayOfTheWeek = await prisma.dayOfTheWeek.create({
+     *   data: {
+     *     // ... data to create a DayOfTheWeek
+     *   }
+     * })
+     * 
+    **/
+    create<T extends dayOfTheWeekCreateArgs>(
+      args: SelectSubset<T, dayOfTheWeekCreateArgs>
+    ): CheckSelect<T, Prisma__dayOfTheWeekClient<dayOfTheWeek>, Prisma__dayOfTheWeekClient<dayOfTheWeekGetPayload<T>>>
+
+    /**
+     * Create many DayOfTheWeeks.
+     *     @param {dayOfTheWeekCreateManyArgs} args - Arguments to create many DayOfTheWeeks.
+     *     @example
+     *     // Create many DayOfTheWeeks
+     *     const dayOfTheWeek = await prisma.dayOfTheWeek.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends dayOfTheWeekCreateManyArgs>(
+      args?: SelectSubset<T, dayOfTheWeekCreateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a DayOfTheWeek.
+     * @param {dayOfTheWeekDeleteArgs} args - Arguments to delete one DayOfTheWeek.
+     * @example
+     * // Delete one DayOfTheWeek
+     * const DayOfTheWeek = await prisma.dayOfTheWeek.delete({
+     *   where: {
+     *     // ... filter to delete one DayOfTheWeek
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends dayOfTheWeekDeleteArgs>(
+      args: SelectSubset<T, dayOfTheWeekDeleteArgs>
+    ): CheckSelect<T, Prisma__dayOfTheWeekClient<dayOfTheWeek>, Prisma__dayOfTheWeekClient<dayOfTheWeekGetPayload<T>>>
+
+    /**
+     * Update one DayOfTheWeek.
+     * @param {dayOfTheWeekUpdateArgs} args - Arguments to update one DayOfTheWeek.
+     * @example
+     * // Update one DayOfTheWeek
+     * const dayOfTheWeek = await prisma.dayOfTheWeek.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends dayOfTheWeekUpdateArgs>(
+      args: SelectSubset<T, dayOfTheWeekUpdateArgs>
+    ): CheckSelect<T, Prisma__dayOfTheWeekClient<dayOfTheWeek>, Prisma__dayOfTheWeekClient<dayOfTheWeekGetPayload<T>>>
+
+    /**
+     * Delete zero or more DayOfTheWeeks.
+     * @param {dayOfTheWeekDeleteManyArgs} args - Arguments to filter DayOfTheWeeks to delete.
+     * @example
+     * // Delete a few DayOfTheWeeks
+     * const { count } = await prisma.dayOfTheWeek.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends dayOfTheWeekDeleteManyArgs>(
+      args?: SelectSubset<T, dayOfTheWeekDeleteManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DayOfTheWeeks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {dayOfTheWeekUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DayOfTheWeeks
+     * const dayOfTheWeek = await prisma.dayOfTheWeek.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends dayOfTheWeekUpdateManyArgs>(
+      args: SelectSubset<T, dayOfTheWeekUpdateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one DayOfTheWeek.
+     * @param {dayOfTheWeekUpsertArgs} args - Arguments to update or create a DayOfTheWeek.
+     * @example
+     * // Update or create a DayOfTheWeek
+     * const dayOfTheWeek = await prisma.dayOfTheWeek.upsert({
+     *   create: {
+     *     // ... data to create a DayOfTheWeek
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DayOfTheWeek we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends dayOfTheWeekUpsertArgs>(
+      args: SelectSubset<T, dayOfTheWeekUpsertArgs>
+    ): CheckSelect<T, Prisma__dayOfTheWeekClient<dayOfTheWeek>, Prisma__dayOfTheWeekClient<dayOfTheWeekGetPayload<T>>>
+
+    /**
+     * Find one DayOfTheWeek that matches the filter or throw
+     * `NotFoundError` if no matches were found.
+     * @param {dayOfTheWeekFindUniqueOrThrowArgs} args - Arguments to find a DayOfTheWeek
+     * @example
+     * // Get one DayOfTheWeek
+     * const dayOfTheWeek = await prisma.dayOfTheWeek.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends dayOfTheWeekFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, dayOfTheWeekFindUniqueOrThrowArgs>
+    ): CheckSelect<T, Prisma__dayOfTheWeekClient<dayOfTheWeek>, Prisma__dayOfTheWeekClient<dayOfTheWeekGetPayload<T>>>
+
+    /**
+     * Find the first DayOfTheWeek that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {dayOfTheWeekFindFirstOrThrowArgs} args - Arguments to find a DayOfTheWeek
+     * @example
+     * // Get one DayOfTheWeek
+     * const dayOfTheWeek = await prisma.dayOfTheWeek.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends dayOfTheWeekFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, dayOfTheWeekFindFirstOrThrowArgs>
+    ): CheckSelect<T, Prisma__dayOfTheWeekClient<dayOfTheWeek>, Prisma__dayOfTheWeekClient<dayOfTheWeekGetPayload<T>>>
+
+    /**
+     * Count the number of DayOfTheWeeks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {dayOfTheWeekCountArgs} args - Arguments to filter DayOfTheWeeks to count.
+     * @example
+     * // Count the number of DayOfTheWeeks
+     * const count = await prisma.dayOfTheWeek.count({
+     *   where: {
+     *     // ... the filter for the DayOfTheWeeks we want to count
+     *   }
+     * })
+    **/
+    count<T extends dayOfTheWeekCountArgs>(
+      args?: Subset<T, dayOfTheWeekCountArgs>,
+    ): PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DayOfTheWeekCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DayOfTheWeek.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DayOfTheWeekAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DayOfTheWeekAggregateArgs>(args: Subset<T, DayOfTheWeekAggregateArgs>): PrismaPromise<GetDayOfTheWeekAggregateType<T>>
+
+    /**
+     * Group by DayOfTheWeek.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DayOfTheWeekGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DayOfTheWeekGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DayOfTheWeekGroupByArgs['orderBy'] }
+        : { orderBy?: DayOfTheWeekGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DayOfTheWeekGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDayOfTheWeekGroupByPayload<T> : PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for dayOfTheWeek.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__dayOfTheWeekClient<T> implements PrismaPromise<T> {
+    [prisma]: true;
+    private readonly _dmmf;
+    private readonly _fetcher;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
+
+    UnavailableTimeHasDayOfTheWeek<T extends UnavailableTimeHasDayOfTheWeekFindManyArgs = {}>(args?: Subset<T, UnavailableTimeHasDayOfTheWeekFindManyArgs>): CheckSelect<T, PrismaPromise<Array<UnavailableTimeHasDayOfTheWeek>>, PrismaPromise<Array<UnavailableTimeHasDayOfTheWeekGetPayload<T>>>>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * dayOfTheWeek base type for findUnique actions
+   */
+  export type dayOfTheWeekFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the dayOfTheWeek
+     * 
+    **/
+    select?: dayOfTheWeekSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: dayOfTheWeekInclude | null
+    /**
+     * Filter, which dayOfTheWeek to fetch.
+     * 
+    **/
+    where: dayOfTheWeekWhereUniqueInput
+  }
+
+  /**
+   * dayOfTheWeek: findUnique
+   */
+  export interface dayOfTheWeekFindUniqueArgs extends dayOfTheWeekFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * dayOfTheWeek base type for findFirst actions
+   */
+  export type dayOfTheWeekFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the dayOfTheWeek
+     * 
+    **/
+    select?: dayOfTheWeekSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: dayOfTheWeekInclude | null
+    /**
+     * Filter, which dayOfTheWeek to fetch.
+     * 
+    **/
+    where?: dayOfTheWeekWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of dayOfTheWeeks to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<dayOfTheWeekOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for dayOfTheWeeks.
+     * 
+    **/
+    cursor?: dayOfTheWeekWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` dayOfTheWeeks from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` dayOfTheWeeks.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of dayOfTheWeeks.
+     * 
+    **/
+    distinct?: Enumerable<DayOfTheWeekScalarFieldEnum>
+  }
+
+  /**
+   * dayOfTheWeek: findFirst
+   */
+  export interface dayOfTheWeekFindFirstArgs extends dayOfTheWeekFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * dayOfTheWeek findMany
+   */
+  export type dayOfTheWeekFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the dayOfTheWeek
+     * 
+    **/
+    select?: dayOfTheWeekSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: dayOfTheWeekInclude | null
+    /**
+     * Filter, which dayOfTheWeeks to fetch.
+     * 
+    **/
+    where?: dayOfTheWeekWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of dayOfTheWeeks to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<dayOfTheWeekOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing dayOfTheWeeks.
+     * 
+    **/
+    cursor?: dayOfTheWeekWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` dayOfTheWeeks from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` dayOfTheWeeks.
+     * 
+    **/
+    skip?: number
+    distinct?: Enumerable<DayOfTheWeekScalarFieldEnum>
+  }
+
+
+  /**
+   * dayOfTheWeek create
+   */
+  export type dayOfTheWeekCreateArgs = {
+    /**
+     * Select specific fields to fetch from the dayOfTheWeek
+     * 
+    **/
+    select?: dayOfTheWeekSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: dayOfTheWeekInclude | null
+    /**
+     * The data needed to create a dayOfTheWeek.
+     * 
+    **/
+    data: XOR<dayOfTheWeekCreateInput, dayOfTheWeekUncheckedCreateInput>
+  }
+
+
+  /**
+   * dayOfTheWeek createMany
+   */
+  export type dayOfTheWeekCreateManyArgs = {
+    /**
+     * The data used to create many dayOfTheWeeks.
+     * 
+    **/
+    data: Enumerable<dayOfTheWeekCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * dayOfTheWeek update
+   */
+  export type dayOfTheWeekUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the dayOfTheWeek
+     * 
+    **/
+    select?: dayOfTheWeekSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: dayOfTheWeekInclude | null
+    /**
+     * The data needed to update a dayOfTheWeek.
+     * 
+    **/
+    data: XOR<dayOfTheWeekUpdateInput, dayOfTheWeekUncheckedUpdateInput>
+    /**
+     * Choose, which dayOfTheWeek to update.
+     * 
+    **/
+    where: dayOfTheWeekWhereUniqueInput
+  }
+
+
+  /**
+   * dayOfTheWeek updateMany
+   */
+  export type dayOfTheWeekUpdateManyArgs = {
+    /**
+     * The data used to update dayOfTheWeeks.
+     * 
+    **/
+    data: XOR<dayOfTheWeekUpdateManyMutationInput, dayOfTheWeekUncheckedUpdateManyInput>
+    /**
+     * Filter which dayOfTheWeeks to update
+     * 
+    **/
+    where?: dayOfTheWeekWhereInput
+  }
+
+
+  /**
+   * dayOfTheWeek upsert
+   */
+  export type dayOfTheWeekUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the dayOfTheWeek
+     * 
+    **/
+    select?: dayOfTheWeekSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: dayOfTheWeekInclude | null
+    /**
+     * The filter to search for the dayOfTheWeek to update in case it exists.
+     * 
+    **/
+    where: dayOfTheWeekWhereUniqueInput
+    /**
+     * In case the dayOfTheWeek found by the `where` argument doesn't exist, create a new dayOfTheWeek with this data.
+     * 
+    **/
+    create: XOR<dayOfTheWeekCreateInput, dayOfTheWeekUncheckedCreateInput>
+    /**
+     * In case the dayOfTheWeek was found with the provided `where` argument, update it with this data.
+     * 
+    **/
+    update: XOR<dayOfTheWeekUpdateInput, dayOfTheWeekUncheckedUpdateInput>
+  }
+
+
+  /**
+   * dayOfTheWeek delete
+   */
+  export type dayOfTheWeekDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the dayOfTheWeek
+     * 
+    **/
+    select?: dayOfTheWeekSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: dayOfTheWeekInclude | null
+    /**
+     * Filter which dayOfTheWeek to delete.
+     * 
+    **/
+    where: dayOfTheWeekWhereUniqueInput
+  }
+
+
+  /**
+   * dayOfTheWeek deleteMany
+   */
+  export type dayOfTheWeekDeleteManyArgs = {
+    /**
+     * Filter which dayOfTheWeeks to delete
+     * 
+    **/
+    where?: dayOfTheWeekWhereInput
+  }
+
+
+  /**
+   * dayOfTheWeek: findUniqueOrThrow
+   */
+  export type dayOfTheWeekFindUniqueOrThrowArgs = dayOfTheWeekFindUniqueArgsBase
+      
+
+  /**
+   * dayOfTheWeek: findFirstOrThrow
+   */
+  export type dayOfTheWeekFindFirstOrThrowArgs = dayOfTheWeekFindFirstArgsBase
+      
+
+  /**
+   * dayOfTheWeek without action
+   */
+  export type dayOfTheWeekArgs = {
+    /**
+     * Select specific fields to fetch from the dayOfTheWeek
+     * 
+    **/
+    select?: dayOfTheWeekSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: dayOfTheWeekInclude | null
+  }
+
+
+
+  /**
    * Model unavailableTime
    */
 
@@ -5057,30 +6034,30 @@ export namespace Prisma {
 
   export type UnavailableTimeMinAggregateOutputType = {
     id: string | null
-    dayOfTheWeek: DayOfTheWeek | null
+    startDateTime: Date | null
+    endDateTime: Date | null
     startTime: Date | null
     endTime: Date | null
-    singleOccurency: Date | null
     created_at: Date | null
     courtId: string | null
   }
 
   export type UnavailableTimeMaxAggregateOutputType = {
     id: string | null
-    dayOfTheWeek: DayOfTheWeek | null
+    startDateTime: Date | null
+    endDateTime: Date | null
     startTime: Date | null
     endTime: Date | null
-    singleOccurency: Date | null
     created_at: Date | null
     courtId: string | null
   }
 
   export type UnavailableTimeCountAggregateOutputType = {
     id: number
-    dayOfTheWeek: number
+    startDateTime: number
+    endDateTime: number
     startTime: number
     endTime: number
-    singleOccurency: number
     created_at: number
     courtId: number
     _all: number
@@ -5089,30 +6066,30 @@ export namespace Prisma {
 
   export type UnavailableTimeMinAggregateInputType = {
     id?: true
-    dayOfTheWeek?: true
+    startDateTime?: true
+    endDateTime?: true
     startTime?: true
     endTime?: true
-    singleOccurency?: true
     created_at?: true
     courtId?: true
   }
 
   export type UnavailableTimeMaxAggregateInputType = {
     id?: true
-    dayOfTheWeek?: true
+    startDateTime?: true
+    endDateTime?: true
     startTime?: true
     endTime?: true
-    singleOccurency?: true
     created_at?: true
     courtId?: true
   }
 
   export type UnavailableTimeCountAggregateInputType = {
     id?: true
-    dayOfTheWeek?: true
+    startDateTime?: true
+    endDateTime?: true
     startTime?: true
     endTime?: true
-    singleOccurency?: true
     created_at?: true
     courtId?: true
     _all?: true
@@ -5198,10 +6175,10 @@ export namespace Prisma {
 
   export type UnavailableTimeGroupByOutputType = {
     id: string
-    dayOfTheWeek: DayOfTheWeek
+    startDateTime: Date
+    endDateTime: Date
     startTime: Date
     endTime: Date
-    singleOccurency: Date
     created_at: Date
     courtId: string
     _count: UnavailableTimeCountAggregateOutputType | null
@@ -5225,17 +6202,19 @@ export namespace Prisma {
 
   export type unavailableTimeSelect = {
     id?: boolean
-    dayOfTheWeek?: boolean
+    startDateTime?: boolean
+    endDateTime?: boolean
     startTime?: boolean
     endTime?: boolean
-    singleOccurency?: boolean
     court?: boolean | CourtArgs
     created_at?: boolean
     courtId?: boolean
+    daysOfTheWeek?: boolean | UnavailableTimeHasDayOfTheWeekArgs
   }
 
   export type unavailableTimeInclude = {
     court?: boolean | CourtArgs
+    daysOfTheWeek?: boolean | UnavailableTimeHasDayOfTheWeekArgs
   }
 
   export type unavailableTimeGetPayload<
@@ -5249,12 +6228,14 @@ export namespace Prisma {
     ?'include' extends U
     ? unavailableTime  & {
     [P in TrueKeys<S['include']>]:
-        P extends 'court' ? CourtGetPayload<Exclude<S['include'], undefined | null>[P]> :  never
+        P extends 'court' ? CourtGetPayload<Exclude<S['include'], undefined | null>[P]> :
+        P extends 'daysOfTheWeek' ? UnavailableTimeHasDayOfTheWeekGetPayload<Exclude<S['include'], undefined | null>[P]> | null :  never
   } 
     : 'select' extends U
     ? {
     [P in TrueKeys<S['select']>]:
-        P extends 'court' ? CourtGetPayload<Exclude<S['select'], undefined | null>[P]> :  P extends keyof unavailableTime ? unavailableTime[P] : never
+        P extends 'court' ? CourtGetPayload<Exclude<S['select'], undefined | null>[P]> :
+        P extends 'daysOfTheWeek' ? UnavailableTimeHasDayOfTheWeekGetPayload<Exclude<S['select'], undefined | null>[P]> | null :  P extends keyof unavailableTime ? unavailableTime[P] : never
   } 
     : unavailableTime
   : unavailableTime
@@ -5631,6 +6612,8 @@ export namespace Prisma {
 
     court<T extends CourtArgs = {}>(args?: Subset<T, CourtArgs>): CheckSelect<T, Prisma__CourtClient<Court | null >, Prisma__CourtClient<CourtGetPayload<T> | null >>;
 
+    daysOfTheWeek<T extends UnavailableTimeHasDayOfTheWeekArgs = {}>(args?: Subset<T, UnavailableTimeHasDayOfTheWeekArgs>): CheckSelect<T, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeek | null >, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeekGetPayload<T> | null >>;
+
     private get _document();
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -5981,6 +6964,937 @@ export namespace Prisma {
      * 
     **/
     include?: unavailableTimeInclude | null
+  }
+
+
+
+  /**
+   * Model UnavailableTimeHasDayOfTheWeek
+   */
+
+
+  export type AggregateUnavailableTimeHasDayOfTheWeek = {
+    _count: UnavailableTimeHasDayOfTheWeekCountAggregateOutputType | null
+    _min: UnavailableTimeHasDayOfTheWeekMinAggregateOutputType | null
+    _max: UnavailableTimeHasDayOfTheWeekMaxAggregateOutputType | null
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekMinAggregateOutputType = {
+    unavailableTimeId: string | null
+    active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+    dayOfTheWeekId: string | null
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekMaxAggregateOutputType = {
+    unavailableTimeId: string | null
+    active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+    dayOfTheWeekId: string | null
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekCountAggregateOutputType = {
+    unavailableTimeId: number
+    active: number
+    created_at: number
+    updated_at: number
+    dayOfTheWeekId: number
+    _all: number
+  }
+
+
+  export type UnavailableTimeHasDayOfTheWeekMinAggregateInputType = {
+    unavailableTimeId?: true
+    active?: true
+    created_at?: true
+    updated_at?: true
+    dayOfTheWeekId?: true
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekMaxAggregateInputType = {
+    unavailableTimeId?: true
+    active?: true
+    created_at?: true
+    updated_at?: true
+    dayOfTheWeekId?: true
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekCountAggregateInputType = {
+    unavailableTimeId?: true
+    active?: true
+    created_at?: true
+    updated_at?: true
+    dayOfTheWeekId?: true
+    _all?: true
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekAggregateArgs = {
+    /**
+     * Filter which UnavailableTimeHasDayOfTheWeek to aggregate.
+     * 
+    **/
+    where?: UnavailableTimeHasDayOfTheWeekWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnavailableTimeHasDayOfTheWeeks to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnavailableTimeHasDayOfTheWeekOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     * 
+    **/
+    cursor?: UnavailableTimeHasDayOfTheWeekWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnavailableTimeHasDayOfTheWeeks from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnavailableTimeHasDayOfTheWeeks.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UnavailableTimeHasDayOfTheWeeks
+    **/
+    _count?: true | UnavailableTimeHasDayOfTheWeekCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UnavailableTimeHasDayOfTheWeekMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UnavailableTimeHasDayOfTheWeekMaxAggregateInputType
+  }
+
+  export type GetUnavailableTimeHasDayOfTheWeekAggregateType<T extends UnavailableTimeHasDayOfTheWeekAggregateArgs> = {
+        [P in keyof T & keyof AggregateUnavailableTimeHasDayOfTheWeek]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUnavailableTimeHasDayOfTheWeek[P]>
+      : GetScalarType<T[P], AggregateUnavailableTimeHasDayOfTheWeek[P]>
+  }
+
+
+
+
+  export type UnavailableTimeHasDayOfTheWeekGroupByArgs = {
+    where?: UnavailableTimeHasDayOfTheWeekWhereInput
+    orderBy?: Enumerable<UnavailableTimeHasDayOfTheWeekOrderByWithAggregationInput>
+    by: Array<UnavailableTimeHasDayOfTheWeekScalarFieldEnum>
+    having?: UnavailableTimeHasDayOfTheWeekScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UnavailableTimeHasDayOfTheWeekCountAggregateInputType | true
+    _min?: UnavailableTimeHasDayOfTheWeekMinAggregateInputType
+    _max?: UnavailableTimeHasDayOfTheWeekMaxAggregateInputType
+  }
+
+
+  export type UnavailableTimeHasDayOfTheWeekGroupByOutputType = {
+    unavailableTimeId: string
+    active: boolean
+    created_at: Date
+    updated_at: Date | null
+    dayOfTheWeekId: string
+    _count: UnavailableTimeHasDayOfTheWeekCountAggregateOutputType | null
+    _min: UnavailableTimeHasDayOfTheWeekMinAggregateOutputType | null
+    _max: UnavailableTimeHasDayOfTheWeekMaxAggregateOutputType | null
+  }
+
+  type GetUnavailableTimeHasDayOfTheWeekGroupByPayload<T extends UnavailableTimeHasDayOfTheWeekGroupByArgs> = PrismaPromise<
+    Array<
+      PickArray<UnavailableTimeHasDayOfTheWeekGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UnavailableTimeHasDayOfTheWeekGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UnavailableTimeHasDayOfTheWeekGroupByOutputType[P]>
+            : GetScalarType<T[P], UnavailableTimeHasDayOfTheWeekGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UnavailableTimeHasDayOfTheWeekSelect = {
+    unavailableTime?: boolean | unavailableTimeArgs
+    unavailableTimeId?: boolean
+    active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    dayOfTheWeek?: boolean | dayOfTheWeekArgs
+    dayOfTheWeekId?: boolean
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekInclude = {
+    unavailableTime?: boolean | unavailableTimeArgs
+    dayOfTheWeek?: boolean | dayOfTheWeekArgs
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekGetPayload<
+    S extends boolean | null | undefined | UnavailableTimeHasDayOfTheWeekArgs,
+    U = keyof S
+      > = S extends true
+        ? UnavailableTimeHasDayOfTheWeek
+    : S extends undefined
+    ? never
+    : S extends UnavailableTimeHasDayOfTheWeekArgs | UnavailableTimeHasDayOfTheWeekFindManyArgs
+    ?'include' extends U
+    ? UnavailableTimeHasDayOfTheWeek  & {
+    [P in TrueKeys<S['include']>]:
+        P extends 'unavailableTime' ? unavailableTimeGetPayload<Exclude<S['include'], undefined | null>[P]> :
+        P extends 'dayOfTheWeek' ? dayOfTheWeekGetPayload<Exclude<S['include'], undefined | null>[P]> :  never
+  } 
+    : 'select' extends U
+    ? {
+    [P in TrueKeys<S['select']>]:
+        P extends 'unavailableTime' ? unavailableTimeGetPayload<Exclude<S['select'], undefined | null>[P]> :
+        P extends 'dayOfTheWeek' ? dayOfTheWeekGetPayload<Exclude<S['select'], undefined | null>[P]> :  P extends keyof UnavailableTimeHasDayOfTheWeek ? UnavailableTimeHasDayOfTheWeek[P] : never
+  } 
+    : UnavailableTimeHasDayOfTheWeek
+  : UnavailableTimeHasDayOfTheWeek
+
+
+  type UnavailableTimeHasDayOfTheWeekCountArgs = Merge<
+    Omit<UnavailableTimeHasDayOfTheWeekFindManyArgs, 'select' | 'include'> & {
+      select?: UnavailableTimeHasDayOfTheWeekCountAggregateInputType | true
+    }
+  >
+
+  export interface UnavailableTimeHasDayOfTheWeekDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+    /**
+     * Find zero or one UnavailableTimeHasDayOfTheWeek that matches the filter.
+     * @param {UnavailableTimeHasDayOfTheWeekFindUniqueArgs} args - Arguments to find a UnavailableTimeHasDayOfTheWeek
+     * @example
+     * // Get one UnavailableTimeHasDayOfTheWeek
+     * const unavailableTimeHasDayOfTheWeek = await prisma.unavailableTimeHasDayOfTheWeek.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends UnavailableTimeHasDayOfTheWeekFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, UnavailableTimeHasDayOfTheWeekFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'UnavailableTimeHasDayOfTheWeek'> extends True ? CheckSelect<T, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeek>, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeekGetPayload<T>>> : CheckSelect<T, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeek | null >, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeekGetPayload<T> | null >>
+
+    /**
+     * Find the first UnavailableTimeHasDayOfTheWeek that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnavailableTimeHasDayOfTheWeekFindFirstArgs} args - Arguments to find a UnavailableTimeHasDayOfTheWeek
+     * @example
+     * // Get one UnavailableTimeHasDayOfTheWeek
+     * const unavailableTimeHasDayOfTheWeek = await prisma.unavailableTimeHasDayOfTheWeek.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends UnavailableTimeHasDayOfTheWeekFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, UnavailableTimeHasDayOfTheWeekFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'UnavailableTimeHasDayOfTheWeek'> extends True ? CheckSelect<T, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeek>, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeekGetPayload<T>>> : CheckSelect<T, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeek | null >, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeekGetPayload<T> | null >>
+
+    /**
+     * Find zero or more UnavailableTimeHasDayOfTheWeeks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnavailableTimeHasDayOfTheWeekFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UnavailableTimeHasDayOfTheWeeks
+     * const unavailableTimeHasDayOfTheWeeks = await prisma.unavailableTimeHasDayOfTheWeek.findMany()
+     * 
+     * // Get first 10 UnavailableTimeHasDayOfTheWeeks
+     * const unavailableTimeHasDayOfTheWeeks = await prisma.unavailableTimeHasDayOfTheWeek.findMany({ take: 10 })
+     * 
+     * // Only select the `unavailableTimeId`
+     * const unavailableTimeHasDayOfTheWeekWithUnavailableTimeIdOnly = await prisma.unavailableTimeHasDayOfTheWeek.findMany({ select: { unavailableTimeId: true } })
+     * 
+    **/
+    findMany<T extends UnavailableTimeHasDayOfTheWeekFindManyArgs>(
+      args?: SelectSubset<T, UnavailableTimeHasDayOfTheWeekFindManyArgs>
+    ): CheckSelect<T, PrismaPromise<Array<UnavailableTimeHasDayOfTheWeek>>, PrismaPromise<Array<UnavailableTimeHasDayOfTheWeekGetPayload<T>>>>
+
+    /**
+     * Create a UnavailableTimeHasDayOfTheWeek.
+     * @param {UnavailableTimeHasDayOfTheWeekCreateArgs} args - Arguments to create a UnavailableTimeHasDayOfTheWeek.
+     * @example
+     * // Create one UnavailableTimeHasDayOfTheWeek
+     * const UnavailableTimeHasDayOfTheWeek = await prisma.unavailableTimeHasDayOfTheWeek.create({
+     *   data: {
+     *     // ... data to create a UnavailableTimeHasDayOfTheWeek
+     *   }
+     * })
+     * 
+    **/
+    create<T extends UnavailableTimeHasDayOfTheWeekCreateArgs>(
+      args: SelectSubset<T, UnavailableTimeHasDayOfTheWeekCreateArgs>
+    ): CheckSelect<T, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeek>, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeekGetPayload<T>>>
+
+    /**
+     * Create many UnavailableTimeHasDayOfTheWeeks.
+     *     @param {UnavailableTimeHasDayOfTheWeekCreateManyArgs} args - Arguments to create many UnavailableTimeHasDayOfTheWeeks.
+     *     @example
+     *     // Create many UnavailableTimeHasDayOfTheWeeks
+     *     const unavailableTimeHasDayOfTheWeek = await prisma.unavailableTimeHasDayOfTheWeek.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends UnavailableTimeHasDayOfTheWeekCreateManyArgs>(
+      args?: SelectSubset<T, UnavailableTimeHasDayOfTheWeekCreateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a UnavailableTimeHasDayOfTheWeek.
+     * @param {UnavailableTimeHasDayOfTheWeekDeleteArgs} args - Arguments to delete one UnavailableTimeHasDayOfTheWeek.
+     * @example
+     * // Delete one UnavailableTimeHasDayOfTheWeek
+     * const UnavailableTimeHasDayOfTheWeek = await prisma.unavailableTimeHasDayOfTheWeek.delete({
+     *   where: {
+     *     // ... filter to delete one UnavailableTimeHasDayOfTheWeek
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends UnavailableTimeHasDayOfTheWeekDeleteArgs>(
+      args: SelectSubset<T, UnavailableTimeHasDayOfTheWeekDeleteArgs>
+    ): CheckSelect<T, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeek>, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeekGetPayload<T>>>
+
+    /**
+     * Update one UnavailableTimeHasDayOfTheWeek.
+     * @param {UnavailableTimeHasDayOfTheWeekUpdateArgs} args - Arguments to update one UnavailableTimeHasDayOfTheWeek.
+     * @example
+     * // Update one UnavailableTimeHasDayOfTheWeek
+     * const unavailableTimeHasDayOfTheWeek = await prisma.unavailableTimeHasDayOfTheWeek.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends UnavailableTimeHasDayOfTheWeekUpdateArgs>(
+      args: SelectSubset<T, UnavailableTimeHasDayOfTheWeekUpdateArgs>
+    ): CheckSelect<T, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeek>, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeekGetPayload<T>>>
+
+    /**
+     * Delete zero or more UnavailableTimeHasDayOfTheWeeks.
+     * @param {UnavailableTimeHasDayOfTheWeekDeleteManyArgs} args - Arguments to filter UnavailableTimeHasDayOfTheWeeks to delete.
+     * @example
+     * // Delete a few UnavailableTimeHasDayOfTheWeeks
+     * const { count } = await prisma.unavailableTimeHasDayOfTheWeek.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends UnavailableTimeHasDayOfTheWeekDeleteManyArgs>(
+      args?: SelectSubset<T, UnavailableTimeHasDayOfTheWeekDeleteManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UnavailableTimeHasDayOfTheWeeks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnavailableTimeHasDayOfTheWeekUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UnavailableTimeHasDayOfTheWeeks
+     * const unavailableTimeHasDayOfTheWeek = await prisma.unavailableTimeHasDayOfTheWeek.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends UnavailableTimeHasDayOfTheWeekUpdateManyArgs>(
+      args: SelectSubset<T, UnavailableTimeHasDayOfTheWeekUpdateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one UnavailableTimeHasDayOfTheWeek.
+     * @param {UnavailableTimeHasDayOfTheWeekUpsertArgs} args - Arguments to update or create a UnavailableTimeHasDayOfTheWeek.
+     * @example
+     * // Update or create a UnavailableTimeHasDayOfTheWeek
+     * const unavailableTimeHasDayOfTheWeek = await prisma.unavailableTimeHasDayOfTheWeek.upsert({
+     *   create: {
+     *     // ... data to create a UnavailableTimeHasDayOfTheWeek
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UnavailableTimeHasDayOfTheWeek we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends UnavailableTimeHasDayOfTheWeekUpsertArgs>(
+      args: SelectSubset<T, UnavailableTimeHasDayOfTheWeekUpsertArgs>
+    ): CheckSelect<T, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeek>, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeekGetPayload<T>>>
+
+    /**
+     * Find one UnavailableTimeHasDayOfTheWeek that matches the filter or throw
+     * `NotFoundError` if no matches were found.
+     * @param {UnavailableTimeHasDayOfTheWeekFindUniqueOrThrowArgs} args - Arguments to find a UnavailableTimeHasDayOfTheWeek
+     * @example
+     * // Get one UnavailableTimeHasDayOfTheWeek
+     * const unavailableTimeHasDayOfTheWeek = await prisma.unavailableTimeHasDayOfTheWeek.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends UnavailableTimeHasDayOfTheWeekFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, UnavailableTimeHasDayOfTheWeekFindUniqueOrThrowArgs>
+    ): CheckSelect<T, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeek>, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeekGetPayload<T>>>
+
+    /**
+     * Find the first UnavailableTimeHasDayOfTheWeek that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnavailableTimeHasDayOfTheWeekFindFirstOrThrowArgs} args - Arguments to find a UnavailableTimeHasDayOfTheWeek
+     * @example
+     * // Get one UnavailableTimeHasDayOfTheWeek
+     * const unavailableTimeHasDayOfTheWeek = await prisma.unavailableTimeHasDayOfTheWeek.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends UnavailableTimeHasDayOfTheWeekFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, UnavailableTimeHasDayOfTheWeekFindFirstOrThrowArgs>
+    ): CheckSelect<T, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeek>, Prisma__UnavailableTimeHasDayOfTheWeekClient<UnavailableTimeHasDayOfTheWeekGetPayload<T>>>
+
+    /**
+     * Count the number of UnavailableTimeHasDayOfTheWeeks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnavailableTimeHasDayOfTheWeekCountArgs} args - Arguments to filter UnavailableTimeHasDayOfTheWeeks to count.
+     * @example
+     * // Count the number of UnavailableTimeHasDayOfTheWeeks
+     * const count = await prisma.unavailableTimeHasDayOfTheWeek.count({
+     *   where: {
+     *     // ... the filter for the UnavailableTimeHasDayOfTheWeeks we want to count
+     *   }
+     * })
+    **/
+    count<T extends UnavailableTimeHasDayOfTheWeekCountArgs>(
+      args?: Subset<T, UnavailableTimeHasDayOfTheWeekCountArgs>,
+    ): PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UnavailableTimeHasDayOfTheWeekCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UnavailableTimeHasDayOfTheWeek.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnavailableTimeHasDayOfTheWeekAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UnavailableTimeHasDayOfTheWeekAggregateArgs>(args: Subset<T, UnavailableTimeHasDayOfTheWeekAggregateArgs>): PrismaPromise<GetUnavailableTimeHasDayOfTheWeekAggregateType<T>>
+
+    /**
+     * Group by UnavailableTimeHasDayOfTheWeek.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnavailableTimeHasDayOfTheWeekGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UnavailableTimeHasDayOfTheWeekGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UnavailableTimeHasDayOfTheWeekGroupByArgs['orderBy'] }
+        : { orderBy?: UnavailableTimeHasDayOfTheWeekGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UnavailableTimeHasDayOfTheWeekGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUnavailableTimeHasDayOfTheWeekGroupByPayload<T> : PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UnavailableTimeHasDayOfTheWeek.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__UnavailableTimeHasDayOfTheWeekClient<T> implements PrismaPromise<T> {
+    [prisma]: true;
+    private readonly _dmmf;
+    private readonly _fetcher;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
+
+    unavailableTime<T extends unavailableTimeArgs = {}>(args?: Subset<T, unavailableTimeArgs>): CheckSelect<T, Prisma__unavailableTimeClient<unavailableTime | null >, Prisma__unavailableTimeClient<unavailableTimeGetPayload<T> | null >>;
+
+    dayOfTheWeek<T extends dayOfTheWeekArgs = {}>(args?: Subset<T, dayOfTheWeekArgs>): CheckSelect<T, Prisma__dayOfTheWeekClient<dayOfTheWeek | null >, Prisma__dayOfTheWeekClient<dayOfTheWeekGetPayload<T> | null >>;
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * UnavailableTimeHasDayOfTheWeek base type for findUnique actions
+   */
+  export type UnavailableTimeHasDayOfTheWeekFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the UnavailableTimeHasDayOfTheWeek
+     * 
+    **/
+    select?: UnavailableTimeHasDayOfTheWeekSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: UnavailableTimeHasDayOfTheWeekInclude | null
+    /**
+     * Filter, which UnavailableTimeHasDayOfTheWeek to fetch.
+     * 
+    **/
+    where: UnavailableTimeHasDayOfTheWeekWhereUniqueInput
+  }
+
+  /**
+   * UnavailableTimeHasDayOfTheWeek: findUnique
+   */
+  export interface UnavailableTimeHasDayOfTheWeekFindUniqueArgs extends UnavailableTimeHasDayOfTheWeekFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * UnavailableTimeHasDayOfTheWeek base type for findFirst actions
+   */
+  export type UnavailableTimeHasDayOfTheWeekFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the UnavailableTimeHasDayOfTheWeek
+     * 
+    **/
+    select?: UnavailableTimeHasDayOfTheWeekSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: UnavailableTimeHasDayOfTheWeekInclude | null
+    /**
+     * Filter, which UnavailableTimeHasDayOfTheWeek to fetch.
+     * 
+    **/
+    where?: UnavailableTimeHasDayOfTheWeekWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnavailableTimeHasDayOfTheWeeks to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnavailableTimeHasDayOfTheWeekOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UnavailableTimeHasDayOfTheWeeks.
+     * 
+    **/
+    cursor?: UnavailableTimeHasDayOfTheWeekWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnavailableTimeHasDayOfTheWeeks from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnavailableTimeHasDayOfTheWeeks.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UnavailableTimeHasDayOfTheWeeks.
+     * 
+    **/
+    distinct?: Enumerable<UnavailableTimeHasDayOfTheWeekScalarFieldEnum>
+  }
+
+  /**
+   * UnavailableTimeHasDayOfTheWeek: findFirst
+   */
+  export interface UnavailableTimeHasDayOfTheWeekFindFirstArgs extends UnavailableTimeHasDayOfTheWeekFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * UnavailableTimeHasDayOfTheWeek findMany
+   */
+  export type UnavailableTimeHasDayOfTheWeekFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the UnavailableTimeHasDayOfTheWeek
+     * 
+    **/
+    select?: UnavailableTimeHasDayOfTheWeekSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: UnavailableTimeHasDayOfTheWeekInclude | null
+    /**
+     * Filter, which UnavailableTimeHasDayOfTheWeeks to fetch.
+     * 
+    **/
+    where?: UnavailableTimeHasDayOfTheWeekWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnavailableTimeHasDayOfTheWeeks to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnavailableTimeHasDayOfTheWeekOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UnavailableTimeHasDayOfTheWeeks.
+     * 
+    **/
+    cursor?: UnavailableTimeHasDayOfTheWeekWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnavailableTimeHasDayOfTheWeeks from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnavailableTimeHasDayOfTheWeeks.
+     * 
+    **/
+    skip?: number
+    distinct?: Enumerable<UnavailableTimeHasDayOfTheWeekScalarFieldEnum>
+  }
+
+
+  /**
+   * UnavailableTimeHasDayOfTheWeek create
+   */
+  export type UnavailableTimeHasDayOfTheWeekCreateArgs = {
+    /**
+     * Select specific fields to fetch from the UnavailableTimeHasDayOfTheWeek
+     * 
+    **/
+    select?: UnavailableTimeHasDayOfTheWeekSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: UnavailableTimeHasDayOfTheWeekInclude | null
+    /**
+     * The data needed to create a UnavailableTimeHasDayOfTheWeek.
+     * 
+    **/
+    data: XOR<UnavailableTimeHasDayOfTheWeekCreateInput, UnavailableTimeHasDayOfTheWeekUncheckedCreateInput>
+  }
+
+
+  /**
+   * UnavailableTimeHasDayOfTheWeek createMany
+   */
+  export type UnavailableTimeHasDayOfTheWeekCreateManyArgs = {
+    /**
+     * The data used to create many UnavailableTimeHasDayOfTheWeeks.
+     * 
+    **/
+    data: Enumerable<UnavailableTimeHasDayOfTheWeekCreateManyInput>
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * UnavailableTimeHasDayOfTheWeek update
+   */
+  export type UnavailableTimeHasDayOfTheWeekUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the UnavailableTimeHasDayOfTheWeek
+     * 
+    **/
+    select?: UnavailableTimeHasDayOfTheWeekSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: UnavailableTimeHasDayOfTheWeekInclude | null
+    /**
+     * The data needed to update a UnavailableTimeHasDayOfTheWeek.
+     * 
+    **/
+    data: XOR<UnavailableTimeHasDayOfTheWeekUpdateInput, UnavailableTimeHasDayOfTheWeekUncheckedUpdateInput>
+    /**
+     * Choose, which UnavailableTimeHasDayOfTheWeek to update.
+     * 
+    **/
+    where: UnavailableTimeHasDayOfTheWeekWhereUniqueInput
+  }
+
+
+  /**
+   * UnavailableTimeHasDayOfTheWeek updateMany
+   */
+  export type UnavailableTimeHasDayOfTheWeekUpdateManyArgs = {
+    /**
+     * The data used to update UnavailableTimeHasDayOfTheWeeks.
+     * 
+    **/
+    data: XOR<UnavailableTimeHasDayOfTheWeekUpdateManyMutationInput, UnavailableTimeHasDayOfTheWeekUncheckedUpdateManyInput>
+    /**
+     * Filter which UnavailableTimeHasDayOfTheWeeks to update
+     * 
+    **/
+    where?: UnavailableTimeHasDayOfTheWeekWhereInput
+  }
+
+
+  /**
+   * UnavailableTimeHasDayOfTheWeek upsert
+   */
+  export type UnavailableTimeHasDayOfTheWeekUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the UnavailableTimeHasDayOfTheWeek
+     * 
+    **/
+    select?: UnavailableTimeHasDayOfTheWeekSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: UnavailableTimeHasDayOfTheWeekInclude | null
+    /**
+     * The filter to search for the UnavailableTimeHasDayOfTheWeek to update in case it exists.
+     * 
+    **/
+    where: UnavailableTimeHasDayOfTheWeekWhereUniqueInput
+    /**
+     * In case the UnavailableTimeHasDayOfTheWeek found by the `where` argument doesn't exist, create a new UnavailableTimeHasDayOfTheWeek with this data.
+     * 
+    **/
+    create: XOR<UnavailableTimeHasDayOfTheWeekCreateInput, UnavailableTimeHasDayOfTheWeekUncheckedCreateInput>
+    /**
+     * In case the UnavailableTimeHasDayOfTheWeek was found with the provided `where` argument, update it with this data.
+     * 
+    **/
+    update: XOR<UnavailableTimeHasDayOfTheWeekUpdateInput, UnavailableTimeHasDayOfTheWeekUncheckedUpdateInput>
+  }
+
+
+  /**
+   * UnavailableTimeHasDayOfTheWeek delete
+   */
+  export type UnavailableTimeHasDayOfTheWeekDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the UnavailableTimeHasDayOfTheWeek
+     * 
+    **/
+    select?: UnavailableTimeHasDayOfTheWeekSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: UnavailableTimeHasDayOfTheWeekInclude | null
+    /**
+     * Filter which UnavailableTimeHasDayOfTheWeek to delete.
+     * 
+    **/
+    where: UnavailableTimeHasDayOfTheWeekWhereUniqueInput
+  }
+
+
+  /**
+   * UnavailableTimeHasDayOfTheWeek deleteMany
+   */
+  export type UnavailableTimeHasDayOfTheWeekDeleteManyArgs = {
+    /**
+     * Filter which UnavailableTimeHasDayOfTheWeeks to delete
+     * 
+    **/
+    where?: UnavailableTimeHasDayOfTheWeekWhereInput
+  }
+
+
+  /**
+   * UnavailableTimeHasDayOfTheWeek: findUniqueOrThrow
+   */
+  export type UnavailableTimeHasDayOfTheWeekFindUniqueOrThrowArgs = UnavailableTimeHasDayOfTheWeekFindUniqueArgsBase
+      
+
+  /**
+   * UnavailableTimeHasDayOfTheWeek: findFirstOrThrow
+   */
+  export type UnavailableTimeHasDayOfTheWeekFindFirstOrThrowArgs = UnavailableTimeHasDayOfTheWeekFindFirstArgsBase
+      
+
+  /**
+   * UnavailableTimeHasDayOfTheWeek without action
+   */
+  export type UnavailableTimeHasDayOfTheWeekArgs = {
+    /**
+     * Select specific fields to fetch from the UnavailableTimeHasDayOfTheWeek
+     * 
+    **/
+    select?: UnavailableTimeHasDayOfTheWeekSelect | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     * 
+    **/
+    include?: UnavailableTimeHasDayOfTheWeekInclude | null
   }
 
 
@@ -8772,6 +10686,14 @@ export namespace Prisma {
   export type CourtScalarFieldEnum = (typeof CourtScalarFieldEnum)[keyof typeof CourtScalarFieldEnum]
 
 
+  export const DayOfTheWeekScalarFieldEnum: {
+    id: 'id',
+    name: 'name'
+  };
+
+  export type DayOfTheWeekScalarFieldEnum = (typeof DayOfTheWeekScalarFieldEnum)[keyof typeof DayOfTheWeekScalarFieldEnum]
+
+
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
@@ -8840,12 +10762,23 @@ export namespace Prisma {
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+  export const UnavailableTimeHasDayOfTheWeekScalarFieldEnum: {
+    unavailableTimeId: 'unavailableTimeId',
+    active: 'active',
+    created_at: 'created_at',
+    updated_at: 'updated_at',
+    dayOfTheWeekId: 'dayOfTheWeekId'
+  };
+
+  export type UnavailableTimeHasDayOfTheWeekScalarFieldEnum = (typeof UnavailableTimeHasDayOfTheWeekScalarFieldEnum)[keyof typeof UnavailableTimeHasDayOfTheWeekScalarFieldEnum]
+
+
   export const UnavailableTimeScalarFieldEnum: {
     id: 'id',
-    dayOfTheWeek: 'dayOfTheWeek',
+    startDateTime: 'startDateTime',
+    endDateTime: 'endDateTime',
     startTime: 'startTime',
     endTime: 'endTime',
-    singleOccurency: 'singleOccurency',
     created_at: 'created_at',
     courtId: 'courtId'
   };
@@ -9085,29 +11018,66 @@ export namespace Prisma {
     description?: StringWithAggregatesFilter | string
   }
 
+  export type dayOfTheWeekWhereInput = {
+    AND?: Enumerable<dayOfTheWeekWhereInput>
+    OR?: Enumerable<dayOfTheWeekWhereInput>
+    NOT?: Enumerable<dayOfTheWeekWhereInput>
+    id?: StringFilter | string
+    name?: StringFilter | string
+    UnavailableTimeHasDayOfTheWeek?: UnavailableTimeHasDayOfTheWeekListRelationFilter
+  }
+
+  export type dayOfTheWeekOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    UnavailableTimeHasDayOfTheWeek?: UnavailableTimeHasDayOfTheWeekOrderByRelationAggregateInput
+  }
+
+  export type dayOfTheWeekWhereUniqueInput = {
+    id?: string
+  }
+
+  export type dayOfTheWeekOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    _count?: dayOfTheWeekCountOrderByAggregateInput
+    _max?: dayOfTheWeekMaxOrderByAggregateInput
+    _min?: dayOfTheWeekMinOrderByAggregateInput
+  }
+
+  export type dayOfTheWeekScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<dayOfTheWeekScalarWhereWithAggregatesInput>
+    OR?: Enumerable<dayOfTheWeekScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<dayOfTheWeekScalarWhereWithAggregatesInput>
+    id?: StringWithAggregatesFilter | string
+    name?: StringWithAggregatesFilter | string
+  }
+
   export type unavailableTimeWhereInput = {
     AND?: Enumerable<unavailableTimeWhereInput>
     OR?: Enumerable<unavailableTimeWhereInput>
     NOT?: Enumerable<unavailableTimeWhereInput>
     id?: StringFilter | string
-    dayOfTheWeek?: EnumDayOfTheWeekFilter | DayOfTheWeek
+    startDateTime?: DateTimeFilter | Date | string
+    endDateTime?: DateTimeFilter | Date | string
     startTime?: DateTimeFilter | Date | string
     endTime?: DateTimeFilter | Date | string
-    singleOccurency?: DateTimeFilter | Date | string
     court?: XOR<CourtRelationFilter, CourtWhereInput>
     created_at?: DateTimeFilter | Date | string
     courtId?: StringFilter | string
+    daysOfTheWeek?: XOR<UnavailableTimeHasDayOfTheWeekRelationFilter, UnavailableTimeHasDayOfTheWeekWhereInput> | null
   }
 
   export type unavailableTimeOrderByWithRelationInput = {
     id?: SortOrder
-    dayOfTheWeek?: SortOrder
+    startDateTime?: SortOrder
+    endDateTime?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
-    singleOccurency?: SortOrder
     court?: CourtOrderByWithRelationInput
     created_at?: SortOrder
     courtId?: SortOrder
+    daysOfTheWeek?: UnavailableTimeHasDayOfTheWeekOrderByWithRelationInput
   }
 
   export type unavailableTimeWhereUniqueInput = {
@@ -9116,10 +11086,10 @@ export namespace Prisma {
 
   export type unavailableTimeOrderByWithAggregationInput = {
     id?: SortOrder
-    dayOfTheWeek?: SortOrder
+    startDateTime?: SortOrder
+    endDateTime?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
-    singleOccurency?: SortOrder
     created_at?: SortOrder
     courtId?: SortOrder
     _count?: unavailableTimeCountOrderByAggregateInput
@@ -9132,12 +11102,62 @@ export namespace Prisma {
     OR?: Enumerable<unavailableTimeScalarWhereWithAggregatesInput>
     NOT?: Enumerable<unavailableTimeScalarWhereWithAggregatesInput>
     id?: StringWithAggregatesFilter | string
-    dayOfTheWeek?: EnumDayOfTheWeekWithAggregatesFilter | DayOfTheWeek
+    startDateTime?: DateTimeWithAggregatesFilter | Date | string
+    endDateTime?: DateTimeWithAggregatesFilter | Date | string
     startTime?: DateTimeWithAggregatesFilter | Date | string
     endTime?: DateTimeWithAggregatesFilter | Date | string
-    singleOccurency?: DateTimeWithAggregatesFilter | Date | string
     created_at?: DateTimeWithAggregatesFilter | Date | string
     courtId?: StringWithAggregatesFilter | string
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekWhereInput = {
+    AND?: Enumerable<UnavailableTimeHasDayOfTheWeekWhereInput>
+    OR?: Enumerable<UnavailableTimeHasDayOfTheWeekWhereInput>
+    NOT?: Enumerable<UnavailableTimeHasDayOfTheWeekWhereInput>
+    unavailableTime?: XOR<UnavailableTimeRelationFilter, unavailableTimeWhereInput>
+    unavailableTimeId?: StringFilter | string
+    active?: BoolFilter | boolean
+    created_at?: DateTimeFilter | Date | string
+    updated_at?: DateTimeNullableFilter | Date | string | null
+    dayOfTheWeek?: XOR<DayOfTheWeekRelationFilter, dayOfTheWeekWhereInput>
+    dayOfTheWeekId?: StringFilter | string
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekOrderByWithRelationInput = {
+    unavailableTime?: unavailableTimeOrderByWithRelationInput
+    unavailableTimeId?: SortOrder
+    active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    dayOfTheWeek?: dayOfTheWeekOrderByWithRelationInput
+    dayOfTheWeekId?: SortOrder
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekWhereUniqueInput = {
+    unavailableTimeId?: string
+    unavailableTimeId_dayOfTheWeekId?: UnavailableTimeHasDayOfTheWeekUnavailableTimeIdDayOfTheWeekIdCompoundUniqueInput
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekOrderByWithAggregationInput = {
+    unavailableTimeId?: SortOrder
+    active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    dayOfTheWeekId?: SortOrder
+    _count?: UnavailableTimeHasDayOfTheWeekCountOrderByAggregateInput
+    _max?: UnavailableTimeHasDayOfTheWeekMaxOrderByAggregateInput
+    _min?: UnavailableTimeHasDayOfTheWeekMinOrderByAggregateInput
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<UnavailableTimeHasDayOfTheWeekScalarWhereWithAggregatesInput>
+    OR?: Enumerable<UnavailableTimeHasDayOfTheWeekScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<UnavailableTimeHasDayOfTheWeekScalarWhereWithAggregatesInput>
+    unavailableTimeId?: StringWithAggregatesFilter | string
+    active?: BoolWithAggregatesFilter | boolean
+    created_at?: DateTimeWithAggregatesFilter | Date | string
+    updated_at?: DateTimeNullableWithAggregatesFilter | Date | string | null
+    dayOfTheWeekId?: StringWithAggregatesFilter | string
   }
 
   export type CourtHasSportsWhereInput = {
@@ -9539,73 +11559,170 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
   }
 
+  export type dayOfTheWeekCreateInput = {
+    id?: string
+    name: string
+    UnavailableTimeHasDayOfTheWeek?: UnavailableTimeHasDayOfTheWeekCreateNestedManyWithoutDayOfTheWeekInput
+  }
+
+  export type dayOfTheWeekUncheckedCreateInput = {
+    id?: string
+    name: string
+    UnavailableTimeHasDayOfTheWeek?: UnavailableTimeHasDayOfTheWeekUncheckedCreateNestedManyWithoutDayOfTheWeekInput
+  }
+
+  export type dayOfTheWeekUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    UnavailableTimeHasDayOfTheWeek?: UnavailableTimeHasDayOfTheWeekUpdateManyWithoutDayOfTheWeekNestedInput
+  }
+
+  export type dayOfTheWeekUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    UnavailableTimeHasDayOfTheWeek?: UnavailableTimeHasDayOfTheWeekUncheckedUpdateManyWithoutDayOfTheWeekNestedInput
+  }
+
+  export type dayOfTheWeekCreateManyInput = {
+    id?: string
+    name: string
+  }
+
+  export type dayOfTheWeekUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type dayOfTheWeekUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
   export type unavailableTimeCreateInput = {
     id?: string
-    dayOfTheWeek: DayOfTheWeek
+    startDateTime: Date | string
+    endDateTime: Date | string
     startTime: Date | string
     endTime: Date | string
-    singleOccurency: Date | string
     court: CourtCreateNestedOneWithoutUnavailableTimeInput
     created_at?: Date | string
+    daysOfTheWeek?: UnavailableTimeHasDayOfTheWeekCreateNestedOneWithoutUnavailableTimeInput
   }
 
   export type unavailableTimeUncheckedCreateInput = {
     id?: string
-    dayOfTheWeek: DayOfTheWeek
+    startDateTime: Date | string
+    endDateTime: Date | string
     startTime: Date | string
     endTime: Date | string
-    singleOccurency: Date | string
     created_at?: Date | string
     courtId: string
+    daysOfTheWeek?: UnavailableTimeHasDayOfTheWeekUncheckedCreateNestedOneWithoutUnavailableTimeInput
   }
 
   export type unavailableTimeUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
+    startDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    singleOccurency?: DateTimeFieldUpdateOperationsInput | Date | string
     court?: CourtUpdateOneRequiredWithoutUnavailableTimeNestedInput
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    daysOfTheWeek?: UnavailableTimeHasDayOfTheWeekUpdateOneWithoutUnavailableTimeNestedInput
   }
 
   export type unavailableTimeUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
+    startDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    singleOccurency?: DateTimeFieldUpdateOperationsInput | Date | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     courtId?: StringFieldUpdateOperationsInput | string
+    daysOfTheWeek?: UnavailableTimeHasDayOfTheWeekUncheckedUpdateOneWithoutUnavailableTimeNestedInput
   }
 
   export type unavailableTimeCreateManyInput = {
     id?: string
-    dayOfTheWeek: DayOfTheWeek
+    startDateTime: Date | string
+    endDateTime: Date | string
     startTime: Date | string
     endTime: Date | string
-    singleOccurency: Date | string
     created_at?: Date | string
     courtId: string
   }
 
   export type unavailableTimeUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
+    startDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    singleOccurency?: DateTimeFieldUpdateOperationsInput | Date | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type unavailableTimeUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
+    startDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    singleOccurency?: DateTimeFieldUpdateOperationsInput | Date | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     courtId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekCreateInput = {
+    unavailableTime: unavailableTimeCreateNestedOneWithoutDaysOfTheWeekInput
+    active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    dayOfTheWeek: dayOfTheWeekCreateNestedOneWithoutUnavailableTimeHasDayOfTheWeekInput
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUncheckedCreateInput = {
+    unavailableTimeId: string
+    active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    dayOfTheWeekId: string
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUpdateInput = {
+    unavailableTime?: unavailableTimeUpdateOneRequiredWithoutDaysOfTheWeekNestedInput
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dayOfTheWeek?: dayOfTheWeekUpdateOneRequiredWithoutUnavailableTimeHasDayOfTheWeekNestedInput
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUncheckedUpdateInput = {
+    unavailableTimeId?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dayOfTheWeekId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekCreateManyInput = {
+    unavailableTimeId: string
+    active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    dayOfTheWeekId: string
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUpdateManyMutationInput = {
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUncheckedUpdateManyInput = {
+    unavailableTimeId?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dayOfTheWeekId?: StringFieldUpdateOperationsInput | string
   }
 
   export type CourtHasSportsCreateInput = {
@@ -10065,56 +12182,116 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter
   }
 
-  export type EnumDayOfTheWeekFilter = {
-    equals?: DayOfTheWeek
-    in?: Enumerable<DayOfTheWeek>
-    notIn?: Enumerable<DayOfTheWeek>
-    not?: NestedEnumDayOfTheWeekFilter | DayOfTheWeek
+  export type UnavailableTimeHasDayOfTheWeekListRelationFilter = {
+    every?: UnavailableTimeHasDayOfTheWeekWhereInput
+    some?: UnavailableTimeHasDayOfTheWeekWhereInput
+    none?: UnavailableTimeHasDayOfTheWeekWhereInput
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type dayOfTheWeekCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+  }
+
+  export type dayOfTheWeekMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+  }
+
+  export type dayOfTheWeekMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekRelationFilter = {
+    is?: UnavailableTimeHasDayOfTheWeekWhereInput | null
+    isNot?: UnavailableTimeHasDayOfTheWeekWhereInput | null
   }
 
   export type unavailableTimeCountOrderByAggregateInput = {
     id?: SortOrder
-    dayOfTheWeek?: SortOrder
+    startDateTime?: SortOrder
+    endDateTime?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
-    singleOccurency?: SortOrder
     created_at?: SortOrder
     courtId?: SortOrder
   }
 
   export type unavailableTimeMaxOrderByAggregateInput = {
     id?: SortOrder
-    dayOfTheWeek?: SortOrder
+    startDateTime?: SortOrder
+    endDateTime?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
-    singleOccurency?: SortOrder
     created_at?: SortOrder
     courtId?: SortOrder
   }
 
   export type unavailableTimeMinOrderByAggregateInput = {
     id?: SortOrder
-    dayOfTheWeek?: SortOrder
+    startDateTime?: SortOrder
+    endDateTime?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
-    singleOccurency?: SortOrder
     created_at?: SortOrder
     courtId?: SortOrder
   }
 
-  export type EnumDayOfTheWeekWithAggregatesFilter = {
-    equals?: DayOfTheWeek
-    in?: Enumerable<DayOfTheWeek>
-    notIn?: Enumerable<DayOfTheWeek>
-    not?: NestedEnumDayOfTheWeekWithAggregatesFilter | DayOfTheWeek
-    _count?: NestedIntFilter
-    _min?: NestedEnumDayOfTheWeekFilter
-    _max?: NestedEnumDayOfTheWeekFilter
+  export type UnavailableTimeRelationFilter = {
+    is?: unavailableTimeWhereInput
+    isNot?: unavailableTimeWhereInput
   }
 
   export type BoolFilter = {
     equals?: boolean
     not?: NestedBoolFilter | boolean
+  }
+
+  export type DayOfTheWeekRelationFilter = {
+    is?: dayOfTheWeekWhereInput
+    isNot?: dayOfTheWeekWhereInput
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUnavailableTimeIdDayOfTheWeekIdCompoundUniqueInput = {
+    unavailableTimeId: string
+    dayOfTheWeekId: string
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekCountOrderByAggregateInput = {
+    unavailableTimeId?: SortOrder
+    active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    dayOfTheWeekId?: SortOrder
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekMaxOrderByAggregateInput = {
+    unavailableTimeId?: SortOrder
+    active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    dayOfTheWeekId?: SortOrder
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekMinOrderByAggregateInput = {
+    unavailableTimeId?: SortOrder
+    active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    dayOfTheWeekId?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter = {
+    equals?: boolean
+    not?: NestedBoolWithAggregatesFilter | boolean
+    _count?: NestedIntFilter
+    _min?: NestedBoolFilter
+    _max?: NestedBoolFilter
   }
 
   export type CourtHasSportsCountOrderByAggregateInput = {
@@ -10139,14 +12316,6 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     sportsId?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter = {
-    equals?: boolean
-    not?: NestedBoolWithAggregatesFilter | boolean
-    _count?: NestedIntFilter
-    _min?: NestedBoolFilter
-    _max?: NestedBoolFilter
   }
 
   export type ReservationRelationFilter = {
@@ -10686,14 +12855,64 @@ export namespace Prisma {
     deleteMany?: Enumerable<ReservationHasRequestedUsersScalarWhereInput>
   }
 
+  export type UnavailableTimeHasDayOfTheWeekCreateNestedManyWithoutDayOfTheWeekInput = {
+    create?: XOR<Enumerable<UnavailableTimeHasDayOfTheWeekCreateWithoutDayOfTheWeekInput>, Enumerable<UnavailableTimeHasDayOfTheWeekUncheckedCreateWithoutDayOfTheWeekInput>>
+    connectOrCreate?: Enumerable<UnavailableTimeHasDayOfTheWeekCreateOrConnectWithoutDayOfTheWeekInput>
+    createMany?: UnavailableTimeHasDayOfTheWeekCreateManyDayOfTheWeekInputEnvelope
+    connect?: Enumerable<UnavailableTimeHasDayOfTheWeekWhereUniqueInput>
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUncheckedCreateNestedManyWithoutDayOfTheWeekInput = {
+    create?: XOR<Enumerable<UnavailableTimeHasDayOfTheWeekCreateWithoutDayOfTheWeekInput>, Enumerable<UnavailableTimeHasDayOfTheWeekUncheckedCreateWithoutDayOfTheWeekInput>>
+    connectOrCreate?: Enumerable<UnavailableTimeHasDayOfTheWeekCreateOrConnectWithoutDayOfTheWeekInput>
+    createMany?: UnavailableTimeHasDayOfTheWeekCreateManyDayOfTheWeekInputEnvelope
+    connect?: Enumerable<UnavailableTimeHasDayOfTheWeekWhereUniqueInput>
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUpdateManyWithoutDayOfTheWeekNestedInput = {
+    create?: XOR<Enumerable<UnavailableTimeHasDayOfTheWeekCreateWithoutDayOfTheWeekInput>, Enumerable<UnavailableTimeHasDayOfTheWeekUncheckedCreateWithoutDayOfTheWeekInput>>
+    connectOrCreate?: Enumerable<UnavailableTimeHasDayOfTheWeekCreateOrConnectWithoutDayOfTheWeekInput>
+    upsert?: Enumerable<UnavailableTimeHasDayOfTheWeekUpsertWithWhereUniqueWithoutDayOfTheWeekInput>
+    createMany?: UnavailableTimeHasDayOfTheWeekCreateManyDayOfTheWeekInputEnvelope
+    set?: Enumerable<UnavailableTimeHasDayOfTheWeekWhereUniqueInput>
+    disconnect?: Enumerable<UnavailableTimeHasDayOfTheWeekWhereUniqueInput>
+    delete?: Enumerable<UnavailableTimeHasDayOfTheWeekWhereUniqueInput>
+    connect?: Enumerable<UnavailableTimeHasDayOfTheWeekWhereUniqueInput>
+    update?: Enumerable<UnavailableTimeHasDayOfTheWeekUpdateWithWhereUniqueWithoutDayOfTheWeekInput>
+    updateMany?: Enumerable<UnavailableTimeHasDayOfTheWeekUpdateManyWithWhereWithoutDayOfTheWeekInput>
+    deleteMany?: Enumerable<UnavailableTimeHasDayOfTheWeekScalarWhereInput>
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUncheckedUpdateManyWithoutDayOfTheWeekNestedInput = {
+    create?: XOR<Enumerable<UnavailableTimeHasDayOfTheWeekCreateWithoutDayOfTheWeekInput>, Enumerable<UnavailableTimeHasDayOfTheWeekUncheckedCreateWithoutDayOfTheWeekInput>>
+    connectOrCreate?: Enumerable<UnavailableTimeHasDayOfTheWeekCreateOrConnectWithoutDayOfTheWeekInput>
+    upsert?: Enumerable<UnavailableTimeHasDayOfTheWeekUpsertWithWhereUniqueWithoutDayOfTheWeekInput>
+    createMany?: UnavailableTimeHasDayOfTheWeekCreateManyDayOfTheWeekInputEnvelope
+    set?: Enumerable<UnavailableTimeHasDayOfTheWeekWhereUniqueInput>
+    disconnect?: Enumerable<UnavailableTimeHasDayOfTheWeekWhereUniqueInput>
+    delete?: Enumerable<UnavailableTimeHasDayOfTheWeekWhereUniqueInput>
+    connect?: Enumerable<UnavailableTimeHasDayOfTheWeekWhereUniqueInput>
+    update?: Enumerable<UnavailableTimeHasDayOfTheWeekUpdateWithWhereUniqueWithoutDayOfTheWeekInput>
+    updateMany?: Enumerable<UnavailableTimeHasDayOfTheWeekUpdateManyWithWhereWithoutDayOfTheWeekInput>
+    deleteMany?: Enumerable<UnavailableTimeHasDayOfTheWeekScalarWhereInput>
+  }
+
   export type CourtCreateNestedOneWithoutUnavailableTimeInput = {
     create?: XOR<CourtCreateWithoutUnavailableTimeInput, CourtUncheckedCreateWithoutUnavailableTimeInput>
     connectOrCreate?: CourtCreateOrConnectWithoutUnavailableTimeInput
     connect?: CourtWhereUniqueInput
   }
 
-  export type EnumDayOfTheWeekFieldUpdateOperationsInput = {
-    set?: DayOfTheWeek
+  export type UnavailableTimeHasDayOfTheWeekCreateNestedOneWithoutUnavailableTimeInput = {
+    create?: XOR<UnavailableTimeHasDayOfTheWeekCreateWithoutUnavailableTimeInput, UnavailableTimeHasDayOfTheWeekUncheckedCreateWithoutUnavailableTimeInput>
+    connectOrCreate?: UnavailableTimeHasDayOfTheWeekCreateOrConnectWithoutUnavailableTimeInput
+    connect?: UnavailableTimeHasDayOfTheWeekWhereUniqueInput
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUncheckedCreateNestedOneWithoutUnavailableTimeInput = {
+    create?: XOR<UnavailableTimeHasDayOfTheWeekCreateWithoutUnavailableTimeInput, UnavailableTimeHasDayOfTheWeekUncheckedCreateWithoutUnavailableTimeInput>
+    connectOrCreate?: UnavailableTimeHasDayOfTheWeekCreateOrConnectWithoutUnavailableTimeInput
+    connect?: UnavailableTimeHasDayOfTheWeekWhereUniqueInput
   }
 
   export type CourtUpdateOneRequiredWithoutUnavailableTimeNestedInput = {
@@ -10702,6 +12921,58 @@ export namespace Prisma {
     upsert?: CourtUpsertWithoutUnavailableTimeInput
     connect?: CourtWhereUniqueInput
     update?: XOR<CourtUpdateWithoutUnavailableTimeInput, CourtUncheckedUpdateWithoutUnavailableTimeInput>
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUpdateOneWithoutUnavailableTimeNestedInput = {
+    create?: XOR<UnavailableTimeHasDayOfTheWeekCreateWithoutUnavailableTimeInput, UnavailableTimeHasDayOfTheWeekUncheckedCreateWithoutUnavailableTimeInput>
+    connectOrCreate?: UnavailableTimeHasDayOfTheWeekCreateOrConnectWithoutUnavailableTimeInput
+    upsert?: UnavailableTimeHasDayOfTheWeekUpsertWithoutUnavailableTimeInput
+    disconnect?: boolean
+    delete?: boolean
+    connect?: UnavailableTimeHasDayOfTheWeekWhereUniqueInput
+    update?: XOR<UnavailableTimeHasDayOfTheWeekUpdateWithoutUnavailableTimeInput, UnavailableTimeHasDayOfTheWeekUncheckedUpdateWithoutUnavailableTimeInput>
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUncheckedUpdateOneWithoutUnavailableTimeNestedInput = {
+    create?: XOR<UnavailableTimeHasDayOfTheWeekCreateWithoutUnavailableTimeInput, UnavailableTimeHasDayOfTheWeekUncheckedCreateWithoutUnavailableTimeInput>
+    connectOrCreate?: UnavailableTimeHasDayOfTheWeekCreateOrConnectWithoutUnavailableTimeInput
+    upsert?: UnavailableTimeHasDayOfTheWeekUpsertWithoutUnavailableTimeInput
+    disconnect?: boolean
+    delete?: boolean
+    connect?: UnavailableTimeHasDayOfTheWeekWhereUniqueInput
+    update?: XOR<UnavailableTimeHasDayOfTheWeekUpdateWithoutUnavailableTimeInput, UnavailableTimeHasDayOfTheWeekUncheckedUpdateWithoutUnavailableTimeInput>
+  }
+
+  export type unavailableTimeCreateNestedOneWithoutDaysOfTheWeekInput = {
+    create?: XOR<unavailableTimeCreateWithoutDaysOfTheWeekInput, unavailableTimeUncheckedCreateWithoutDaysOfTheWeekInput>
+    connectOrCreate?: unavailableTimeCreateOrConnectWithoutDaysOfTheWeekInput
+    connect?: unavailableTimeWhereUniqueInput
+  }
+
+  export type dayOfTheWeekCreateNestedOneWithoutUnavailableTimeHasDayOfTheWeekInput = {
+    create?: XOR<dayOfTheWeekCreateWithoutUnavailableTimeHasDayOfTheWeekInput, dayOfTheWeekUncheckedCreateWithoutUnavailableTimeHasDayOfTheWeekInput>
+    connectOrCreate?: dayOfTheWeekCreateOrConnectWithoutUnavailableTimeHasDayOfTheWeekInput
+    connect?: dayOfTheWeekWhereUniqueInput
+  }
+
+  export type unavailableTimeUpdateOneRequiredWithoutDaysOfTheWeekNestedInput = {
+    create?: XOR<unavailableTimeCreateWithoutDaysOfTheWeekInput, unavailableTimeUncheckedCreateWithoutDaysOfTheWeekInput>
+    connectOrCreate?: unavailableTimeCreateOrConnectWithoutDaysOfTheWeekInput
+    upsert?: unavailableTimeUpsertWithoutDaysOfTheWeekInput
+    connect?: unavailableTimeWhereUniqueInput
+    update?: XOR<unavailableTimeUpdateWithoutDaysOfTheWeekInput, unavailableTimeUncheckedUpdateWithoutDaysOfTheWeekInput>
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type dayOfTheWeekUpdateOneRequiredWithoutUnavailableTimeHasDayOfTheWeekNestedInput = {
+    create?: XOR<dayOfTheWeekCreateWithoutUnavailableTimeHasDayOfTheWeekInput, dayOfTheWeekUncheckedCreateWithoutUnavailableTimeHasDayOfTheWeekInput>
+    connectOrCreate?: dayOfTheWeekCreateOrConnectWithoutUnavailableTimeHasDayOfTheWeekInput
+    upsert?: dayOfTheWeekUpsertWithoutUnavailableTimeHasDayOfTheWeekInput
+    connect?: dayOfTheWeekWhereUniqueInput
+    update?: XOR<dayOfTheWeekUpdateWithoutUnavailableTimeHasDayOfTheWeekInput, dayOfTheWeekUncheckedUpdateWithoutUnavailableTimeHasDayOfTheWeekInput>
   }
 
   export type CourtCreateNestedOneWithoutSportsInput = {
@@ -10722,10 +12993,6 @@ export namespace Prisma {
     upsert?: CourtUpsertWithoutSportsInput
     connect?: CourtWhereUniqueInput
     update?: XOR<CourtUpdateWithoutSportsInput, CourtUncheckedUpdateWithoutSportsInput>
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type SportUpdateOneWithoutCourtsNestedInput = {
@@ -10953,23 +13220,6 @@ export namespace Prisma {
     _count?: NestedIntFilter
     _min?: NestedDateTimeFilter
     _max?: NestedDateTimeFilter
-  }
-
-  export type NestedEnumDayOfTheWeekFilter = {
-    equals?: DayOfTheWeek
-    in?: Enumerable<DayOfTheWeek>
-    notIn?: Enumerable<DayOfTheWeek>
-    not?: NestedEnumDayOfTheWeekFilter | DayOfTheWeek
-  }
-
-  export type NestedEnumDayOfTheWeekWithAggregatesFilter = {
-    equals?: DayOfTheWeek
-    in?: Enumerable<DayOfTheWeek>
-    notIn?: Enumerable<DayOfTheWeek>
-    not?: NestedEnumDayOfTheWeekWithAggregatesFilter | DayOfTheWeek
-    _count?: NestedIntFilter
-    _min?: NestedEnumDayOfTheWeekFilter
-    _max?: NestedEnumDayOfTheWeekFilter
   }
 
   export type NestedBoolFilter = {
@@ -11307,20 +13557,22 @@ export namespace Prisma {
 
   export type unavailableTimeCreateWithoutCourtInput = {
     id?: string
-    dayOfTheWeek: DayOfTheWeek
+    startDateTime: Date | string
+    endDateTime: Date | string
     startTime: Date | string
     endTime: Date | string
-    singleOccurency: Date | string
     created_at?: Date | string
+    daysOfTheWeek?: UnavailableTimeHasDayOfTheWeekCreateNestedOneWithoutUnavailableTimeInput
   }
 
   export type unavailableTimeUncheckedCreateWithoutCourtInput = {
     id?: string
-    dayOfTheWeek: DayOfTheWeek
+    startDateTime: Date | string
+    endDateTime: Date | string
     startTime: Date | string
     endTime: Date | string
-    singleOccurency: Date | string
     created_at?: Date | string
+    daysOfTheWeek?: UnavailableTimeHasDayOfTheWeekUncheckedCreateNestedOneWithoutUnavailableTimeInput
   }
 
   export type unavailableTimeCreateOrConnectWithoutCourtInput = {
@@ -11386,10 +13638,10 @@ export namespace Prisma {
     OR?: Enumerable<unavailableTimeScalarWhereInput>
     NOT?: Enumerable<unavailableTimeScalarWhereInput>
     id?: StringFilter | string
-    dayOfTheWeek?: EnumDayOfTheWeekFilter | DayOfTheWeek
+    startDateTime?: DateTimeFilter | Date | string
+    endDateTime?: DateTimeFilter | Date | string
     startTime?: DateTimeFilter | Date | string
     endTime?: DateTimeFilter | Date | string
-    singleOccurency?: DateTimeFilter | Date | string
     created_at?: DateTimeFilter | Date | string
     courtId?: StringFilter | string
   }
@@ -11600,6 +13852,57 @@ export namespace Prisma {
     unavailableTime?: unavailableTimeUncheckedUpdateManyWithoutCourtNestedInput
   }
 
+  export type UnavailableTimeHasDayOfTheWeekCreateWithoutDayOfTheWeekInput = {
+    unavailableTime: unavailableTimeCreateNestedOneWithoutDaysOfTheWeekInput
+    active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string | null
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUncheckedCreateWithoutDayOfTheWeekInput = {
+    unavailableTimeId: string
+    active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string | null
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekCreateOrConnectWithoutDayOfTheWeekInput = {
+    where: UnavailableTimeHasDayOfTheWeekWhereUniqueInput
+    create: XOR<UnavailableTimeHasDayOfTheWeekCreateWithoutDayOfTheWeekInput, UnavailableTimeHasDayOfTheWeekUncheckedCreateWithoutDayOfTheWeekInput>
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekCreateManyDayOfTheWeekInputEnvelope = {
+    data: Enumerable<UnavailableTimeHasDayOfTheWeekCreateManyDayOfTheWeekInput>
+    skipDuplicates?: boolean
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUpsertWithWhereUniqueWithoutDayOfTheWeekInput = {
+    where: UnavailableTimeHasDayOfTheWeekWhereUniqueInput
+    update: XOR<UnavailableTimeHasDayOfTheWeekUpdateWithoutDayOfTheWeekInput, UnavailableTimeHasDayOfTheWeekUncheckedUpdateWithoutDayOfTheWeekInput>
+    create: XOR<UnavailableTimeHasDayOfTheWeekCreateWithoutDayOfTheWeekInput, UnavailableTimeHasDayOfTheWeekUncheckedCreateWithoutDayOfTheWeekInput>
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUpdateWithWhereUniqueWithoutDayOfTheWeekInput = {
+    where: UnavailableTimeHasDayOfTheWeekWhereUniqueInput
+    data: XOR<UnavailableTimeHasDayOfTheWeekUpdateWithoutDayOfTheWeekInput, UnavailableTimeHasDayOfTheWeekUncheckedUpdateWithoutDayOfTheWeekInput>
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUpdateManyWithWhereWithoutDayOfTheWeekInput = {
+    where: UnavailableTimeHasDayOfTheWeekScalarWhereInput
+    data: XOR<UnavailableTimeHasDayOfTheWeekUpdateManyMutationInput, UnavailableTimeHasDayOfTheWeekUncheckedUpdateManyWithoutUnavailableTimeHasDayOfTheWeekInput>
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekScalarWhereInput = {
+    AND?: Enumerable<UnavailableTimeHasDayOfTheWeekScalarWhereInput>
+    OR?: Enumerable<UnavailableTimeHasDayOfTheWeekScalarWhereInput>
+    NOT?: Enumerable<UnavailableTimeHasDayOfTheWeekScalarWhereInput>
+    unavailableTimeId?: StringFilter | string
+    active?: BoolFilter | boolean
+    created_at?: DateTimeFilter | Date | string
+    updated_at?: DateTimeNullableFilter | Date | string | null
+    dayOfTheWeekId?: StringFilter | string
+  }
+
   export type CourtCreateWithoutUnavailableTimeInput = {
     id?: string
     name: string
@@ -11619,6 +13922,25 @@ export namespace Prisma {
     create: XOR<CourtCreateWithoutUnavailableTimeInput, CourtUncheckedCreateWithoutUnavailableTimeInput>
   }
 
+  export type UnavailableTimeHasDayOfTheWeekCreateWithoutUnavailableTimeInput = {
+    active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    dayOfTheWeek: dayOfTheWeekCreateNestedOneWithoutUnavailableTimeHasDayOfTheWeekInput
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUncheckedCreateWithoutUnavailableTimeInput = {
+    active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string | null
+    dayOfTheWeekId: string
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekCreateOrConnectWithoutUnavailableTimeInput = {
+    where: UnavailableTimeHasDayOfTheWeekWhereUniqueInput
+    create: XOR<UnavailableTimeHasDayOfTheWeekCreateWithoutUnavailableTimeInput, UnavailableTimeHasDayOfTheWeekUncheckedCreateWithoutUnavailableTimeInput>
+  }
+
   export type CourtUpsertWithoutUnavailableTimeInput = {
     update: XOR<CourtUpdateWithoutUnavailableTimeInput, CourtUncheckedUpdateWithoutUnavailableTimeInput>
     create: XOR<CourtCreateWithoutUnavailableTimeInput, CourtUncheckedCreateWithoutUnavailableTimeInput>
@@ -11636,6 +13958,105 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     sports?: CourtHasSportsUncheckedUpdateManyWithoutCourtNestedInput
     reservation?: ReservationUncheckedUpdateManyWithoutCourtNestedInput
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUpsertWithoutUnavailableTimeInput = {
+    update: XOR<UnavailableTimeHasDayOfTheWeekUpdateWithoutUnavailableTimeInput, UnavailableTimeHasDayOfTheWeekUncheckedUpdateWithoutUnavailableTimeInput>
+    create: XOR<UnavailableTimeHasDayOfTheWeekCreateWithoutUnavailableTimeInput, UnavailableTimeHasDayOfTheWeekUncheckedCreateWithoutUnavailableTimeInput>
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUpdateWithoutUnavailableTimeInput = {
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dayOfTheWeek?: dayOfTheWeekUpdateOneRequiredWithoutUnavailableTimeHasDayOfTheWeekNestedInput
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUncheckedUpdateWithoutUnavailableTimeInput = {
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dayOfTheWeekId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type unavailableTimeCreateWithoutDaysOfTheWeekInput = {
+    id?: string
+    startDateTime: Date | string
+    endDateTime: Date | string
+    startTime: Date | string
+    endTime: Date | string
+    court: CourtCreateNestedOneWithoutUnavailableTimeInput
+    created_at?: Date | string
+  }
+
+  export type unavailableTimeUncheckedCreateWithoutDaysOfTheWeekInput = {
+    id?: string
+    startDateTime: Date | string
+    endDateTime: Date | string
+    startTime: Date | string
+    endTime: Date | string
+    created_at?: Date | string
+    courtId: string
+  }
+
+  export type unavailableTimeCreateOrConnectWithoutDaysOfTheWeekInput = {
+    where: unavailableTimeWhereUniqueInput
+    create: XOR<unavailableTimeCreateWithoutDaysOfTheWeekInput, unavailableTimeUncheckedCreateWithoutDaysOfTheWeekInput>
+  }
+
+  export type dayOfTheWeekCreateWithoutUnavailableTimeHasDayOfTheWeekInput = {
+    id?: string
+    name: string
+  }
+
+  export type dayOfTheWeekUncheckedCreateWithoutUnavailableTimeHasDayOfTheWeekInput = {
+    id?: string
+    name: string
+  }
+
+  export type dayOfTheWeekCreateOrConnectWithoutUnavailableTimeHasDayOfTheWeekInput = {
+    where: dayOfTheWeekWhereUniqueInput
+    create: XOR<dayOfTheWeekCreateWithoutUnavailableTimeHasDayOfTheWeekInput, dayOfTheWeekUncheckedCreateWithoutUnavailableTimeHasDayOfTheWeekInput>
+  }
+
+  export type unavailableTimeUpsertWithoutDaysOfTheWeekInput = {
+    update: XOR<unavailableTimeUpdateWithoutDaysOfTheWeekInput, unavailableTimeUncheckedUpdateWithoutDaysOfTheWeekInput>
+    create: XOR<unavailableTimeCreateWithoutDaysOfTheWeekInput, unavailableTimeUncheckedCreateWithoutDaysOfTheWeekInput>
+  }
+
+  export type unavailableTimeUpdateWithoutDaysOfTheWeekInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    court?: CourtUpdateOneRequiredWithoutUnavailableTimeNestedInput
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type unavailableTimeUncheckedUpdateWithoutDaysOfTheWeekInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    courtId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type dayOfTheWeekUpsertWithoutUnavailableTimeHasDayOfTheWeekInput = {
+    update: XOR<dayOfTheWeekUpdateWithoutUnavailableTimeHasDayOfTheWeekInput, dayOfTheWeekUncheckedUpdateWithoutUnavailableTimeHasDayOfTheWeekInput>
+    create: XOR<dayOfTheWeekCreateWithoutUnavailableTimeHasDayOfTheWeekInput, dayOfTheWeekUncheckedCreateWithoutUnavailableTimeHasDayOfTheWeekInput>
+  }
+
+  export type dayOfTheWeekUpdateWithoutUnavailableTimeHasDayOfTheWeekInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type dayOfTheWeekUncheckedUpdateWithoutUnavailableTimeHasDayOfTheWeekInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
   }
 
   export type CourtCreateWithoutSportsInput = {
@@ -12138,10 +14559,10 @@ export namespace Prisma {
 
   export type unavailableTimeCreateManyCourtInput = {
     id?: string
-    dayOfTheWeek: DayOfTheWeek
+    startDateTime: Date | string
+    endDateTime: Date | string
     startTime: Date | string
     endTime: Date | string
-    singleOccurency: Date | string
     created_at?: Date | string
   }
 
@@ -12194,28 +14615,30 @@ export namespace Prisma {
 
   export type unavailableTimeUpdateWithoutCourtInput = {
     id?: StringFieldUpdateOperationsInput | string
-    dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
+    startDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    singleOccurency?: DateTimeFieldUpdateOperationsInput | Date | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    daysOfTheWeek?: UnavailableTimeHasDayOfTheWeekUpdateOneWithoutUnavailableTimeNestedInput
   }
 
   export type unavailableTimeUncheckedUpdateWithoutCourtInput = {
     id?: StringFieldUpdateOperationsInput | string
-    dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
+    startDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    singleOccurency?: DateTimeFieldUpdateOperationsInput | Date | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    daysOfTheWeek?: UnavailableTimeHasDayOfTheWeekUncheckedUpdateOneWithoutUnavailableTimeNestedInput
   }
 
   export type unavailableTimeUncheckedUpdateManyWithoutUnavailableTimeInput = {
     id?: StringFieldUpdateOperationsInput | string
-    dayOfTheWeek?: EnumDayOfTheWeekFieldUpdateOperationsInput | DayOfTheWeek
+    startDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDateTime?: DateTimeFieldUpdateOperationsInput | Date | string
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    singleOccurency?: DateTimeFieldUpdateOperationsInput | Date | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -12257,6 +14680,34 @@ export namespace Prisma {
   export type ReservationHasRequestedUsersUncheckedUpdateManyWithoutRequested_participantsInput = {
     user_id?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekCreateManyDayOfTheWeekInput = {
+    unavailableTimeId: string
+    active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string | null
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUpdateWithoutDayOfTheWeekInput = {
+    unavailableTime?: unavailableTimeUpdateOneRequiredWithoutDaysOfTheWeekNestedInput
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUncheckedUpdateWithoutDayOfTheWeekInput = {
+    unavailableTimeId?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type UnavailableTimeHasDayOfTheWeekUncheckedUpdateManyWithoutUnavailableTimeHasDayOfTheWeekInput = {
+    unavailableTimeId?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
 
