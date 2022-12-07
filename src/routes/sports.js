@@ -17,7 +17,7 @@ module.exports = app => {
         res.json(sports);
     })
     app.get('/sports', async (req, res) => {
-        const {sports, maxAmount} = await prisma.sport.findMany({
+        const sports = await prisma.sport.findMany({
             where: {
                 name: {
                     not: undefined
