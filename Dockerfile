@@ -10,9 +10,8 @@ COPY . .
 
 RUN yarn install && yarn prisma generate 
 
-RUN yarn prisma migrate deploy
-
 RUN yarn cache clean
 
 EXPOSE 3000
+CMD yarn prisma migrate deploy
 CMD [ "node", "src/server.js" ]
