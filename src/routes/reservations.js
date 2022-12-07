@@ -7,13 +7,17 @@ const jsonwebtoken = require("jsonwebtoken");
 
 module.exports = app =>{
 
-    app.get('/reservations', (req, res, next) => auth(req, res, next, 'User'), async (req, res) => {
+    app.get('/reservations', async (req, res) => {
 
         const reservations = await prisma.reservation.findMany({
             where:{
                 id: {
                     not: undefined
                 }},
+            include:{
+                court: true,
+                sport: true,
+            }
         })
         res.json(reservations);
     });
@@ -430,7 +434,15 @@ module.exports = app =>{
 
         const myReservation = await prisma.reservation.findMany({
             where: {
-                participants: userId
+                participants: {
+                    some:{
+                        user_id: userId
+                    }
+                }
+            },
+            include:{
+                court: true,
+                sport: true,
             }
         })
 
