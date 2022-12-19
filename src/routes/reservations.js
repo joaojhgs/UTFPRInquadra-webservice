@@ -5,7 +5,7 @@ const moment = require('moment');
 const jsonwebtoken = require("jsonwebtoken");
 
 
-module.exports = app =>{
+module.exports = app => {
 
     app.get('/reservations', async (req, res) => {
 
@@ -17,7 +17,17 @@ module.exports = app =>{
             include:{
                 court: true,
                 sport: true,
-            }
+                participants: {
+                    include:{
+                        user: true
+                    }
+                },
+                requested_participants: {
+                    include:{
+                        user: true
+                    }
+                },
+            },
         })
         res.json(reservations);
     });
@@ -207,6 +217,130 @@ module.exports = app =>{
             });
 
             return res.send("Criação completa com sucesso");
+      
+
+        } catch(error){
+            if(error == 400) 
+            if(error == 401) return res.send('Essa reserva não existe.')
+            if(error == 402) return res.send('Esse pedido não existe.')
+            if(error == 403) return res.send('Você não tem permissão para aceitar pedidos nesta reserva.')
+            if(error == 404) return res.send('Essa reserva já não possui mais vagas.')
+            if(error == 405) return res.send('Falha ao aceitar o pedido.')
+            if(error == 406) return res.send('Falha ao deletar o pedido.')
+        }
+    });
+
+    app.post('/reservations/request/refuse', (req, res, next) => auth(req, res, next, 'User'), async (req, res) => {
+        const { authorization } = req.headers
+        const token = authorization?.split(' ')[1]
+        const user = jsonwebtoken.verify(token, process.env.JWT_SECRET_TOKEN, {complete: true});
+        
+        try{
+            const {reservationId, userId} = req.body;
+            if(!reservationId || !userId)
+                throw 400
+
+            const reservation = await prisma.reservation.findFirstOrThrow({
+                where:{
+                    id: {
+                        equals: reservationId
+                    }},
+            }).catch((err) => {
+                console.log(err)
+
+                throw 401
+            });
+
+            await prisma.reservationHasRequestedUsers.findUnique({
+                where:{
+                    reservation_id_user_id:{
+                        reservation_id: reservationId,
+                        user_id: userId,
+                    }
+                }
+            }).catch((err) => {
+                console.log(err)
+
+                throw 402
+            });
+
+            if(reservation.manager_id !== user.payload.id) throw 403
+
+            await prisma.reservationHasRequestedUsers.delete({
+                where:{
+                    reservation_id_user_id: {
+                        reservation_id: reservationId,
+                        user_id: userId,
+                    }
+                }
+            }).catch((err) => {
+                console.log(err)
+                throw 406
+            });
+
+            return res.send("Recusado com sucesso");
+      
+
+        } catch(error){
+            if(error == 400) 
+            if(error == 401) return res.send('Essa reserva não existe.')
+            if(error == 402) return res.send('Esse pedido não existe.')
+            if(error == 403) return res.send('Você não tem permissão para aceitar pedidos nesta reserva.')
+            if(error == 404) return res.send('Essa reserva já não possui mais vagas.')
+            if(error == 405) return res.send('Falha ao aceitar o pedido.')
+            if(error == 406) return res.send('Falha ao deletar o pedido.')
+        }
+    });
+
+    app.post('/reservations/remove', (req, res, next) => auth(req, res, next, 'User'), async (req, res) => {
+        const { authorization } = req.headers
+        const token = authorization?.split(' ')[1]
+        const user = jsonwebtoken.verify(token, process.env.JWT_SECRET_TOKEN, {complete: true});
+        
+        try{
+            const {reservationId, userId} = req.body;
+            if(!reservationId || !userId)
+                throw 400
+
+            const reservation = await prisma.reservation.findFirstOrThrow({
+                where:{
+                    id: {
+                        equals: reservationId
+                    }},
+            }).catch((err) => {
+                console.log(err)
+
+                throw 401
+            });
+
+            const request = await prisma.reservationHasUsers.findUnique({
+                where:{
+                    reservation_id_user_id:{
+                        reservation_id: reservationId,
+                        user_id: userId,
+                    }
+                }
+            }).catch((err) => {
+                console.log(err)
+
+                throw 402
+            });
+
+            if(reservation.manager_id !== user.payload.id) throw 403
+
+            await prisma.reservationHasUsers.delete({
+                where:{
+                    reservation_id_user_id: {
+                        reservation_id: reservationId,
+                        user_id: userId,
+                    }
+                }
+            }).catch((err) => {
+                console.log(err)
+                throw 406
+            });
+
+            return res.send("Remoção completa com sucesso");
       
 
         } catch(error){
