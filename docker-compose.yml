@@ -14,13 +14,3 @@ services:
       - POSTGRES_DB=utfinquadra
     ports:
       - 5432:5432
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: utfinquadra-api-pgadmin
-    tty: true
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@ingresso.com
-      - PGADMIN_DEFAULT_PASSWORD=123456
-    ports:
-      - 9000:80
